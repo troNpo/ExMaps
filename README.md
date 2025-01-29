@@ -1,4 +1,4 @@
-![IMG_20250104_223723](https://github.com/user-attachments/assets/bfc181a5-4de8-4475-b600-a6465116896b)
+![1738000825619](https://github.com/user-attachments/assets/ee506b0a-5bf0-4c3d-97b8-74b604ff51dd)
 
 Es un estilo de mapa para Mapsforge OpenAndroMaps v5 
 
