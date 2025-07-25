@@ -1,0 +1,21 @@
+{
+  "name": "ExMaps",
+  "short_name": "ExMaps",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#c0c0c0",
+  "theme_color": "#1e88e5",
+  "description": "Herramienta para búsqueda de puntos de interés",
+  "icons": [
+    {
+      "src": "icons/logo192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/logo512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
