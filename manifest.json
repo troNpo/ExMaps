@@ -10,6 +10,11 @@
   "background_color": "#ffffff",
   "theme_color": "#2196f3",
   "lang": "es-ES",
+  "dir": "ltr",
+  "categories": ["navigation", "utilities", "travel"],
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
   "icons": [
     {
       "src": "icons/logo192.png",
@@ -22,19 +27,16 @@
       "type": "image/png"
     }
   ],
-"screenshots": [
-  {
-    "src": "icons/screenshot1.png",
-    "sizes": "720x1541",
-    "type": "image/png"
-  },
-  {
-    "src": "icons/screenshot2.png",
-    "sizes": "720x1541",
-    "type": "image/png"
-  }
-  ],
-  "launch_handler": {
-    "client_mode": "focus-existing"
-  }
+  "screenshots": [
+    {
+      "src": "icons/screenshot1.png",
+      "sizes": "720x1541",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/screenshot2.png",
+      "sizes": "720x1541",
+      "type": "image/png"
+    }
+  ]
 }
