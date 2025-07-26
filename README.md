@@ -41,7 +41,10 @@ Con ayuda de [**Copilot**](https://play.google.com/store/apps/details?id=com.mic
 
 - Datos geográficos por [**OpenStreetMap contributors**](https://www.openstreetmap.org/copyright)
 - Servicios de consulta por [**Overpass API (FOSSGIS e.V.)**](https://www.fossgis.de/)
-- OruxMaps es una aplicación independiente, propiedad de José Vázquez 
+- Geocodificación proporcionada por [**Nominatim**](https://nominatim.org/)
+- Visualización cartográfica mediante [**Leaflet**](https://leafletjs.com/)
+- Imágenes callejeras mediante [**Google Street View**](https://www.google.com/streetview/) y [**Mapillary**](https://www.mapillary.com/)
+- OruxMaps es una aplicación independiente, propiedad de José Vázquez .
 
 ---
 
