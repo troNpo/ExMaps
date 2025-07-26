@@ -551,26 +551,6 @@ body {
   cursor: pointer;
 }
 
-/* 🎯 Favoritos: línea visual */
-.poilinea {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background-color: #262c3a;
-  padding: 10px;
-  border-radius: 16px;
-}
-
-.poicono {
-  width: 30px;
-  height: 30px;
-}
-
-.poitexto {
-  font-size: 15px;
-  color: #f0f0f0;
-}
 
 /* 🧾 Checkbox visual de POIs */
 .poicheck {
