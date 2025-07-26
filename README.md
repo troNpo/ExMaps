@@ -53,4 +53,4 @@ Con ayuda de [**Copilot**](https://play.google.com/store/apps/details?id=com.mic
 [https://tronpo.github.io/ExMapsPDI](https://tronpo.github.io/ExMapsPDI)
 
 ---
-
+Esta en desarrollo , versión de prueba :)
