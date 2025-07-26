@@ -258,7 +258,7 @@ body {
   border-radius: 12px 12px 0 0;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
   transition: bottom 0.3s ease;
-  z-index: 999;
+  z-index: 300;
   max-height: 50vh;
   overflow: hidden;
 }
@@ -389,7 +389,7 @@ body {
   display: none;
   flex-direction: column;
   gap: 10px;
-  z-index: 1001;
+  z-index: 350;
 }
 
 .menu-emergente.visible {
