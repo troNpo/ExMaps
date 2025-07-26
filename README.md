@@ -6,6 +6,7 @@
 
 **ExMapsPDI** es una herramienta web creada por [**troNpo**](https://github.com/tronpo) para complementar la búsqueda de **POIs (Puntos de Interés)** en la app [**OruxMaps GP**](https://play.google.com/store/apps/details?id=com.orux.oruxmapsDonate). Aprovecha el poder de [**Overpass Turbo**](https://overpass-turbo.eu/) para realizar consultas precisas sobre datos abiertos de **OpenStreetMap**. De forma fácil para usuarios no avanzados.
 
+En desarrollo :)
 ---
 
 ### 🔎 ¿Qué puedes hacer con ExMapsPDI?
@@ -45,12 +46,12 @@ Con ayuda de [**Copilot**](https://play.google.com/store/apps/details?id=com.mic
 - Visualización cartográfica mediante [**Leaflet**](https://leafletjs.com/)
 - Imágenes callejeras mediante [**Google Street View**](https://www.google.com/streetview/) y [**Mapillary**](https://www.mapillary.com/)
 - OruxMaps es una aplicación independiente, propiedad de José Vázquez .
-
+- Los iconos utilizados en esta aplicación han sido descargados desde [Flaticon](https://www.flaticon.com/), propiedad de Freepik Company S.L.
 ---
 
 ### 🚀 Enlace en producción
 
-👉 [https://tronpo.github.io/ExMapsPDI](https://tronpo.github.io/ExMapsPDI)
+[https://tronpo.github.io/ExMapsPDI](https://tronpo.github.io/ExMapsPDI)
 
 ---
 
