@@ -667,28 +667,30 @@ body {
 
 #logoExMaps {
   position: absolute;
-  top: 16px;
-  left: 50%;
+  top: 0px;
+  left: 15%;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: rgba(0, 0, 0, 0.5); /* Fondo translúcido estilo ExMaps */
+  background: none; 
   padding: 8px 16px;
   border-radius: 10px;
   z-index: 1000;
 }
 
 #logoExMaps img {
-  width: 50px;
+  width: 70px;        
   height: auto;
+  background: none; 
+  border: none;
 }
 
 #logoExMaps span {
   margin-top: 4px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: bold;
-  color: #66ccff;
+  color: #66ccff; 
   font-family: 'Segoe UI', sans-serif;
 }
 
