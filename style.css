@@ -691,34 +691,6 @@ body {
   color: #66ccff;
   font-family: 'Segoe UI', sans-serif;
 }
-#logoExMaps {
-  position: absolute;
-  top: 0px;
-  left: 15%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: none; /* Fondo translúcido estilo ExMaps */
-  padding: 8px 16px;
-  border-radius: 10px;
-  z-index: 1000;
-}
-
-#logoExMaps img {
-  width: 70px;         /* Aumenta tamaño del logo */
-  height: auto;
-  background: none; /* Asegura que el fondo no se vea */
-  border: none;
-}
-
-#logoExMaps span {
-  margin-top: 4px;
-  font-size: 16px;
-  font-weight: bold;
-  color: #66ccff; /* Color ExMaps, puedes cambiarlo si lo prefieres */
-  font-family: 'Segoe UI', sans-serif;
-}
 
 .guia-osm {
   background-color: #1f2535;
