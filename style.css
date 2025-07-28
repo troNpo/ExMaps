@@ -1,0 +1,549 @@
+/* 🌍 Estilos base */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #101010;
+  color: #f0f0f0; /* ligeramente más legible que #fff */
+}
+/* 🌐 Mapa a pantalla completa */
+#map {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+/* botones pantalla del mapa */
+/* ☰ Botón de menú principal */
+.menu-icon {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  width: 40px;
+  height: 40px;
+  background: #000000;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 300;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+}
+.menu-icon img {
+  width: 24px;
+  height: 24px; 
+}
+.menu-icon:active {
+  transform: scale(0.95); 
+}
+/* botón de ajustes de mapa */
+#btnAjustesMapa {
+  position: fixed;
+  top: 170px; 
+  right: 5px;
+  width: 48px;
+  height: 48px;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  border: none;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  cursor: pointer;
+}
+#btnAjustesMapa img {
+  width: 24px;
+  height: 24px;
+}
+/*  Botones dentro del menú ajustes de mapa  */
+.menu-emergente button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #262c3a;
+  color: #f0f0f0;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.menu-emergente button img {
+  width: 22px;
+  height: 22px;
+  filter: invert(100%);
+}
+.menu-emergente button:hover {
+  background-color: #384051;
+}
+/* 📄 Ítems tipo <li> con imagen + texto (caso menú mapa) */
+.menu-emergente li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #262c3a;
+  color: #f0f0f0;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  list-style: none;
+}
+.menu-emergente li img {
+  width: 22px;
+  height: 22px;
+  filter: invert(100%);
+}
+.menu-emergente li:hover {
+  background-color: #384051;
+}
+/* 🔙 Botón volver/cerrar */
+.btnVolverPanel {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+}
+.btnVolverPanel img {
+  width: 22px;
+  height: 22px;
+  filter: invert(100%);
+}
+/* Botón flotante de ajustes de mapa y posibles botones futuros */
+.btnAjustes {
+  position: absolute;
+  right: 5px;
+  bottom: 500px;
+  z-index: 300;
+  background: #ffffffcc;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  cursor: pointer;
+}
+.btnAjustes img {
+  width: 24px;
+  height: 24px;
+}
+/* estilo del menú flotante */
+#menuAjustes {
+  position: absolute;
+  right: 5px;
+  bottom: 300px;
+  background-color: #262c3a;
+  color: #f0f0f0;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  padding: 14px;
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 300;
+  width: 220px;
+}
+#menuAjustes.visible {
+  display: flex;
+}
+#menuAjustes ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+#menuAjustes li {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+#menuAjustes li:hover {
+  background-color: #384051;
+}
+#menuAjustes li img {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  filter: invert(100%);
+}
+#menuAjustes .cerrarMenu {
+  background: none;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+}
+#menuAjustes .cerrarMenu img {
+  width: 20px;
+  height: 20px;
+  filter: invert(100%);
+}
+/* botón búsqueda en el mapa */
+.btnFlotanteBusqueda {
+  position: fixed;
+  top: 225px; 
+  right: 5px;
+  width: 48px;
+  height: 48px;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  border: none;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  cursor: pointer;
+}
+.btnFlotanteBusqueda img {
+  width: 24px;
+  height: 24px;
+}
+/* panel lateral para la búsqueda de pois */
+/* Encabezado fijo para todos los paneles */
+#logoExMaps {
+  position: absolute;
+  top: 0px;
+  left: 15%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: none; 
+  padding: 8px 16px;
+  border-radius: 10px;
+  z-index: 1000;
+}
+#logoExMaps img {
+  width: 70px;        
+  height: auto;
+  background: none; 
+  border: none;
+}
+#logoExMaps span {
+  margin-top: 4px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #66ccff; 
+  font-family: 'Segoe UI', sans-serif;
+}
+#nombreApp {
+  position: fixed;
+  top: 25px;
+  left: 100px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #66ccff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+}
+
+/* 📐 Panel lateral principal */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 360px;
+  height: 100%;
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.4);
+  z-index: 900;
+  overflow-y: auto;
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+.sidebar.hidden {
+  display: none;
+}
+/* 📂 Subpaneles dinámicos categorías  */
+.subpanel {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+  box-sizing: border-box;
+  position: absolute;
+  top: 80px;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.subpanel.visible {
+  display: flex !important;
+}
+/* paneles individuales de categorías */
+.subpanel h2 {
+  color: #66ccff;
+  font-size: 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+}
+/* 🔍 Botón búsqueda contextual */
+.btnBuscarPanel {
+  background-color: #bb0e26;
+  color: #ffffff;
+  border: none;
+  padding: 10px 14px;
+  font-size: 15px;
+  border-radius: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background 0.2s ease;
+}
+.btnBuscarPanel:hover {
+  background-color: #a00c20;
+}
+/* botón limpieza chekbox */
+.btnSecundario {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  font-size: 16px;
+  background-color: #474747;
+  border: 1px solid #ccc;
+  border-radius: 26px;
+  cursor: pointer;
+  color: #ffffff; 
+}
+.btnSecundario:hover {
+  background-color: #ddd;
+}
+
+/* 🧩 Agrupaciones: categorías */
+.grupo-categorias {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.grupo-categorias button {
+  background-color: #262c3a;
+  color: #f0f0f0;
+  border: none;
+  padding: 12px;
+  font-size: 15px;
+  border-radius: 16px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.2s ease;
+}
+.grupo-categorias button:hover {
+  background-color: #384051;
+  cursor: pointer;
+}
+/* 🧾 Checkbox visual de POIs */
+.poicheck {
+  margin-right: 10px;
+  transform: scale(1.2);
+}
+.contenedorFiltros {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+/* 🪟 Panel informativo inferior (POI) */
+.bottom-sheet {
+  position: fixed;
+  bottom: -50%;
+  left: 0;
+  right: 0;
+  background: #1e1e1e;
+  color: #f0f0f0;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+  transition: bottom 0.3s ease;
+  z-index: 300;
+  max-height: 50vh;
+  overflow: hidden;
+}
+.bottom-sheet.visible {
+  bottom: 0;
+}
+.bottom-sheet.expandido {
+  top: 0;
+  bottom: 0;
+  border-radius: 0;
+  max-height: 100vh;
+  height: 100vh;
+}
+/* 📎 Grip superior decorativo */
+.grip {
+  width: 40px;
+  height: 6px;
+  background: #2a2a2a;
+  border-radius: 3px;
+  margin: 10px auto;
+  cursor: grab;
+}
+/* 📄 Contenedor de la información del POI */
+.contenido-poi {
+  padding: 15px 20px;
+  max-height: calc(50vh - 60px);
+  overflow-y: auto;
+}
+.bottom-sheet.expandido .contenido-poi {
+  max-height: calc(100vh - 160px); 
+  padding-bottom: 80px; 
+}
+.contenido-poi h2 {
+  color: #66ccff;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+.contenido-poi a {
+  color: #C5F900; 
+  text-decoration: none;
+  font-weight: 500;
+}
+.contenido-poi a:hover {
+  color: #A6DF00; 
+  text-decoration: underline;
+}
+/* ❌ Botón cerrar panel */
+.btn-cerrar {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  z-index: 350;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-cerrar img {
+  width: 22px;
+  height: 22px;
+  filter: invert(100%);
+}
+/* 🔼 Botón expandir panel */
+.expandir-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  z-index: 350;
+}
+.expandir-btn img {
+  width: 22px;
+  height: 22px;
+  filter: invert(100%);
+}
+/* 🔘 Bloque de acciones principales poi */
+.acciones-poi {
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 0;
+  gap: 10px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.accion-btn {
+  background: none;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.accion-btn img {
+  width: 24px;
+  height: 24px;
+  filter: invert(100%);
+}
+.menu-emergente {
+  position: absolute;
+  bottom: 80px;
+  left: 20px;
+  right: 20px;
+  background-color: #262c3a;             
+  color: #f0f0f0;
+  border-radius: 12px;
+  padding: 14px;
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 350;
+}
+.menu-emergente.visible {
+  display: flex;
+}
+/* aportación osm */ 
+.guia-osm {
+  background-color: #1f2535;
+  color: #f0f0f0;
+  font-size: 14px;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+}
+.guia-osm ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 8px 0;
+}
+.guia-osm li {
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cerrarMenuContribuir {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  z-index: 400;
+}
+.cerrarMenuContribuir img {
+  width: 20px;
+  height: 20px;
+  filter: invert(100%);
+}
+
+
+
+
+
