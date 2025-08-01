@@ -6,7 +6,7 @@
 
 **ExMaps** es una herramienta web desarrollada por [**troNpo**](https://github.com/troNpo) como complemento directo para la app [**OruxMaps GP**](https://play.google.com/store/apps/details?id=com.orux.oruxmapsDonate). Su propósito es facilitar la búsqueda, exploración y exportación de **POIs (Puntos de Interés)** desde mapas interactivos basados en **OpenStreetMap**, usando consultas optimizadas con [**Overpass Turbo**](https://overpass-turbo.eu/).
 
-> ⚠️ ExMaps no reemplaza OruxMaps GP, sino que lo potencia: permite preparar rutas, localizar lugares clave y exportarlos en formato compatible para usarlos directamente en OruxMaps Gp.
+> ⚠️ ExMaps no reemplaza OruxMaps GP; ofrece una alternativa a la búsqueda de pois de la app, localizar lugares clave y exportarlos en formato compatible para usarlos directamente en OruxMaps Gp.
 
 ---
 
@@ -52,11 +52,6 @@ Con ayuda de [**Copilot**](https://play.google.com/store/apps/details?id=com.mic
 - Iconos descargados desde [Flaticon](https://www.flaticon.com/), propiedad de Freepik Company S.L.
 - OruxMaps es una aplicación independiente, propiedad de José Vázquez.
 
----
-
-## 🚀 Enlace en producción
-
-[https://tronpo.github.io/ExMaps/](https://tronpo.github.io/ExMaps/)[43dcd9a7-70db-4a1f-b0ae-981daa162054](https://tronpo.github.io/ExMaps/?citationMarker=43dcd9a7-70db-4a1f-b0ae-981daa162054 "1")
 
 ---
 
