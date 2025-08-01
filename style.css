@@ -721,7 +721,7 @@ body.modo-zurdo .barra-lateral {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 400;
   cursor: pointer;
   transition: transform 0.2s ease;
 }
@@ -757,30 +757,3 @@ body.modo-zurdo .toggle-botonera {
   pointer-events: auto;
 }
 
-.popup {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-}
-
-.popup-contenido {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 300px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-}
-
-.popup-contenido h3 {
-  margin-top: 0;
-}
-
-.botones {
-  margin-top: 15px;
-  display: flex;
-  justify-content: space-between;
-}
