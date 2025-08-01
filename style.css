@@ -1,0 +1,786 @@
+/* 🌍 Estilos base */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #101010;
+  color: #f0f0f0; /* ligeramente más legible que #fff */
+}
+/* 🌐 Mapa a pantalla completa */
+#map {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+
+/*  Botones dentro del menú ajustes de mapa  */
+.menu-emergente button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 12px 16px;
+  border: 1px solid #bb0e26;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.menu-emergente button img {
+  width: 22px;
+  height: 22px;
+  filter: invert(100%);
+}
+.menu-emergente button:hover {
+  background-color: #384051;
+}
+/* 📄 Ítems tipo <li> con imagen + texto (caso menú mapa) */
+.menu-emergente li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  list-style: none;
+}
+.menu-emergente li img {
+  width: 22px;
+  height: 22px;
+  filter: invert(100%);
+}
+.menu-emergente li:hover {
+  background-color: #1e1e1e;
+}
+/* 🔙 Botón volver/cerrar */
+.btnVolverPanel {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+}
+.btnVolverPanel img {
+  width: 22px;
+  height: 22px;
+  filter: invert(100%);
+}
+/* estilo del menú flotante */
+#menuAjustes {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  bottom: 300px;
+  background: #1e1e1e;                          
+  color: #f0f0f0;                               
+  font-family: 'Segoe UI', sans-serif;          
+  border-radius: 12px;                         
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);    
+  padding: 15px 20px;                           
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 300;
+  width: 220px;
+}
+#menuAjustes.visible {
+  display: flex;
+}
+
+#menuAjustes ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#menuAjustes li {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background 0.3s ease;
+  color: #f0f0f0;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: 'Segoe UI', sans-serif;
+}
+#menuAjustes li:hover {
+  background-color: #1e1e1e;
+}
+
+#menuAjustes li img {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  filter: invert(100%);
+}
+
+#menuAjustes .cerrarMenu {
+  background: none;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+}
+#menuAjustes .cerrarMenu img {
+  width: 20px;
+  height: 20px;
+  filter: invert(100%);
+}
+/* panel lateral para la búsqueda de pois */
+/* Encabezado fijo para todos los paneles */
+#logoExMaps {
+  position: absolute;
+  top: 0px;
+  left: 15%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: none; 
+  padding: 8px 16px;
+  border-radius: 10px;
+  z-index: 1000;
+}
+#logoExMaps img {
+  width: 70px;        
+  height: auto;
+  background: none; 
+  border: none;
+}
+#logoExMaps span {
+  margin-top: 4px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #66ccff; 
+  font-family: 'Segoe UI', sans-serif;
+}
+#nombreApp {
+  position: fixed;
+  top: 25px;
+  left: 100px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #66ccff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+}
+
+
+/* 🔍 Botón búsqueda contextual */
+.btnBuscarPanel {
+  background-color: #bb0e26;
+  color: #ffffff;
+  border: none;
+  padding: 10px 14px;
+  font-size: 15px;
+  border-radius: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background 0.2s ease;
+}
+.btnBuscarPanel:hover {
+  background-color: #a00c20;
+}
+/* 📐 Panel lateral principal */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 360px;
+  height: 100%;
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  font-family: 'Segoe UI', sans-serif;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.3); /* igual a POI */
+  z-index: 900;
+  overflow-y: auto;
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+.sidebar.hidden {
+  display: none;
+}
+
+/* 📂 Subpaneles dinámicos categorías */
+.subpanel {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  font-family: 'Segoe UI', sans-serif;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* nueva sombra flotante */
+  border-radius: 12px;
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+  box-sizing: border-box;
+  position: absolute;
+  top: 80px;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.subpanel.visible {
+  display: flex !important;
+}
+.subpanel h2 {
+  color: #66ccff;
+  font-size: 20px;
+  font-family: 'Segoe UI', sans-serif;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+}
+
+/* 🧽 Botón limpieza checkbox */
+.btnSecundario {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  font-size: 15px;
+  background-color: #1e1e1e;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 16px;
+  cursor: pointer;
+  color: #f0f0f0;
+  font-family: 'Segoe UI', sans-serif;
+  transition: background 0.3s ease;
+}
+.btnSecundario:hover {
+  background-color: #2a2a2a;
+}
+
+/* 🧩 Botones de agrupaciones */
+.grupo-categorias button {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  padding: 12px 14px;
+  border-radius: 12px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+  transition: background 0.2s ease;
+}
+.grupo-categorias button:hover {
+  background-color: #2a2a2a;
+}
+
+/* 🧾 Checkbox visual */
+.poicheck {
+  margin-right: 10px;
+  transform: scale(1.2);
+}
+.contenedorFiltros {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+/* 🪟 Panel informativo inferior (POI) */
+.bottom-sheet {
+  position: fixed;
+  bottom: -50%;
+  left: 0;
+  right: 0;
+  background: #1e1e1e;
+  color: #f0f0f0;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+  transition: bottom 0.3s ease;
+  z-index: 300;
+  max-height: 50vh;
+  overflow: hidden;
+}
+.bottom-sheet.visible {
+  bottom: 0;
+}
+.bottom-sheet.expandido {
+  top: 0;
+  bottom: 0;
+  border-radius: 0;
+  max-height: 100vh;
+  height: 100vh;
+}
+/* 📎 Grip superior decorativo */
+.grip {
+  width: 40px;
+  height: 6px;
+  background: #2a2a2a;
+  border-radius: 3px;
+  margin: 10px auto;
+  cursor: grab;
+}
+/* 📄 Contenedor de la información del POI */
+.contenido-poi {
+  padding: 15px 20px;
+  max-height: calc(50vh - 60px);
+  overflow-y: auto;
+}
+.bottom-sheet.expandido .contenido-poi {
+  max-height: calc(100vh - 160px); 
+  padding-bottom: 80px; 
+}
+.contenido-poi h2 {
+  color: #66ccff;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+.contenido-poi a {
+  color: #C5F900; 
+  text-decoration: none;
+  font-weight: 500;
+}
+.contenido-poi a:hover {
+  color: #A6DF00; 
+  text-decoration: underline;
+}
+/* ❌ Botón cerrar panel */
+.btn-cerrar {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  z-index: 350;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-cerrar img {
+  width: 22px;
+  height: 22px;
+  filter: invert(100%);
+}
+/* 🔼 Botón expandir panel */
+.expandir-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  z-index: 350;
+}
+.expandir-btn img {
+  width: 22px;
+  height: 22px;
+  filter: invert(100%);
+}
+/* 🔘 Bloque de acciones principales poi */
+.acciones-poi {
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 0;
+  gap: 10px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.accion-btn {
+  background: none;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.accion-btn img {
+  width: 24px;
+  height: 24px;
+  filter: invert(100%);
+}
+.menu-emergente {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  background-color: #1e1e1e;                  /* Fondo oscuro como el POI */
+  color: #f0f0f0;                             /* Texto claro */
+  font-family: 'Segoe UI', sans-serif;        /* Tipografía consistente */
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 12px;                        /* Bordes redondeados suaves */
+  padding: 15px 20px;                         /* Espaciado similar al POI */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);   
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 350;
+}
+.menu-emergente.visible {
+  display: flex;
+}
+/* aportación osm */ 
+.guia-osm {
+  background-color: #1e1e1e;                 
+  color: #f0f0f0;                             
+  font-size: 15px;                           
+  font-family: 'Segoe UI', sans-serif;        
+  border-radius: 12px;                        
+  padding: 15px 20px;                         
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);   
+  margin-bottom: 10px;
+}
+.guia-osm ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 8px 0;
+}
+.guia-osm li {
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cerrarMenuContribuir {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  z-index: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cerrarMenuContribuir img {
+  width: 20px;
+  height: 20px;
+  filter: invert(100%);
+}
+
+.btnLateral {
+  width: 42px;
+  height: 42px;
+  padding: 8px;
+}
+/* Botones individuales */
+.btnLateral {
+  width: 48px;
+  height: 48px;
+  background-color: transparent;
+  border: none;
+  border-radius: 50%;
+  box-shadow: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.btnLateral img {
+  width: 24px;
+  height: 24px;
+  filter: invert(100%);
+  opacity: 1;
+}
+.btnLateral:active {
+  transform: scale(0.95);
+}
+
+/* Botón con texto debajo */
+.bloque-boton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0px;
+}
+.bloque-boton span {
+  font-size: 10px;
+  color: #fff;
+  text-align: center;
+  line-height: 1.2;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+
+/* PERFIL DE USUARIO */
+.menu-emergente input,
+.menu-emergente select {
+  width: 100%;
+  box-sizing: border-box; 
+  padding: 12px 14px;
+  margin-top: 6px;
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 15px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 12px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+  transition: border-color 0.3s ease;
+}
+
+.menu-emergente input:focus,
+.menu-emergente select:focus {
+  outline: none;
+  border-color: #66ccff;
+  box-shadow: 0 0 0 2px rgba(102,204,255, 0.3);
+}
+
+/* Etiquetas con íconos */
+.menu-emergente label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.menu-emergente label img {
+  width: 18px;
+  height: 18px;
+  filter: invert(100%);
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+/* Panel genérico emergente (oculto por defecto) */
+.menu-emergente {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  background-color: #1e1e1e;                  
+  color: #f0f0f0;                             /
+  font-family: 'Segoe UI', sans-serif;       
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 12px;                        
+  padding: 15px 20px;                         
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);   
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 350;
+}
+.menu-emergente.visible {
+  display: flex;
+}
+
+/* ❌ Botón cerrar flotante */
+.menu-emergente .btnVolverPanel {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+.menu-emergente .btnVolverPanel:hover {
+  transform: rotate(90deg);
+}
+.menu-emergente .btnVolverPanel img {
+  width: 20px;
+  height: 20px;
+  filter: invert(100%);
+  display: block;
+}
+
+/* Etiquetas con íconos */
+.menu-emergente label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  margin-bottom: 6px;
+  font-size: 15px;
+  font-weight: 500;
+}
+.menu-emergente label img {
+  width: 18px;
+  height: 18px;
+  filter: invert(100%);
+}
+
+/* Bloque búsqueda */
+.menu-emergente .busqueda-wrap {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.menu-emergente input[type="text"] {
+  flex: 1;
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  padding: 12px 14px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 12px;
+  font-size: 15px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.2);
+  transition: border-color 0.3s ease;
+}
+.menu-emergente input:focus {
+  outline: none;
+  border-color: #66ccff;
+  box-shadow: 0 0 0 2px rgba(102,204,255,0.3);
+}
+
+.menu-emergente #btnBuscarDireccion {
+  padding: 12px 20px;
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  border: 1px solid #bb0e26;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.menu-emergente #btnBuscarDireccion:hover {
+  background-color: #2a2a2a;
+}
+
+/* Resultados */
+.menu-emergente #resultadosNominatim {
+  margin-top: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 4px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+/* Posición estándar: modo diestro (botonera a la derecha) */
+.barra-lateral {
+  position: fixed;
+  top: 110px;
+  right: 10px;
+  left: unset;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 5px;
+  padding: 6px 1px;
+  z-index: 350;
+  width: fit-content;
+  transition: all 0.3s ease;
+}
+
+/* Cambia a izquierda en modo zurdo */
+body.modo-zurdo .barra-lateral {
+  left: 10px;
+  right: unset;
+}
+
+/* Botón flotante para mostrar/ocultar la barra lateral */
+.toggle-botonera {
+  position: fixed;
+  top: 62px;
+  right: 10px;
+  width: 50px;
+  height: 50px;
+  background: rgba(0, 0, 0, 0.6);     
+  border-radius: 5px;                
+  border: none;
+  padding: 6px 1px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.toggle-botonera img {
+  width: 24px;
+  height: 24px;
+  filter: invert(100%);
+}
+
+.toggle-botonera:active {
+  transform: scale(0.95);
+}
+
+/* 🧭 Adaptación para modo zurdo */
+body.modo-zurdo .toggle-botonera {
+  left: 10px;
+  right: unset;
+}
+.barra-lateral {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform-origin: top;
+}
+.barra-lateral.oculta {
+  transform: scaleY(0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.barra-lateral.activa {
+  transform: scaleY(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.popup {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.popup-contenido {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.popup-contenido h3 {
+  margin-top: 0;
+}
+
+.botones {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+}
