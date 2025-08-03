@@ -4,13 +4,56 @@ const map = L.map('map', {
 }).setView([37.3886, -5.9953], 13);
 let marcadorBusquedaNominatim = null;
 
-// 🗺️ Añadir capa base
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; OpenStreetMap contributors',
-  maxZoom: 19
-}).addTo(map);
 
-// botonera lateral 
+// Capa base: OpenStreetMap
+const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap contributors',
+  maxZoom: 19
+}).addTo(map); // Se añade por defecto
+
+// Capa base: OpenTopoMap
+const openTopo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenTopoMap & contributors',
+  maxZoom: 17
+});
+
+// Capa base: Satélite Esri World Imagery
+const esriSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  attribution: '© Esri & contributors',
+  maxZoom: 18
+});
+
+// Selector de capas base
+const baseMaps = {
+  "OpenStreetMap": osmLayer,
+  "OpenTopoMap": openTopo,
+  "Satélite (Esri)": esriSat
+};
+
+// 🥾 Senderismo
+const hikingOverlay = L.tileLayer('https://tile.waymarkedtrails.org/hiking/{z}/{x}/{y}.png', {
+  attribution: '© Waymarked Trails',
+  opacity: 0.7
+});
+
+// 🚴 Ciclismo
+const cyclingOverlay = L.tileLayer('https://tile.waymarkedtrails.org/cycling/{z}/{x}/{y}.png', {
+  attribution: '© Waymarked Trails',
+  opacity: 0.7
+});
+
+// 🎿 Esquí
+const skiingOverlay = L.tileLayer('https://tile.waymarkedtrails.org/skiing/{z}/{x}/{y}.png', {
+  attribution: '© Waymarked Trails',
+  opacity: 0.7
+});
+
+const overlayMaps = {
+  "🥾 Senderismo": hikingOverlay,
+  "🚴 Ciclismo": cyclingOverlay,
+  "🎿 Esquí": skiingOverlay
+};
+L.control.layers(baseMaps, overlayMaps).addTo(map);
 // Buscar dirección con Nominatim
 document.getElementById("btnBuscarLugar").addEventListener("click", () => {
   const panel = document.getElementById("panelResultadosNominatim");
@@ -19,7 +62,7 @@ document.getElementById("btnBuscarLugar").addEventListener("click", () => {
   document.getElementById("inputDireccion").value = "";
   document.getElementById("resultadosNominatim").innerHTML = "";
 
-  // Evitar a�adir m�ltiples listeners
+  // Evitar a�adir m�ltiples listeners
   document.getElementById("btnBuscarDireccion").onclick = () => {
     const direccion = document.getElementById("inputDireccion").value.trim();
     if (!direccion) return;
@@ -31,7 +74,7 @@ document.getElementById("btnBuscarLugar").addEventListener("click", () => {
         contenedor.innerHTML = "";
 
         if (!data.length) {
-          contenedor.innerHTML = `? No se encontr� la direcci�n <b>${direccion}</b>`;
+          contenedor.innerHTML = `? No se encontr� la direcci�n <b>${direccion}</b>`;
           return;
         }
 
@@ -58,7 +101,7 @@ document.getElementById("btnBuscarLugar").addEventListener("click", () => {
       })
       .catch(() => {
         document.getElementById("resultadosNominatim").innerHTML =
-          "? Error de conexi�n con Nominatim";
+          "? Error de conexi�n con Nominatim";
       });
   };
 });
@@ -379,24 +422,157 @@ function ejecutarBusqueda() {
   //  alert("❌ No se pudo conectar con el servidor. Intenta más tarde.");//
   });
 }
-
 const emojiTags = {
-  "addr:street": "🏙️",
-  "addr:housenumber": "🔢",
+  // 🎯 Claves generales
+  "tourism": "🧳",
+  "addr:city": "🏘️",
+  "source": "📡",
+  "wheelchair": "♿",
+  "natural": "🌿",
+  "amenity": "🏢",
+  "leisure": "🎯",
+  "shop": "🛍️",
+  "man_made": "🏗️",
+  "historic": "🏰",
+  "craft": "🔧",
+
+  // 🌟 Claves con valor específico
+  "natural=tree": "🌳",
+  "natural=peak": "⛰️",
+  "natural=beach": "🏖️",
+  "natural=waterfall": "💦",
+  "natural=spring": "🚰",
+  "natural=rock": "🪨",
+  "natural=wood": "🌲",
+  "amenity=restaurant": "🍽️",
+  "amenity=bar": "🍻",
+  "amenity=school": "🏫",
+  "amenity=hospital": "🏥",
+  "leisure=park": "🌳",
+  "shop=supermarket": "🧃",
+  "shop=bakery": "🥖",
+  "shop=bicycle": "🚴",
+  "shop=butcher": "🔪",
+  "shop=clothes": "👕",
+  "shop=travel_agency": "🧳",
+  "craft=shoemaker": "👞",
+  "historic=castle": "🏰",
+  "man_made=tower": "🗼",
+  "amenity=cafe": "☕",
+  "amenity=fast_food": "🍔",
+  "amenity=pub": "🍺",
+  "amenity=ice_cream": "🍨",
+  "amenity=pharmacy": "💊",
+  "amenity=doctors": "👩‍⚕️",
+  "emergency=defibrillator": "❤️",
+  "amenity=fire_station": "🚒",
+  "amenity=police": "🚓",
+  "emergency=phone": "📞",
+  "amenity=bank": "🏦",
+  "amenity=atm": "🏧",
+  "amenity=post_office": "📮",
+  "amenity=university": "🎓",
+  "amenity=library": "📖",
+  "amenity=kindergarten": "🧸",
+  "amenity=place_of_worship": "⛪",
+  "tourism=hotel": "🏨",
+  "tourism=hostel": "🛏️",
+  "tourism=camp_site": "⛺",
+  "tourism=museum": "🏛️",
+  "tourism=artwork": "🎨",
+  "tourism=zoo": "🦁",
+  "leisure=playground": "🛝",
+  "room": "🛏️",
+  "stars": "⭐",
+  "beds": "🛌",
+  "toilets": "🚽",
+  "shower": "🚿",
+  "highway": "🛣️",
+  "highway=bus_stop": "🚌",
+  "railway=station": "🚉",
+  "aeroway=airport": "✈️",
+  "aeroway=helipad": "🚁",
+  "amenity=parking": "🅿️",
+  "amenity=charging_station": "🔌",
+  "amenity=recycling": "♻️",
+  "amenity=bench": "🪑",
+  "amenity=drinking_water": "🚰",
+  "amenity=shelter": "🏚️",
+  "amenity=cinema": "🎬",
+  "amenity=theatre": "🎭",
+  "amenity=nightclub": "💃",
+
+  // 🧭 Identidad y contacto
+  "name": "📌",
+  "operator": "👤",
+  "brand": "🏷️",
+  "description": "📝",
+  "note": "🧾",
+  "id": "🆔",
+  "wikidata": "📖",
+  "wikipedia": "📚",
+  "alt_name": "🗣️",
+
+  // 📞 Contacto
   "contact:phone": "📞",
   "phone": "📱",
-  "website": "🌐",
-  "opening_hours": "🕒",
-  "amenity": "🏛️",
-  "shop": "🛒",
-  "leisure": "🎉",
-  "tourism": "🗺️",
-  "natural": "🌿",
-  "emergency": "🚨",
-  "internet_access": "📶",
   "email": "✉️",
-  "operator": "👤"
+  "contact:email": "📬",
+  "website": "🌐",
+  "contact:website": "🖥️",
+  "fax": "📠",
+  "contact:facebook": "📘",
+  "contact:twitter": "🐦",
+
+  // 🕒 Horario y disponibilidad
+  "opening_hours": "🕒",
+  "start_date": "📅",
+  "check_date": "✅",
+  "access": "🚪",
+  "internet_access": "📶",
+  "wifi": "📡",
+
+  // 📍 Dirección
+  "addr:street": "🏙️",
+  "addr:housenumber": "🔢",
+  "addr:postcode": "🏷️",
+  "addr:country": "🌍",
+  "addr:state": "🗺️",
+
+  // 🏢 Edificios
+  "building": "🏨",
+  "building:levels": "🏗️",
+  "building:material": "🧱",
+  "building:use": "📦",
+
+  // 🔬 Fuente de datos
+  "source:name": "📚",
+  "source:date": "📅",
+
+  // 🧭 Otros
+  "wheelchair:description": "📝",
+  "staff_count": "👥",
+  "employees": "🧑‍💼",
+  "layer": "📚",
+  "ele": "⛰️",
+  "height": "📏",
+  "level": "⬆️",
+
+  // 📷 Medios y vista
+  "image": "🖼️",
+  "mapillary": "📷",
+  "camera": "📸",
+  
+  "type": "📦",
+"type=node": "📍",
+"type=way": "🛣️",
+"type=relation": "🔗"
+   
 };
+
+
+
+
 
 function mostrarDetallesEnPanel(tags) {
   const panel = document.getElementById("panelPoi");
@@ -406,7 +582,7 @@ function mostrarDetallesEnPanel(tags) {
   const btnOpciones = document.getElementById("btnOpcionesToggle");
   const opciones = document.getElementById("opcionesBloque");
 
-  // ✅ Guardar el POI globalmente para exportación individual
+  // ? Guardar el POI globalmente
   window.tagsPOI = tags;
 
   nombre.textContent = tags.name || "POI";
@@ -414,7 +590,7 @@ function mostrarDetallesEnPanel(tags) {
 
   Object.entries(tags).forEach(([clave, valor]) => {
     if (valor && clave !== "name" && clave !== "lat" && clave !== "lon") {
-      const emoji = emojiTags[clave] || "🔹";
+      const emoji = emojiTags[clave] || "?";
       let contenido = `${emoji} <strong>${clave}:</strong> `;
 
       if (clave === "website") {
@@ -431,25 +607,59 @@ function mostrarDetallesEnPanel(tags) {
     }
   });
 
-  // Mostrar panel
+  // Añadir selector personalizado
+  const wrapper = document.createElement("div");
+  wrapper.style.marginTop = "12px";
+  wrapper.style.borderTop = "1px solid #ccc";
+  wrapper.style.paddingTop = "8px";
+
+  const check = document.createElement("input");
+  check.type = "checkbox";
+  check.id = "checkPersonalizada";
+  check.checked = tags.seleccionado || false;
+
+  const label = document.createElement("label");
+  label.htmlFor = "checkPersonalizada";
+  label.textContent = "Añadir a capa personalizada";
+  label.style.marginLeft = "6px";
+
+  check.addEventListener("change", (e) => {
+    tags.seleccionado = e.target.checked;
+    window.poisSeleccionados ||= [];
+
+    const index = window.poisSeleccionados.findIndex(p =>
+      p.lat === tags.lat && p.lon === tags.lon
+    );
+
+    if (e.target.checked && index === -1) {
+      window.poisSeleccionados.push(tags);
+    } else if (!e.target.checked && index !== -1) {
+      window.poisSeleccionados.splice(index, 1);
+    }
+  });
+
+  wrapper.appendChild(check);
+  wrapper.appendChild(label);
+  contenedor.appendChild(wrapper);
+
+  // ? Mostrar panel
   panel.classList.remove("hidden", "expandido");
   panel.classList.add("visible");
 
-  // 👉 Expansión automática si el contenido es largo
+  // ? Expandir si hay contenido largo
   if (contenedor.scrollHeight > 300) {
     panel.classList.add("expandido");
     btnOpciones.style.display = "block";
-
     const icono = btnExpandir.querySelector("img");
     if (icono) icono.src = "icons/ui/fi-sr-compress.svg";
   } else {
+    panel.classList.remove("expandido");
     btnOpciones.style.display = "none";
-
     const icono = btnExpandir.querySelector("img");
     if (icono) icono.src = "icons/ui/fi-sr-expand.svg";
   }
 
-  // 🗺️ Centrar el mapa en el POI (si tiene coordenadas)
+  // ? Centrar mapa en el POI
   if (tags.lat && tags.lon) {
     const punto = L.latLng(tags.lat, tags.lon);
     const alturaMapa = map.getSize().y;
@@ -461,7 +671,6 @@ function mostrarDetallesEnPanel(tags) {
 
   actualizarBotones();
 }
-
 function mostrarDetallesDesdePopup(tagsData) {
   const tags = typeof tagsData === "string" ? JSON.parse(tagsData) : tagsData;
 
@@ -1182,3 +1391,37 @@ document.getElementById("toggleBotonera")?.addEventListener("click", () => {
 function abrirAyuda() {
   window.open("https://tronpoonpo.blogspot.com/p/exmapsapp.html", "_blank");
 }
+function exportarPOIsSeleccionados() {
+  const seleccionados = window.poisSeleccionados || [];
+
+  if (seleccionados.length === 0) {
+    mostrarAvisoToast("?? No hay POIs seleccionados en la capa personalizada");
+    return;
+  }
+
+  const poisPorCategoria = {};
+
+  seleccionados.forEach(tags => {
+    const categoria = detectarCategoria(tags);
+    const nombre = tags.name || "POI";
+    const { lat, lon } = tags;
+
+    poisPorCategoria[categoria] ||= [];
+    poisPorCategoria[categoria].push({ nombre, lat, lon, tags });
+  });
+
+  exportarMapaKML(poisPorCategoria);
+}
+document.getElementById("btnPanelCapas")?.addEventListener("click", () => {
+  const wrapper = document.querySelector(".leaflet-control-layers");
+  if (wrapper) {
+    const yaExpandido = wrapper.classList.contains("leaflet-control-layers-expanded");
+
+    // Si ya está abierto, lo cerramos
+    if (yaExpandido) {
+      wrapper.classList.remove("leaflet-control-layers-expanded");
+    } else {
+      wrapper.classList.add("leaflet-control-layers-expanded");
+    }
+  }
+});
