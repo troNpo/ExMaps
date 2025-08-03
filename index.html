@@ -20,7 +20,7 @@
     
     <!-- botón menú flotante -->
         <button id="toggleBotonera" class="toggle-botonera" title="Mostrar/Ocultar barra">
-  <img src="icons/ui/fi-sr-square-ellipsis-vertical.svg" alt="Toggle" />
+  <img src="icons/ui/fi-sr-brain-circuit.svg" alt="Toggle" />
 </button>
     
     <!-- botonera lateral  -->
@@ -32,13 +32,22 @@
     </button>
     <span>Ubicación</span>
   </div>
+  <!-- capas -->
+<div class="bloque-boton">
+  <button id="btnPanelCapas" class="btnLateral" title="Capas del mapa">
+    <img src="icons/ui/fi-sr-layers.svg" alt="Capas">
+  </button>
+  <span>Capas</span>
+</div>
 
   <!-- ➕ Zoom in  -->
   <div class="bloque-boton">
     <button id="btnZoomIn" title="Acercar mapa" class="btnLateral">
       <img src="icons/ui/fi-sr-zoom-in.svg" alt="Zoom +" />
     </button>
+     <span>zoom</span>
   </div>
+ 
 
   <!-- ➖ Zoom out  -->
   <div class="bloque-boton">
@@ -50,11 +59,12 @@
   <!-- 🍔 Categorías -->
   <div class="bloque-boton">
     <button id="menuBtn" title="Abrir panel" class="btnLateral">
-      <img src="icons/ui/fi-sr-menu-burger.svg" alt="Menú" />
+      <img src="icons/ui/fi-sr-category.svg" alt="Menú" />
     </button>
     <span>Categorías</span>
   </div>
 
+  
   <!-- 🔄 Actualizar búsqueda -->
   <div class="bloque-boton">
     <button id="btnBusquedaDirecta" title="Buscar desde mapa" class="btnLateral">
@@ -71,48 +81,50 @@
   <span>Limpiar</span>
 </div>
 
-<!-- Botón Exportar KML -->
-<div class="bloque-boton">
-  <button title="Exportar KML" class="btnLateral" onclick="exportarMapaKML(construirPoisPorCategoria())">
-    <img src="icons/ui/fi-sr-clip.svg" alt="Exportar mapa KML" />
-  </button>
-  <span>Exportar</span>
-</div>
 <!-- ajustes  -->
 <div class="bloque-boton">
   <button id="btnAjustesMapa" title="Ajustes del mapa" class="btnLateral">
-    <img src="icons/ui/fi-sr-settings.svg" alt="Ajustes" />
+    <img src="icons/ui/fi-sr-square-ellipsis.svg" alt="Ajustes" />
   </button>
-  <span>Ajustes</span>
+  <span>Opciones</span>
+</div>
+<!-- ❔ Botón de ayuda -->
+<div class="bloque-boton">
+  <button id="btnAyudaMapa" title="Abrir ayuda" class="btnLateral" onclick="abrirAyuda()">
+    <img src="icons/ui/fi-sr-question-square.svg" alt="Ayuda sobre la app" />
+  </button>
+  <span>Ayuda</span>
 </div>
 </div>
 
 <!-- Menú emergente que se abre al pulsar el botón de ajustes -->
 <div id="menuAjustes" class="menu-emergente">
 
- <button class="cerrarMenu" onclick="cerrarAjustes()">
-  <img src="icons/ui/fi-sr-cross-small.svg" alt="Cerrar ajustes" />
-</button>
-    
+  <button class="cerrarMenu" onclick="cerrarAjustes()">
+    <img src="icons/ui/fi-sr-cross-small.svg" alt="Cerrar ajustes" />
+  </button>
+
   <!-- Sección de usuario -->
   <button onclick="abrirPerfilUsuario()" class="btn-opcion">
     <img src="icons/ui/fi-sr-user-gear.svg" alt="Perfil de usuario" />
     Perfil de usuario
   </button>
+  
+  <!-- 🧭 Exportación directa KML -->
+  <button onclick="exportarMapaKML(construirPoisPorCategoria())" class="btn-opcion">
+    <img src="icons/ui/fi-sr-folder-download.svg" alt="Exportar mapa KML" />
+    Exportar todos los POIs del mapa
+  </button>
 
-  <!-- Sección avanzada -->
+  <button onclick="exportarPOIsSeleccionados()" class="btn-opcion">
+    <img src="icons/ui/fi-sr-file-download.svg" alt="Exportar seleccionados KML" />
+    Exportar Capa personalizada 
+  </button>
+<!-- Sección avanzada -->
   <button onclick="abrirConfiguracionAvanzada()" class="btn-opcion">
     <img src="icons/ui/fi-sr-settings.svg" alt="Configuración avanzada" />
     Con.avanzada
   </button>
-
-  <!-- Sección de ayuda -->
-  <button onclick="abrirAyuda()" class="btn-opcion">
-    <img src="icons/ui/fi-sr-question-square.svg" alt="Ayuda" />
-    Ayuda
-  </button>
-
-  <!-- Espacio para futuras funciones -->
 </div>
 
 <!-- Panel búsqueda Nominatim -->
