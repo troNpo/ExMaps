@@ -91,8 +91,7 @@ body {
   background: #1e1e1e;                          
   color: #f0f0f0;                               
   font-family: 'Segoe UI', sans-serif;          
-  border-radius: 12px;                         
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);    
+  border-radius: 12px;  
   padding: 15px 20px;                           
   display: none;
   flex-direction: column;
@@ -181,7 +180,6 @@ body {
   font-size: 24px;
   font-weight: bold;
   color: #66ccff;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
   z-index: 1000;
 }
 
@@ -215,7 +213,6 @@ body {
   background-color: #1e1e1e;
   color: #f0f0f0;
   font-family: 'Segoe UI', sans-serif;
-  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.3); /* igual a POI */
   z-index: 900;
   overflow-y: auto;
   border-right: 1px solid rgba(255,255,255,0.08);
@@ -233,7 +230,6 @@ body {
   background-color: #1e1e1e;
   color: #f0f0f0;
   font-family: 'Segoe UI', sans-serif;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* nueva sombra flotante */
   border-radius: 12px;
   height: calc(100vh - 80px);
   overflow-y: auto;
@@ -289,7 +285,6 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
   transition: background 0.2s ease;
 }
 .grupo-categorias button:hover {
@@ -315,7 +310,6 @@ body {
   background: #1e1e1e;
   color: #f0f0f0;
   border-radius: 12px 12px 0 0;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
   transition: bottom 0.3s ease;
   z-index: 300;
   max-height: 50vh;
@@ -428,14 +422,13 @@ body {
   left: 50%;
   transform: translateX(-50%);
   width: 90%;
-  background-color: #1e1e1e;                  /* Fondo oscuro como el POI */
-  color: #f0f0f0;                             /* Texto claro */
-  font-family: 'Segoe UI', sans-serif;        /* Tipografía consistente */
+  background-color: #1e1e1e;                  
+  color: #f0f0f0;                          
+  font-family: 'Segoe UI', sans-serif;       
   font-size: 15px;
   font-weight: 500;
-  border-radius: 12px;                        /* Bordes redondeados suaves */
-  padding: 15px 20px;                         /* Espaciado similar al POI */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);   
+  border-radius: 12px;                        
+  padding: 15px 20px;                         
   display: none;
   flex-direction: column;
   gap: 10px;
@@ -451,8 +444,7 @@ body {
   font-size: 15px;                           
   font-family: 'Segoe UI', sans-serif;        
   border-radius: 12px;                        
-  padding: 15px 20px;                         
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);   
+  padding: 15px 20px;
   margin-bottom: 10px;
 }
 .guia-osm ul {
@@ -544,7 +536,6 @@ body {
   font-size: 15px;
   border: 1px solid rgba(255,255,255,0.2);
   border-radius: 12px;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
   transition: border-color 0.3s ease;
 }
 
@@ -552,7 +543,6 @@ body {
 .menu-emergente select:focus {
   outline: none;
   border-color: #66ccff;
-  box-shadow: 0 0 0 2px rgba(102,204,255, 0.3);
 }
 
 /* Etiquetas con íconos */
@@ -583,8 +573,7 @@ body {
   font-size: 15px;
   font-weight: 500;
   border-radius: 12px;                        
-  padding: 15px 20px;                         
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);   
+  padding: 15px 20px;
   display: none;
   flex-direction: column;
   gap: 10px;
@@ -650,13 +639,11 @@ body {
   border: 1px solid rgba(255,255,255,0.2);
   border-radius: 12px;
   font-size: 15px;
-  box-shadow: 0;
   transition: border-color 0.3s ease;
 }
 .menu-emergente input:focus {
   outline: none;
   border-color: #66ccff;
-  box-shadow: 0 0 0 2px rgba(102,204,255,0.3);
 }
 
 .menu-emergente #btnBuscarDireccion {
@@ -694,7 +681,7 @@ body {
   background: rgba(0, 0, 0, 0.6);
   border-radius: 5px;
   padding: 6px 1px;
-  z-index: 350;
+  z-index: 300;
   width: fit-content;
   transition: all 0.3s ease;
 }
@@ -716,11 +703,10 @@ body.modo-zurdo .barra-lateral {
   border-radius: 5px;                
   border: none;
   padding: 6px 1px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.4);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 350;
+  z-index: 300;
   cursor: pointer;
   transition: transform 0.2s ease;
 }
@@ -761,7 +747,6 @@ body.modo-zurdo .toggle-botonera {
   color: #fff;
   border-radius: 10px;
   padding: 12px;
-  box-shadow: 0 0 12px rgba(0,0,0,0.4);
   font-family: 'Segoe UI', sans-serif;
 }
 .leaflet-control-layers-toggle {
@@ -780,5 +765,4 @@ body.modo-zurdo .toggle-botonera {
   padding: 16px;
   z-index: 1200;
   font-family: 'Segoe UI', sans-serif;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.5);
 }
