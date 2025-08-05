@@ -68,7 +68,7 @@
   <!-- 🔄 Actualizar búsqueda -->
   <div class="bloque-boton">
     <button id="btnBusquedaDirecta" title="Buscar desde mapa" class="btnLateral">
-      <img src="icons/ui/fi-sr-search-location.svg" alt="Buscar desde mapa" />
+      <img src="icons/ui/fi-sr-search.svg" alt="Buscar desde mapa" />
     </button>
     <span>Actualizar</span>
   </div>
@@ -197,35 +197,86 @@
 </div>  
     <!-- 🏷️ Título de la app -->
     <div id="nombreApp">Puntos de Interés</div> 
-    
-    <!-- 🧭 Panel principal de selección de categorías -->
- <div id="panelCategorias" class="subpanel visible">
+   
+      <!-- 🧭 Panel principal de selección de categorías -->
+<div id="panelCategorias" class="subpanel visible">
+
+  <!-- Botón volver -->
   <button class="btnVolverPanel soloIcono" onclick="cerrarPanelCategorias()">
     <img src="icons/ui/fi-sr-arrow-small-left.svg" alt="Cerrar panel">
   </button>
+
   <h2>Explorar categorías</h2>
-  <button class="btnBuscarPanel">🔍 Buscar seleccionados</button>
+
+  <!-- Botones de acción -->
+  <button class="btnBuscarPanel">
+    <img src="icons/ui/fi-sr-search.svg" alt="Buscar">
+    <span>Buscar seleccionados</span>
+  </button>
+
   <button id="btnLimpiarSeleccion" class="btnSecundario">
-  🧹 Limpiar selección
-</button>
-  
+    <img src="icons/ui/fi-sr-eraser.svg" alt="Limpiar">
+    <span>Limpiar selección</span>
+  </button>
+
+  <!-- Categorías -->
   <div class="grupo-categorias">
-   <!-- <button onclick="mostrarCategoria('ciclismo_senderismo')">🚶 Ciclismo y senderismo</button> -->
-    <button onclick="mostrarCategoria('alojamiento')">🛏️ Alojamiento</button>
-    <button onclick="mostrarCategoria('comodidades')">🚿 Comodidades</button>
-    <button onclick="mostrarCategoria('emergencias')">🚨 Emergencias</button>
-    <button onclick="mostrarCategoria('naturaleza')">🌿 Naturaleza</button>
-    <button onclick="mostrarCategoria('ocio_turismo')">🎭 Ocio y turismo</button>
-    <button onclick="mostrarCategoria('servicios')">🛠️ Servicios</button>
-    <button onclick="mostrarCategoria('transporte')">🚉 Transporte</button>
+    <button onclick="mostrarCategoria('alojamiento')">
+      <img src="icons/ui/fi-sr-bed.svg" alt="Alojamiento">
+      <span>Alojamiento</span>
+    </button>
+
+    <button onclick="mostrarCategoria('comodidades')">
+      <img src="icons/ui/fi-sr-faucet.svg" alt="Comodidades">
+      <span>Comodidades</span>
+    </button>
+
+    <button onclick="mostrarCategoria('emergencias')">
+      <img src="icons/ui/fi-sr-hospital.svg" alt="Emergencias">
+      <span>Emergencias</span>
+    </button>
+
+    <button onclick="mostrarCategoria('naturaleza')">
+      <img src="icons/ui/fi-sr-mountain.svg" alt="Naturaleza">
+      <span>Naturaleza</span>
+    </button>
+
+    <button onclick="mostrarCategoria('ocio_turismo')">
+      <img src="icons/ui/fi-sr-castle.svg" alt="Ocio y turismo">
+      <span>Ocio y turismo</span>
+    </button>
+
+    <button onclick="mostrarCategoria('servicios')">
+      <img src="icons/ui/fi-sr-tools.svg" alt="Servicios">
+      <span>Servicios</span>
+    </button>
+
+    <button onclick="mostrarCategoria('transporte')">
+      <img src="icons/ui/fi-sr-plane-alt.svg" alt="Transporte">
+      <span>Transporte</span>
+    </button>
+    
+  <button onclick="mostrarCategoria('ciclismo_senderismo')">
+    <img src="icons/ui/fi-sr-route.svg" alt="Ciclismo y senderismo">
+    <span>Ciclismo y senderismo</span>
+  </button>
+
   </div>
 </div>
+
 <div id="panelalojamiento" class="subpanel hidden">
   <button class="btnVolverPanel soloIcono" onclick="volverCategorias()">
     <img src="icons/ui/fi-sr-arrow-small-left.svg" alt="Volver">
   </button>
-  <h2>🛏️ Alojamiento</h2>
-   <button class="btnBuscarPanel" id="btnBuscarAlojamiento">🔍 Buscar POIs</button>
+<h2>
+  <img src="icons/ui/fi-sr-bed.svg" alt="Alojamiento" class="icono-panel">
+  Alojamiento
+</h2>
+   <!-- Botón buscar POIs con icono SVG -->
+  <button class="btnBuscarPanel" id="btnBuscarAlojamiento">
+    <img src="icons/ui/fi-sr-search.svg" alt="Buscar POIs">
+    <span>Buscar POIs</span>
+  </button>
   <div class="contenedorFiltros">
     <label>
       <input type="checkbox" class="poicheck" data-cat="tourism" data-sub="alpine_hut">
@@ -270,61 +321,84 @@
   </div>
 </div>
   <div id="panelciclismo_senderismo" class="subpanel hidden">
+  <!-- 🔙 Botón volver -->
   <button class="btnVolverPanel soloIcono" onclick="volverCategorias()">
-    <img src="icons/ui/fi-sr-arrow-small-left.svg" alt="Volver">
+    <img src="icons/ui/fi-sr-arrow-small-left.svg" alt="Volver" />
   </button>
-  <h2>🚶 Ciclismo y senderismo</h2>
-   <button class="btnBuscarPanel" id="btnBuscarRutaActiva">🔍 Buscar POIs</button>
+
+  <!-- 🏷️ Título con icono -->
+  <h2>
+    <img src="icons/ui/fi-sr-route.svg" alt="Ciclismo y Senderismo" class="icono-panel" />
+    Ciclismo y Senderismo
+  </h2>
+
+  <!-- 🔍 Botón buscar POIs -->
+  <button class="btnBuscarPanel" id="btnBuscarCiclismoSenderismo">
+    <img src="icons/ui/fi-sr-search.svg" alt="Buscar POIs" />
+    <span>Buscar POIs</span>
+  </button>
+
+  <!-- ✅ Filtros agrupados y organizados -->
   <div class="contenedorFiltros">
-    <label>
-      <input type="checkbox" class="poicheck" data-cat="information" data-sub="guidepost">
-      Poste de ruta
-    </label>
-    <label>
-      <input type="checkbox" class="poicheck" data-cat="information" data-sub="trailhead">
-      Inicio de ruta
-    </label>
-    <label>
-      <input type="checkbox" class="poicheck" data-cat="amenity" data-sub="bicycle_repair_station">
-      Reparación bici
-    </label>
-    <label>
-      <input type="checkbox" class="poicheck" data-cat="amenity" data-sub="charging_station">
-      Punto de carga
-    </label>
-    <label>
-      <input type="checkbox" class="poicheck" data-cat="tourism" data-sub="picnic_site">
-      Zona picnic
-    </label>
-    <label>
-      <input type="checkbox" class="poicheck" data-cat="amenity" data-sub="firepit">
-      Zona fuego
-    </label>
-    <label>
-      <input type="checkbox" class="poicheck" data-cat="amenity" data-sub="shelter">
-      Refugio sencillo
-    </label>
-    <label>
-      <input type="checkbox" class="poicheck" data-cat="information" data-sub="guidepost">
-      Señal guía
-    </label>
-    <label>
-      <input type="checkbox" class="poicheck" data-cat="information" data-sub="board">
-      Panel informativo
-    </label>
-    <label>
-      <input type="checkbox" class="poicheck" data-cat="information" data-sub="terminal">
-      Terminal digital
-    </label>
+
+    <!-- 🧭 Señalización -->
+    <label><input type="checkbox" class="poicheck" data-cat="information" data-sub="guidepost"> Poste de ruta</label>
+    <label><input type="checkbox" class="poicheck" data-cat="information" data-sub="guidepost"> Señal guía</label>
+    <label><input type="checkbox" class="poicheck" data-cat="information" data-sub="board"> Panel informativo</label>
+    <label><input type="checkbox" class="poicheck" data-cat="information" data-sub="terminal"> Terminal digital</label>
+
+    <!-- 🚲 Servicios para ciclistas -->
+    <label><input type="checkbox" class="poicheck" data-cat="amenity" data-sub="bicycle_repair_station"> Reparación bici</label>
+    <label><input type="checkbox" class="poicheck" data-cat="amenity" data-sub="charging_station"> Punto de carga</label>
+
+    <!-- ⛺ Descanso y refugio -->
+    <label><input type="checkbox" class="poicheck" data-cat="amenity" data-sub="shelter"> Refugio sencillo</label>
+    <label><input type="checkbox" class="poicheck" data-cat="tourism" data-sub="alpine_hut"> Refugio de montaña</label>
+    <label><input type="checkbox" class="poicheck" data-cat="tourism" data-sub="wilderness_hut"> Refugio básico</label>
+    <label><input type="checkbox" class="poicheck" data-cat="tourism" data-sub="camp_site"> Camping</label>
+    <label><input type="checkbox" class="poicheck" data-cat="tourism" data-sub="caravan_site"> Caravanas</label>
+    <label><input type="checkbox" class="poicheck" data-cat="tourism" data-sub="picnic_site"> Zona picnic</label>
+    <label><input type="checkbox" class="poicheck" data-cat="amenity" data-sub="firepit"> Zona fuego</label>
+    <label><input type="checkbox" class="poicheck" data-cat="amenity" data-sub="drinking_water"> Agua potable</label>
+
+    <!-- 🏞️ Entorno natural -->
+    <label><input type="checkbox" class="poicheck" data-cat="natural" data-sub="tree"> Árbol destacado</label>
+    <label><input type="checkbox" class="poicheck" data-cat="natural" data-sub="spring"> Manantial</label>
+    <label><input type="checkbox" class="poicheck" data-cat="natural" data-sub="waterfall"> Cascada</label>
+    <label><input type="checkbox" class="poicheck" data-cat="natural" data-sub="cave_entrance"> Cueva</label>
+    <label><input type="checkbox" class="poicheck" data-cat="natural" data-sub="rock"> Formación rocosa</label>
+    <label><input type="checkbox" class="poicheck" data-cat="natural" data-sub="volcano"> Volcán</label>
+    <label><input type="checkbox" class="poicheck" data-cat="natural" data-sub="peak"> Pico</label>
+    <label><input type="checkbox" class="poicheck" data-cat="natural" data-sub="saddle"> Collado</label>
+    <label><input type="checkbox" class="poicheck" data-cat="natural" data-sub="mountain_pass"> Paso montañoso</label>
+    <label><input type="checkbox" class="poicheck" data-cat="tourism" data-sub="viewpoint"> Mirador</label>
+    <label><input type="checkbox" class="poicheck" data-cat="boundary" data-sub="protected_area"> Área protegida</label>
+
+    <!-- 🏥 Emergencia y salud -->
+    <label><input type="checkbox" class="poicheck" data-cat="amenity" data-sub="hospital"> Hospital</label>
+    <label><input type="checkbox" class="poicheck" data-cat="amenity" data-sub="pharmacy"> Farmacia</label>
+    <label><input type="checkbox" class="poicheck" data-cat="amenity" data-sub="doctors"> Centro médico / doctor</label>
+    <label><input type="checkbox" class="poicheck" data-cat="emergency" data-sub="emergency_phone"> Teléfono de emergencia</label>
+
+    <!-- 🏰 Elementos históricos -->
+    <label><input type="checkbox" class="poicheck" data-cat="historic" data-sub="castle"> Castillo</label>
+    <label><input type="checkbox" class="poicheck" data-cat="historic" data-sub="ruins"> Ruinas</label>
+
   </div>
 </div>
-
 <div id="panelcomodidades" class="subpanel hidden">
   <button class="btnVolverPanel soloIcono" onclick="volverCategorias()">
     <img src="icons/ui/fi-sr-arrow-small-left.svg" alt="Volver">
   </button>
-  <h2>🚿 Comodidades</h2>
-  <button class="btnBuscarPanel" id="btnBuscarComodidades">🔍 Buscar POIs</button>
+ <h2>
+  <img src="icons/ui/fi-sr-faucet.svg" alt="Comodidades" class="icono-panel">
+  Comodidades
+</h2>
+    <!-- Botón buscar POIs con icono SVG -->
+  <button class="btnBuscarPanel" id="panelcomodidades">
+    <img src="icons/ui/fi-sr-search.svg" alt="Buscar POIs">
+    <span>Buscar POIs</span>
+  </button>
   <div class="contenedorFiltros">
     <label>
       <input type="checkbox" class="poicheck" data-cat="amenity" data-sub="drinking_water">
@@ -365,8 +439,15 @@
   <button class="btnVolverPanel soloIcono" onclick="volverCategorias()">
     <img src="icons/ui/fi-sr-arrow-small-left.svg" alt="Volver">
   </button>
-  <h2>🚨 Emergencias</h2>
-    <button class="btnBuscarPanel" id="btnBuscarEmergencias">🔍 Buscar POIs</button>
+  <h2>
+  <img src="icons/ui/fi-sr-hospital.svg" alt="Emergencias" class="icono-panel">
+  Emergencias
+</h2>
+     <!-- Botón buscar POIs con icono SVG -->
+  <button class="btnBuscarPanel" id="panelemergencias">
+    <img src="icons/ui/fi-sr-search.svg" alt="Buscar POIs">
+    <span>Buscar POIs</span>
+  </button>
   <div class="contenedorFiltros">
     <label>
       <input type="checkbox" class="poicheck" data-cat="amenity" data-sub="hospital">
@@ -407,8 +488,15 @@
   <button class="btnVolverPanel soloIcono" onclick="volverCategorias()">
     <img src="icons/ui/fi-sr-arrow-small-left.svg" alt="Volver">
   </button>
-  <h2>🌿 Naturaleza</h2>
-  <button class="btnBuscarPanel" id="btnBuscarNaturaleza">🔍 Buscar POIs</button>
+ <h2>
+  <img src="icons/ui/fi-sr-mountain.svg" alt="Naturaleza" class="icono-panel">
+  Naturaleza
+</h2>
+   <!-- Botón buscar POIs con icono SVG -->
+  <button class="btnBuscarPanel" id="panelnaturaleza">
+    <img src="icons/ui/fi-sr-search.svg" alt="Buscar POIs">
+    <span>Buscar POIs</span>
+  </button>
   <div class="contenedorFiltros">
     <label>
       <input type="checkbox" class="poicheck" data-cat="natural" data-sub="tree">
@@ -477,8 +565,15 @@
   <button class="btnVolverPanel soloIcono" onclick="volverCategorias()">
     <img src="icons/ui/fi-sr-arrow-small-left.svg" alt="Volver">
   </button>
-  <h2>🎭 Ocio y turismo</h2>
-   <button class="btnBuscarPanel" id="btnBuscarOcioTurismo">🔍 Buscar POIs</button>
+<h2>
+  <img src="icons/ui/fi-sr-castle.svg" alt="Ocio y turismo" class="icono-panel">
+  Ocio y turismo
+</h2>
+    <!-- Botón buscar POIs con icono SVG -->
+  <button class="btnBuscarPanel" id="panelocio_turismo">
+    <img src="icons/ui/fi-sr-search.svg" alt="Buscar POIs">
+    <span>Buscar POIs</span>
+  </button>
   <div class="contenedorFiltros">
     <label><input type="checkbox" class="poicheck" data-cat="tourism" data-sub="museum"> Museo</label>
     <label><input type="checkbox" class="poicheck" data-cat="tourism" data-sub="gallery"> Galería de arte</label>
@@ -513,7 +608,10 @@
   <button class="btnVolverPanel soloIcono" onclick="volverCategorias()">
     <img src="icons/ui/fi-sr-arrow-small-left.svg" alt="Volver">
   </button>
-  <h2>🚉 Transporte</h2>
+  <h2>
+  <img src="icons/ui/fi-sr-plane-alt.svg" alt="Transporte" class="icono-panel">
+  Transporte
+</h2>
    <button class="btnBuscarPanel" id="btnBuscarTransporte">🔍 Buscar POIs</button>
   <div class="contenedorFiltros">
     <label><input type="checkbox" class="poicheck" data-cat="highway" data-sub="bus_stop"> Parada de bus</label>
@@ -535,8 +633,15 @@
   <button class="btnVolverPanel soloIcono" onclick="volverCategorias()">
     <img src="icons/ui/fi-sr-arrow-small-left.svg" alt="Volver">
   </button>
-  <h2>🛠️ Servicios</h2>
-    <button class="btnBuscarPanel" id="btnBuscarServicios">🔍 Buscar POIs</button>
+  <h2>
+  <img src="icons/ui/fi-sr-tools.svg" alt="Servicios" class="icono-panel">
+  Servicios
+</h2>
+    <!-- Botón buscar POIs con icono SVG -->
+  <button class="btnBuscarPanel" id="panelservicios">
+    <img src="icons/ui/fi-sr-search.svg" alt="Buscar POIs">
+    <span>Buscar POIs</span>
+  </button>
   <div class="contenedorFiltros">
     <!-- 🛒 Comercio -->
     <label><input type="checkbox" class="poicheck" data-cat="shop" data-sub="supermarket"> Supermercado</label>

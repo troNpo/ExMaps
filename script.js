@@ -1425,3 +1425,51 @@ document.getElementById("btnPanelCapas")?.addEventListener("click", () => {
     }
   }
 });
+
+document.getElementById("archivoRuta")?.addEventListener("change", (event) => {
+  const archivo = event.target.files[0];
+  if (!archivo) return;
+
+  const lector = new FileReader();
+
+  lector.onload = function(e) {
+    const contenido = e.target.result;
+    const extension = archivo.name.split(".").pop().toLowerCase();
+
+    const estiloVisible = L.geoJson(null, {
+      style: {
+        color: "#00ff00", // Verde neón
+        weight: 4,
+        opacity: 0.9
+      }
+    });
+
+    let capaRuta;
+    if (extension === "gpx") {
+      capaRuta = omnivore.gpx.parse(contenido, null, estiloVisible);
+    } else if (extension === "kml") {
+      capaRuta = omnivore.kml.parse(contenido, null, estiloVisible);
+    } else {
+      alert("❌ Archivo no compatible. Usa GPX o KML");
+      return;
+    }
+
+    capaRuta.on("ready", () => {
+      capaRuta.addTo(map);
+
+      const bounds = capaRuta.getBounds();
+      const centro = map.getCenter();
+
+      // Solo centramos el mapa si la ruta está fuera de la vista actual
+      if (!bounds.contains(centro)) {
+        map.fitBounds(bounds);
+      }
+    });
+
+    capaRuta.on("error", () => {
+      alert("❌ No se pudo cargar la ruta");
+    });
+  };
+
+  lector.readAsText(archivo);
+});

@@ -11,9 +11,7 @@ body {
   inset: 0;
   z-index: 1;
 }
-
-
-/*  Botones dentro del menú ajustes de mapa  */
+/* Botones dentro del menú ajustes de mapa */
 .menu-emergente button {
   display: flex;
   align-items: center;
@@ -28,6 +26,7 @@ body {
   border-radius: 12px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  min-width: 140px;
 }
 .menu-emergente button img {
   width: 22px;
@@ -36,6 +35,20 @@ body {
 }
 .menu-emergente button:hover {
   background-color: #384051;
+}
+
+/* Responsive: ajuste para pantallas pequeñas */
+@media (max-width: 600px) {
+  .menu-emergente button {
+    font-size: 14px;
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .menu-emergente button img {
+    width: 20px;
+    height: 20px;
+  }
 }
 /* 📄 Ítems tipo <li> con imagen + texto (caso menú mapa) */
 .menu-emergente li {
@@ -53,6 +66,7 @@ body {
   cursor: pointer;
   transition: background-color 0.3s ease;
   list-style: none;
+  min-width: 140px;
 }
 .menu-emergente li img {
   width: 22px;
@@ -60,43 +74,77 @@ body {
   filter: invert(100%);
 }
 .menu-emergente li:hover {
-  background-color: #1e1e1e;
+  background-color: #384051; /* Color hover corregido */
+}
+
+/* 📱 Responsive: ajuste para pantallas pequeñas */
+@media (max-width: 600px) {
+  .menu-emergente li {
+    font-size: 14px;
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .menu-emergente li img {
+    width: 20px;
+    height: 20px;
+  }
 }
 /* 🔙 Botón volver/cerrar */
 .btnVolverPanel {
   position: absolute;
   top: 12px;
   right: 12px;
-  background: none;
+  background-color: #1e1e1e;
+  color: #f0f0f0;
   border: none;
-  padding: 6px;
+  padding: 8px;
+  border-radius: 12px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1001;
+  transition: background-color 0.3s ease;
 }
 .btnVolverPanel img {
   width: 22px;
   height: 22px;
   filter: invert(100%);
 }
-/* estilo del menú flotante */
+.btnVolverPanel:hover {
+  background-color: #384051;
+}
+
+/* 📱 Responsive: ajuste para pantallas pequeñas */
+@media (max-width: 600px) {
+  .btnVolverPanel {
+    padding: 6px;
+  }
+
+  .btnVolverPanel img {
+    width: 20px;
+    height: 20px;
+  }
+}
+/* 🪟 Menú flotante ajustes de mapa */
 #menuAjustes {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
   width: 90%;
+  max-width: 400px; /* Limita ancho en pantallas grandes */
   bottom: 300px;
-  background: #1e1e1e;                          
-  color: #f0f0f0;                               
-  font-family: 'Segoe UI', sans-serif;          
-  border-radius: 12px;  
-  padding: 15px 20px;                           
+  background: #1e1e1e;
+  color: #f0f0f0;
+  font-family: 'Segoe UI', sans-serif;
+  border-radius: 12px;
+  padding: 15px 20px;
   display: none;
   flex-direction: column;
   gap: 10px;
-  z-index: 300;
+  z-index: 350;
+  box-sizing: border-box;
 }
 #menuAjustes.visible {
   display: flex;
@@ -121,7 +169,7 @@ body {
   font-family: 'Segoe UI', sans-serif;
 }
 #menuAjustes li:hover {
-  background-color: #1e1e1e;
+  background-color: #384051;
 }
 
 #menuAjustes li img {
@@ -145,8 +193,30 @@ body {
   height: 20px;
   filter: invert(100%);
 }
-/* panel lateral para la búsqueda de pois */
-/* Encabezado fijo para todos los paneles */
+
+/* 📱 Responsive: ajustes para pantallas pequeñas */
+@media (max-width: 600px) {
+  #menuAjustes {
+    bottom: 120px; /* más accesible en pantallas pequeñas */
+    padding: 12px 16px;
+  }
+
+  #menuAjustes li {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+
+  #menuAjustes li img {
+    width: 18px;
+    height: 18px;
+  }
+
+  #menuAjustes .cerrarMenu img {
+    width: 18px;
+    height: 18px;
+  }
+}
+/* 📌 Logo ExMaps */
 #logoExMaps {
   position: absolute;
   top: 0px;
@@ -155,24 +225,28 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: none; 
+  background: none;
   padding: 8px 16px;
   border-radius: 10px;
   z-index: 1000;
+  max-width: 140px;
+  box-sizing: border-box;
 }
 #logoExMaps img {
-  width: 70px;        
+  width: 70px;
   height: auto;
-  background: none; 
+  background: none;
   border: none;
 }
 #logoExMaps span {
   margin-top: 4px;
   font-size: 16px;
   font-weight: bold;
-  color: #66ccff; 
+  color: #66ccff;
   font-family: 'Segoe UI', sans-serif;
 }
+
+/* 🪧 Nombre de la app */
 #nombreApp {
   position: fixed;
   top: 25px;
@@ -181,8 +255,8 @@ body {
   font-weight: bold;
   color: #66ccff;
   z-index: 1000;
+  white-space: nowrap;
 }
-
 
 /* 🔍 Botón búsqueda contextual */
 .btnBuscarPanel {
@@ -202,6 +276,34 @@ body {
 .btnBuscarPanel:hover {
   background-color: #a00c20;
 }
+.btnBuscarPanel:active {
+  transform: scale(0.98);
+}
+
+/* 📱 Responsive: adaptación móvil */
+@media (max-width: 600px) {
+  #logoExMaps img {
+    width: 55px;
+  }
+
+  #logoExMaps span {
+    font-size: 14px;
+  }
+
+  #nombreApp {
+    font-size: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 20px;
+    text-align: center;
+  }
+
+  .btnBuscarPanel {
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 14px;
+  }
+}
 /* 📐 Panel lateral principal */
 .sidebar {
   position: fixed;
@@ -216,6 +318,7 @@ body {
   z-index: 900;
   overflow-y: auto;
   border-right: 1px solid rgba(255,255,255,0.08);
+  box-sizing: border-box;
 }
 .sidebar.hidden {
   display: none;
@@ -238,19 +341,31 @@ body {
   top: 80px;
   left: 0;
   width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
   z-index: 999;
   border-top: 1px solid rgba(255,255,255,0.08);
 }
 .subpanel.visible {
   display: flex !important;
 }
+
+/* Encabezado de categoría con icono */
 .subpanel h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   color: #66ccff;
   font-size: 20px;
   font-family: 'Segoe UI', sans-serif;
   border-bottom: 1px solid rgba(255,255,255,0.1);
   padding-bottom: 8px;
   margin-bottom: 8px;
+}
+.subpanel h2 .icono-panel {
+  width: 22px;
+  height: 22px;
+  filter: brightness(0) invert(1);
 }
 
 /* 🧽 Botón limpieza checkbox */
@@ -270,25 +385,75 @@ body {
 .btnSecundario:hover {
   background-color: #2a2a2a;
 }
+.btnBuscarPanel:hover,
+.btnSecundario:hover {
+  background-color: #2a2a2a;
+}
+.btnBuscarPanel img,
+.btnSecundario img {
+  width: 24px;
+  height: 24px;
+  filter: invert(100%);
+}
 
+/* 📱 Responsive: ajustes para pantallas pequeñas */
+@media (max-width: 600px) {
+  .sidebar {
+    max-width: 100%;
+    padding: 12px;
+  }
+
+  .subpanel {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .subpanel h2 {
+    font-size: 18px;
+  }
+
+  .btnSecundario {
+    font-size: 14px;
+    padding: 8px 10px;
+    border-radius: 14px;
+  }
+
+  .btnSecundario img,
+  .btnBuscarPanel img {
+    width: 20px;
+    height: 20px;
+  }
+}
 /* 🧩 Botones de agrupaciones */
+.grupo-categorias {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+  margin-top: 12px;
+}
+
 .grupo-categorias button {
   background-color: #1e1e1e;
-  color: #f0f0f0;
-  font-family: 'Segoe UI', sans-serif;
-  font-size: 15px;
-  font-weight: 500;
-  border: none;
-  padding: 12px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
-  text-align: left;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 10px;
-  transition: background 0.2s ease;
+  color: #f0f0f0;
+  font-size: 13.5px;
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: 500;
+  text-align: left;
 }
-.grupo-categorias button:hover {
-  background-color: #2a2a2a;
+
+.grupo-categorias button img {
+  width: 22px;
+  height: 22px;
+  filter: invert(100%);
 }
 
 /* 🧾 Checkbox visual */
@@ -300,6 +465,35 @@ body {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+/* 🎯 Responsive para pantallas ≤600px */
+@media (max-width: 600px) {
+  .grupo-categorias {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+  }
+
+  .grupo-categorias button {
+    padding: 8px 10px;
+    font-size: 12.5px;
+    gap: 8px;
+    border-radius: 10px;
+  }
+
+  .grupo-categorias button img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .poicheck {
+    transform: scale(1.1);
+    margin-right: 8px;
+  }
+
+  .contenedorFiltros {
+    gap: 6px;
+  }
 }
 /* 🪟 Panel informativo inferior (POI) */
 .bottom-sheet {
@@ -314,6 +508,7 @@ body {
   z-index: 300;
   max-height: 50vh;
   overflow: hidden;
+  box-sizing: border-box;
 }
 .bottom-sheet.visible {
   bottom: 0;
@@ -325,6 +520,7 @@ body {
   max-height: 100vh;
   height: 100vh;
 }
+
 /* 📎 Grip superior decorativo */
 .grip {
   width: 40px;
@@ -334,15 +530,17 @@ body {
   margin: 10px auto;
   cursor: grab;
 }
-/* 📄 Contenedor de la información del POI */
+
+/* 📄 Contenido del POI */
 .contenido-poi {
   padding: 15px 20px;
   max-height: calc(50vh - 60px);
   overflow-y: auto;
+  box-sizing: border-box;
 }
 .bottom-sheet.expandido .contenido-poi {
-  max-height: calc(100vh - 160px); 
-  padding-bottom: 80px; 
+  max-height: calc(100vh - 160px);
+  padding-bottom: 80px;
 }
 .contenido-poi h2 {
   color: #66ccff;
@@ -350,14 +548,15 @@ body {
   margin-bottom: 10px;
 }
 .contenido-poi a {
-  color: #C5F900; 
+  color: #C5F900;
   text-decoration: none;
   font-weight: 500;
 }
 .contenido-poi a:hover {
-  color: #A6DF00; 
+  color: #A6DF00;
   text-decoration: underline;
 }
+
 /* ❌ Botón cerrar panel */
 .btn-cerrar {
   position: absolute;
@@ -372,12 +571,12 @@ body {
   align-items: center;
   justify-content: center;
 }
-
 .btn-cerrar img {
   width: 22px;
   height: 22px;
   filter: invert(100%);
 }
+
 /* 🔼 Botón expandir panel */
 .expandir-btn {
   position: absolute;
@@ -394,58 +593,111 @@ body {
   height: 22px;
   filter: invert(100%);
 }
-/* 🔘 Bloque de acciones principales poi */
+
+/* 📱 Responsive: mejora táctil y visual */
+@media (max-width: 600px) {
+  .bottom-sheet {
+    max-height: 60vh;
+  }
+
+  .contenido-poi {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  .contenido-poi h2 {
+    font-size: 18px;
+  }
+
+  .btn-cerrar img,
+  .expandir-btn img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .grip {
+    width: 32px;
+    height: 5px;
+  }
+}
 .acciones-poi {
   display: flex;
   justify-content: space-around;
   padding: 12px 0;
   gap: 10px;
   border-top: 1px solid rgba(255,255,255,0.1);
+  flex-wrap: wrap; /* Por si hay más acciones en móvil */
 }
+
 .accion-btn {
   background: none;
   border: none;
-  padding: 10px;
+  padding: 14px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 8px;
+  transition: background 0.2s ease;
 }
+.accion-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+.accion-btn:active {
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .accion-btn img {
   width: 24px;
   height: 24px;
   filter: invert(100%);
 }
+
+/* 📱 Responsive para iconos y tacto */
+@media (max-width: 600px) {
+  .accion-btn {
+    padding: 12px;
+  }
+  .accion-btn img {
+    width: 20px;
+    height: 20px;
+  }
+}
+/* 📦 Menú emergente general */
 .menu-emergente {
   position: absolute;
   bottom: 80px;
   left: 50%;
   transform: translateX(-50%);
   width: 90%;
-  background-color: #1e1e1e;                  
-  color: #f0f0f0;                          
-  font-family: 'Segoe UI', sans-serif;       
+  max-width: 400px; /* previene exceso en tablets */
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  font-family: 'Segoe UI', sans-serif;
   font-size: 15px;
   font-weight: 500;
-  border-radius: 12px;                        
-  padding: 15px 20px;                         
+  border-radius: 12px;
+  padding: 15px 20px;
   display: none;
   flex-direction: column;
   gap: 10px;
   z-index: 350;
+  box-sizing: border-box;
 }
 .menu-emergente.visible {
   display: flex;
 }
-/* aportación osm */ 
+
+/* 🗺️ Guía OSM */
 .guia-osm {
-  background-color: #1e1e1e;                 
-  color: #f0f0f0;                             
-  font-size: 15px;                           
-  font-family: 'Segoe UI', sans-serif;        
-  border-radius: 12px;                        
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  font-size: 15px;
+  font-family: 'Segoe UI', sans-serif;
+  border-radius: 12px;
   padding: 15px 20px;
   margin-bottom: 10px;
+  box-sizing: border-box;
 }
 .guia-osm ul {
   list-style: none;
@@ -458,6 +710,8 @@ body {
   align-items: center;
   gap: 8px;
 }
+
+/* ❌ Botón cerrar contribución */
 .cerrarMenuContribuir {
   position: absolute;
   top: 10px;
@@ -477,12 +731,60 @@ body {
   filter: invert(100%);
 }
 
+/* 🔘 Botón lateral flotante */
 .btnLateral {
   width: 42px;
   height: 42px;
   padding: 8px;
+  border-radius: 50%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-/* Botones individuales */
+.btnLateral img {
+  width: 24px;
+  height: 24px;
+  filter: invert(100%);
+}
+
+/* 📱 Responsive para móviles */
+@media (max-width: 600px) {
+  .menu-emergente {
+    bottom: 100px;
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  .guia-osm {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  .guia-osm li {
+    gap: 6px;
+    font-size: 13.5px;
+  }
+
+  .cerrarMenuContribuir img {
+    width: 18px;
+    height: 18px;
+  }
+
+  .btnLateral {
+    width: 40px;
+    height: 40px;
+    padding: 6px;
+  }
+
+  .btnLateral img {
+    width: 22px;
+    height: 22px;
+  }
+}
+/* 🔘 Botón lateral individual */
 .btnLateral {
   width: 48px;
   height: 48px;
@@ -507,27 +809,69 @@ body {
   transform: scale(0.95);
 }
 
-/* Botón con texto debajo */
+/* 🔡 Botón con texto debajo */
 .bloque-boton {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0px;
+  gap: 4px;
+  padding: 4px 6px;
+  transition: transform 0.15s ease, opacity 0.15s ease;
 }
 .bloque-boton span {
-  font-size: 10px;
-  color: #fff;
+  font-size: 11px;
+  color: #f0f0f0;
   text-align: center;
-  line-height: 1.2;
+  line-height: 1.3;
   font-family: 'Segoe UI', sans-serif;
+  font-weight: 500;
 }
 
+/* 🌀 Feedback táctil suave */
+.bloque-boton:active {
+  transform: scale(0.97);
+  opacity: 0.8;
+}
 
-/* PERFIL DE USUARIO */
+/* 📱 Responsive para pantallas pequeñas */
+@media (max-width: 600px) {
+  .btnLateral {
+    width: 44px;
+    height: 44px;
+    padding: 4px;
+  }
+  .btnLateral img {
+    width: 22px;
+    height: 22px;
+  }
+  .bloque-boton span {
+    font-size: 10px;
+  }
+}
+/* 📋 Etiquetas con íconos */
+.menu-emergente label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #f0f0f0;
+  font-family: 'Segoe UI', sans-serif;
+  margin-top: 10px;
+}
+
+.menu-emergente label img {
+  width: 18px;
+  height: 18px;
+  filter: invert(100%);
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+/* 🖊️ Inputs y Selects */
 .menu-emergente input,
 .menu-emergente select {
   width: 100%;
-  box-sizing: border-box; 
+  box-sizing: border-box;
   padding: 12px 14px;
   margin-top: 6px;
   background-color: #1e1e1e;
@@ -536,48 +880,59 @@ body {
   font-size: 15px;
   border: 1px solid rgba(255,255,255,0.2);
   border-radius: 12px;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.menu-emergente input::placeholder,
+.menu-emergente select::placeholder {
+  color: #bbbbbb;
 }
 
 .menu-emergente input:focus,
 .menu-emergente select:focus {
   outline: none;
   border-color: #66ccff;
+  background-color: #2a2a2a;
 }
 
-/* Etiquetas con íconos */
-.menu-emergente label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+/* 📱 Responsive para pantallas pequeñas */
+@media (max-width: 600px) {
+  .menu-emergente label {
+    font-size: 13.5px;
+    gap: 6px;
+  }
 
-.menu-emergente label img {
-  width: 18px;
-  height: 18px;
-  filter: invert(100%);
-  margin-right: 8px;
-  vertical-align: middle;
-}
+  .menu-emergente label img {
+    width: 16px;
+    height: 16px;
+  }
 
-/* Panel genérico emergente (oculto por defecto) */
+  .menu-emergente input,
+  .menu-emergente select {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+}
+/* 🌠 Panel genérico emergente (oculto por defecto) */
 .menu-emergente {
   position: absolute;
   bottom: 80px;
   left: 50%;
   transform: translateX(-50%);
   width: 90%;
-  background-color: #1e1e1e;                  
-  color: #f0f0f0;                             /
-  font-family: 'Segoe UI', sans-serif;       
+  max-width: 400px; /* límite para tablets y escritorio */
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  font-family: 'Segoe UI', sans-serif;
   font-size: 15px;
   font-weight: 500;
-  border-radius: 12px;                        
+  border-radius: 12px;
   padding: 15px 20px;
   display: none;
   flex-direction: column;
   gap: 10px;
   z-index: 350;
+  box-sizing: border-box;
 }
 .menu-emergente.visible {
   display: flex;
@@ -608,7 +963,7 @@ body {
   display: block;
 }
 
-/* Etiquetas con íconos */
+/* 🏷️ Etiquetas con íconos */
 .menu-emergente label {
   display: flex;
   align-items: center;
@@ -624,7 +979,7 @@ body {
   filter: invert(100%);
 }
 
-/* Bloque búsqueda */
+/* 🔍 Bloque búsqueda contextual */
 .menu-emergente .busqueda-wrap {
   display: flex;
   gap: 8px;
@@ -639,13 +994,18 @@ body {
   border: 1px solid rgba(255,255,255,0.2);
   border-radius: 12px;
   font-size: 15px;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+.menu-emergente input::placeholder {
+  color: #bbb;
 }
 .menu-emergente input:focus {
   outline: none;
   border-color: #66ccff;
+  background-color: #2a2a2a;
 }
 
+/* 🔴 Botón buscar dirección */
 .menu-emergente #btnBuscarDireccion {
   padding: 12px 20px;
   background-color: #1e1e1e;
@@ -659,8 +1019,11 @@ body {
 .menu-emergente #btnBuscarDireccion:hover {
   background-color: #2a2a2a;
 }
+.menu-emergente #btnBuscarDireccion:active {
+  background-color: #3a0f1f;
+}
 
-/* Resultados */
+/* 📋 Resultados de búsqueda */
 .menu-emergente #resultadosNominatim {
   margin-top: 8px;
   max-height: 300px;
@@ -669,90 +1032,164 @@ body {
   font-size: 14px;
   line-height: 1.5;
 }
-/* Posición estándar: modo diestro (botonera a la derecha) */
-.barra-lateral {
-  position: fixed;
-  top: 110px;
-  right: 10px;
-  left: unset;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 5px;
-  padding: 6px 1px;
-  z-index: 300;
-  width: fit-content;
-  transition: all 0.3s ease;
-}
 
-/* Cambia a izquierda en modo zurdo */
-body.modo-zurdo .barra-lateral {
-  left: 10px;
-  right: unset;
-}
+/* 📱 Ajustes responsive para pantallas ≤600px */
+@media (max-width: 600px) {
+  .menu-emergente {
+    bottom: 100px;
+    padding: 12px 16px;
+    font-size: 14px;
+  }
 
-/* Botón flotante para mostrar/ocultar la barra lateral */
+  .menu-emergente label {
+    font-size: 13.5px;
+    gap: 6px;
+  }
+
+  .menu-emergente label img {
+    width: 16px;
+    height: 16px;
+  }
+
+  .menu-emergente input[type="text"] {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+
+  .menu-emergente #btnBuscarDireccion {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  .menu-emergente .btnVolverPanel img {
+    width: 18px;
+    height: 18px;
+  }
+}
+/* 🔘 Botón flotante pegado visualmente a la barra */
 .toggle-botonera {
   position: fixed;
-  top: 62px;
-  right: 10px;
-  width: 50px;
-  height: 50px;
-  background: rgba(0, 0, 0, 0.6);     
-  border-radius: 5px;                
-  border: none;
-  padding: 6px 1px;
+  top: 60px;
+  right: 12px;
+  width: 48px;
+  height: 48px;
+  background: rgba(0, 0, 0, 0.75);
+  border-radius: 10px 10px 0 0;
+  border: 1px solid rgba(255,255,255,0.1);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 300;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: background 0.3s ease;
 }
-
 .toggle-botonera img {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   filter: invert(100%);
 }
 
-.toggle-botonera:active {
-  transform: scale(0.95);
+/* 🧊 Barra vertical unida al botón con animación tipo despliegue */
+.barra-lateral {
+  position: fixed;
+  top: calc(60px + 48px);
+  right: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 6px;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(3px);
+  border-radius: 0 0 10px 10px;
+  box-sizing: border-box;
+  width: 48px;
+  z-index: 300;
+  transform-origin: top center;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-/* 🧭 Adaptación para modo zurdo */
-body.modo-zurdo .toggle-botonera {
-  left: 10px;
-  right: unset;
+/* 🔘 Botones individuales */
+.barra-lateral button {
+  width: 36px;
+  height: 36px;
+  background: rgba(255,255,255,0.12);
+  border: none;
+  border-radius: 50%;
+  padding: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
-.barra-lateral {
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  transform-origin: top;
+.barra-lateral button img {
+  width: 18px;
+  height: 18px;
+  filter: invert(100%);
 }
+.barra-lateral button:active {
+  background: rgba(255,255,255,0.2);
+}
+
+/* 🚦 Estados de visibilidad */
 .barra-lateral.oculta {
   transform: scaleY(0);
   opacity: 0;
   pointer-events: none;
 }
-
 .barra-lateral.activa {
   transform: scaleY(1);
   opacity: 1;
   pointer-events: auto;
 }
 
+/* 🧠 Modo zurdo */
+body.modo-zurdo .toggle-botonera {
+  left: 12px;
+  right: unset;
+}
+body.modo-zurdo .barra-lateral {
+  left: 12px;
+  right: unset;
+}
+
+/* 📱 Responsive para móviles */
+@media (max-width: 600px) {
+  .toggle-botonera {
+    top: 48px;
+    width: 44px;
+    height: 44px;
+  }
+  .barra-lateral {
+    top: calc(48px + 44px);
+    width: 44px;
+    padding: 6px;
+  }
+  .barra-lateral button {
+    width: 34px;
+    height: 34px;
+  }
+  .barra-lateral button img {
+    width: 16px;
+    height: 16px;
+  }
+}
+/* 🎨 Apariencia base del panel de capas */
 .leaflet-control-layers-expanded {
   background-color: #1e1e1e;
   color: #fff;
   border-radius: 10px;
   padding: 12px;
   font-family: 'Segoe UI', sans-serif;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
 }
+
+/* 🔕 Oculta el botón de toggle original de Leaflet */
 .leaflet-control-layers-toggle {
   display: none !important;
 }
-/* 🔧 Panel flotante centrado estilo ExMaps */
+
+/* 📍 Panel flotante centrado en pantalla */
 .leaflet-control-layers.leaflet-control-layers-expanded {
   position: fixed !important;
   top: 50% !important;
@@ -765,4 +1202,29 @@ body.modo-zurdo .toggle-botonera {
   padding: 16px;
   z-index: 1200;
   font-family: 'Segoe UI', sans-serif;
+  box-sizing: border-box;
+  max-width: 90%;
+  max-height: 90%;
+  overflow-y: auto;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* 📱 Ajustes responsive para pantallas pequeñas */
+@media (max-width: 600px) {
+  .leaflet-control-layers.leaflet-control-layers-expanded {
+    padding: 12px;
+    font-size: 14px;
+  }
+}
+
+/* 🎭 Animación de entrada opcional */
+.leaflet-control-layers.leaflet-control-layers-expanded.inactivo {
+  transform: translate(-50%, -60%) scale(0.95);
+  opacity: 0;
+  pointer-events: none;
+}
+.leaflet-control-layers.leaflet-control-layers-expanded.activo {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  pointer-events: auto;
 }
