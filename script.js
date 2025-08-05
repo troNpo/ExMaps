@@ -1493,3 +1493,8 @@ self.addEventListener('fetch', event => {
       .then(response => response || fetch(event.request).catch(() => caches.match('./offline.html')))
   );
 });
+if ('serviceWorker' in navigator && 'SyncManager' in window) {
+  navigator.serviceWorker.ready.then(registration => {
+    registration.sync.register('sync-new-poi');
+  });
+}
