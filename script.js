@@ -1473,3 +1473,23 @@ document.getElementById("archivoRuta")?.addEventListener("change", (event) => {
 
   lector.readAsText(archivo);
 });
+self.addEventListener('install', event => {
+  self.skipWaiting(); // Fuerza la activación inmediata
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+  );
+});
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key)))
+    )
+  );
+  self.clients.claim(); // Toma control sin esperar
+});
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => response || fetch(event.request).catch(() => caches.match('./offline.html')))
+  );
+});
