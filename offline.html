@@ -1,1 +1,53 @@
-
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sin conexión</title>
+  <style>
+    body {
+      background-color: #202020;
+      color: #ffffff;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .logo {
+      font-size: 60px;
+      margin-bottom: 20px;
+      color: #3498db;
+    }
+    h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #2980b9;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">🗺️ ExMaps</div>
+  <h1>¡Estás sin conexión!</h1>
+  <p>Pero tranquilo, esta app funciona incluso sin internet.</p>
+  <button onclick="location.reload()">Reintentar</button>
+</body>
+</html>
