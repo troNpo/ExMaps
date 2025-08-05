@@ -38,3 +38,20 @@ self.addEventListener('fetch', event => {
       })
   );
 });
+self.addEventListener('sync', event => {
+  if (event.tag === 'sync-new-poi') {
+    event.waitUntil(sendPendingPOIs());
+  }
+});
+
+async function sendPendingPOIs() {
+  const pending = await getPendingPOIs(); // ← Podemos crear esta función con IndexedDB
+  for (const poi of pending) {
+    await fetch('/api/pois', {
+      method: 'POST',
+      body: JSON.stringify(poi),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    // Aquí puedes borrar el POI si fue exitoso
+  }
+        }
