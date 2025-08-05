@@ -5,6 +5,7 @@
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
+  "display_override": ["window-controls-overlay"],
   "orientation": "portrait",
   "description": "búsqueda de pois.",
   "background_color": "#000000",
@@ -40,5 +41,27 @@
       "sizes": "720x1541",
       "type": "image/png"
     }
-  ]
+  ],
+  "file_handlers": [
+    {
+      "action": "/abrir",
+      "accept": {
+        "application/pdf": [".pdf"],
+        "application/json": [".json"]
+      }
+    }
+  ],
+  "handle_links": {
+    "enabled": true,
+    "include": ["https://exmaps.es/*"]
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "exmaps",
+      "url": "https://exmaps.es/ruta?dato=%s"
+    }
+  ],
+  "edge_side_panel": {
+    "preferred_width": 400
+  }
 }
