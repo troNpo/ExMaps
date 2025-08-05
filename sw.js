@@ -1,3 +1,4 @@
+importScripts("https://progressier.app/duolajawWVm8uvtCoDCg/sw.js");
 const CACHE_NAME = 'mapa-cache-v1';
 const urlsToCache = ['/', '/index.html', '/styles.css', '/js/app.js'];
 
