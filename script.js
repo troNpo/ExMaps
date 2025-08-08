@@ -1173,38 +1173,9 @@ document.getElementById("btnVisualizarPOI")?.addEventListener("click", () => {
   });
   menu?.classList.toggle("visible");
 });
-function abrirStreetViewDesdePOI() {
-  const tags = window.tagsPOI;
-  if (!tags?.lat || !tags?.lon) {
-    mostrarAvisoToast("⚠️ Coordenadas no disponibles");
-    return;
-  }
 
-  const lat = tags.lat.toFixed(7);
-  const lon = tags.lon.toFixed(7);
 
-  const streetViewURL = `https://www.google.com/maps?q=&layer=c&cbll=${lat},${lon}`;
-  window.open(streetViewURL, "_blank");
-
-  cerrarMenuVer();
-}
-
-function abrirMapillaryDesdePOI() {
-  const tags = window.tagsPOI;
-  if (!tags?.lat || !tags?.lon) {
-    mostrarAvisoToast("⚠️ Coordenadas no disponibles");
-    return;
-  }
-
-  const lat = tags.lat.toFixed(7);
-  const lon = tags.lon.toFixed(7);
-
-  const mapillaryURL = `https://www.mapillary.com/app/?lat=${lat}&lng=${lon}&z=17&focus=photo`;
-  window.open(mapillaryURL, "_blank");
-
-  cerrarMenuVer();
-}
-function abrirPeakFinderDesdePOI() {
+function abrirVisorWebDesdePOI(tipo) {
   const tags = window.tagsPOI;
   if (!tags?.lat || !tags?.lon) {
     mostrarAvisoToast("⚠️ Coordenadas no disponibles");
@@ -1214,12 +1185,40 @@ function abrirPeakFinderDesdePOI() {
   const lat = tags.lat.toFixed(7);
   const lon = tags.lon.toFixed(7);
   const ele = tags.ele ? parseFloat(tags.ele).toFixed(1) : 0;
-  const azimuth = 180; // Puedes ajustar esto si tienes orientación
 
-  const peakFinderURL = `https://www.peakfinder.org/es?lat=${lat}&lng=${lon}&ele=${ele}&azi=${azimuth}`;
-  window.open(peakFinderURL, "_blank");
+  let url = "";
+  let titulo = "";
 
-  cerrarMenuVer();
+  switch (tipo) {
+    case "streetview":
+      url = `https://www.google.com/maps?q=&layer=c&cbll=${lat},${lon}`;
+      window.open(url, "_blank");
+      return;
+
+    case "mapillary":
+      url = `https://www.mapillary.com/app/?lat=${lat}&lng=${lon}&z=17&focus=photo`;
+      window.open(url, "_blank");
+      return;
+
+    case "peakfinder":
+      url = `https://www.peakfinder.org/es?lat=${lat}&lng=${lon}&ele=${ele}&azi=180`;
+      titulo = "PeakFinder";
+      break;
+  }
+
+  // Solo embebemos PeakFinder
+  document.getElementById("iframeWeb").src = url;
+  document.getElementById("visorTitulo").textContent = titulo;
+  document.getElementById("visorWeb").classList.remove("hidden");
+}
+function cerrarVisorWeb() {
+  const visor = document.getElementById("visorWeb");
+  const iframe = document.getElementById("iframeWeb");
+
+  if (visor && iframe) {
+    iframe.src = ""; // Limpia el contenido
+    visor.classList.add("hidden"); // Oculta el visor
+  }
 }
 
 function cerrarMenuVer() {

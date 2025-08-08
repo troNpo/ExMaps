@@ -760,23 +760,30 @@
     <span>Añadir sugerencia como nota pública</span>
   </button>
 </div>
-
 <!-- 🗺️ Menú ver ubicación -->
 <div class="menu-emergente" id="menuVer">
-  <button onclick="abrirStreetViewDesdePOI()">
+  <button onclick="abrirVisorWebDesdePOI('streetview')">
     <img src="icons/ui/fi-sr-street-view.svg" alt="Street View" />
     <span>Ver en Street View</span>
   </button>
 
-  <button onclick="abrirMapillaryDesdePOI()">
+  <button onclick="abrirVisorWebDesdePOI('mapillary')">
     <img src="icons/ui/fi-sr-camera-viewfinder.svg" alt="Mapillary" />
     <span>Ver en Mapillary</span>
   </button>
-  
-  <button onclick="abrirPeakFinderDesdePOI()">
-  <img src="icons/ui/fi-sr-mountains.svg" alt="PeakFinder" />
-  <span>Ver en PeakFinder</span>
-</button>
+
+  <button onclick="abrirVisorWebDesdePOI('peakfinder')">
+    <img src="icons/ui/fi-sr-mountains.svg" alt="PeakFinder" />
+    <span>Ver en PeakFinder</span>
+  </button>
+</div>
+
+<div id="visorWeb" class="visor-full hidden">
+  <div class="visor-barra">
+    <span id="visorTitulo">Visor</span>
+    <button onclick="cerrarVisorWeb()">❌</button>
+  </div>
+  <iframe id="iframeWeb" src="" loading="lazy" allowfullscreen></iframe>
 </div>
 
   
