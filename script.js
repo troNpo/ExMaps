@@ -230,97 +230,37 @@ function obtenerPOIsSeleccionados() {
   return seleccionados;
 }
 
-// 🧭 Diccionario de colores oficiales OSM (simplificado y ampliable)
-const colorPorSubtipo = {
-  // 🛠️ Servicios — tonos azules
-  "shop=supermarket": "#225577",
-  "shop=bakery": "#3377aa",
-  "shop=organic": "#4488cc",
-  "shop=butcher": "#5599dd",
-  "shop=bicycle": "#66aaff",
-  "shop=travel_agency": "#77bbff",
 
-  // 💸 Finanzas — tonos grises
-  "amenity=atm": "#666666",
-  "amenity=bank": "#777777",
-  "amenity=post_office": "#888888",
-  "amenity=post_box": "#999999",
-
-  // 🚨 Emergencias — tonos rojos
-  "amenity=hospital": "#cc0000",
-  "amenity=pharmacy": "#dd3333",
-  "amenity=doctors": "#ee5555",
-  "emergency=emergency_phone": "#ff7777",
-  "emergency=defibrillator": "#ff9999",
-  "amenity=fire_station": "#ff3333",
-  "amenity=police": "#0033cc",
-
-  // 🛏️ Alojamiento — tonos lilas
-  "tourism=hostel": "#9966cc",
-  "tourism=hotel": "#aa77dd",
-  "tourism=chalet": "#bb88ee",
-  "tourism=guest_house": "#cc99ff",
-  "tourism=camp_site": "#b377e8",
-
-  // 🚉 Transporte — tonos azulados
-  "highway=bus_stop": "#226699",
-  "amenity=bus_station": "#3388bb",
-  "railway=train_station": "#4499cc",
-  "railway=station": "#55aadd",
-  "aeroway=airport": "#66bbff",
-  "aeroway=helipad": "#77ccff",
-
-  // 🚿 Comodidades — tonos verdes
-  "amenity=drinking_water": "#228822",
-  "amenity=toilets": "#339933",
-  "amenity=recycling": "#44aa44",
-  "amenity=shelter": "#55bb55",
-  "amenity=bench": "#66cc66",
-
-  // 🌿 Naturaleza — tonos bosque
-  "natural=tree": "#336633",
-  "natural=peak": "#447744",
-  "natural=spring": "#558855",
-  "natural=rock": "#669966",
-  "natural=beach": "#77aa77",
-  "natural=waterfall": "#88bb88",
-
-  // 🎭 Ocio y turismo — tonos púrpura
-  "tourism=museum": "#660066",
-  "amenity=cinema": "#772277",
-  "amenity=theatre": "#883388",
-  "historic=castle": "#994499",
-  "tourism=zoo": "#aa55aa",
-  "tourism=artwork": "#bb66bb",
-
-  // 🍽️ Gastronomía — tonos vino
-  "amenity=restaurant": "#880000",
-  "amenity=fast_food": "#993333",
-  "amenity=cafe": "#aa5555",
-  "amenity=bar": "#bb7777",
-  "amenity=pub": "#cc9999",
-  "amenity=ice_cream": "#ddbbbb"
-};
 
 function crearMarcador(el) {
   const nombre = el.tags.name || "POI";
 
-  let subtipo = "marker";
-  for (const key of ["amenity", "shop", "tourism", "leisure", "natural", "emergency", "highway"]) {
-    if (el.tags[key]) {
-      subtipo = `${key}=${el.tags[key]}`;
+  let subtipo = null;
+  let key = null;
+
+  for (const k of ["amenity", "shop", "tourism", "leisure", "natural", "emergency", "highway", "historic", "building"]) {
+    if (el.tags[k]) {
+      key = k;
+      subtipo = el.tags[k];
       break;
     }
   }
 
-  const color = colorPorSubtipo[subtipo] || "#999999";
+  // Ruta del icono específico
+  const rutaIcono = subtipo ? `icons/${subtipo}.svg` : null;
 
-  const marcador = L.circleMarker([el.lat, el.lon], {
-    radius: 8,
-    color,
-    fillColor: color,
-    fillOpacity: 0.8
-  }).addTo(map);
+  const icono = rutaIcono
+    ? L.icon({
+        iconUrl: rutaIcono,
+        iconSize: [30, 30],
+        iconAnchor: [15, 30],
+        popupAnchor: [0, -25]
+      })
+    : null;
+
+  const marcador = icono
+    ? L.marker([el.lat, el.lon], { icon: icono }).addTo(map)
+    : L.marker([el.lat, el.lon]).addTo(map); // marcador estándar si no hay icono
 
   el.tags.lat = el.lat;
   el.tags.lon = el.lon;
@@ -345,7 +285,7 @@ function crearMarcador(el) {
     }
   });
 
-  return marcador; // ✅ cierre clave que estaba faltando
+  return marcador;
 }
 function ejecutarBusqueda() {
   const seleccionados = obtenerPOIsSeleccionados();
@@ -363,14 +303,29 @@ function ejecutarBusqueda() {
   const radio = Math.round(100 * Math.pow(2, 19 - zoom)); // Escalado dinámico
 
   // 🧬 Diccionario de equivalencias por categoría + subtipo
-  const equivalencias = {
-    "historic=castle": ["historic=castle", "castle=yes", "tourism=attraction"],
-    "tourism=hotel": ["tourism=hotel", "amenity=hotel"],
-    "shop=supermarket": ["shop=supermarket", "amenity=marketplace"],
-    "amenity=pharmacy": ["amenity=pharmacy", "healthcare=pharmacy", "shop=health"],
-    "tourism=museum": ["tourism=museum", "amenity=museum", "historic=building"],
-    // ⚠️ Puedes seguir ampliando aquí según tus necesidades
-  };
+ const equivalencias = {
+  "historic=castle": ["historic=castle", "castle=yes", "tourism=attraction"],
+  "tourism=hotel": ["tourism=hotel", "amenity=hotel"],
+  "shop=supermarket": ["shop=supermarket", "amenity=marketplace"],
+  "amenity=pharmacy": ["amenity=pharmacy", "healthcare=pharmacy", "shop=health"],
+  "tourism=museum": ["tourism=museum", "amenity=museum", "historic=building"],
+  "amenity=restaurant": ["amenity=restaurant", "cuisine=*", "tourism=attraction"],
+  "amenity=cafe": ["amenity=cafe", "cuisine=cafe", "shop=coffee"],
+  "amenity=bar": ["amenity=bar", "cuisine=bar", "shop=alcohol"],
+  "amenity=bank": ["amenity=bank", "office=financial", "shop=money"],
+  "amenity=atm": ["amenity=atm", "shop=money", "amenity=bank"],
+  "amenity=parking": ["amenity=parking", "highway=parking", "tourism=caravan_site"],
+  "leisure=park": ["leisure=park", "landuse=recreation_ground", "tourism=attraction"],
+  "amenity=school": ["amenity=school", "education=school", "building=school"],
+  "amenity=hospital": ["amenity=hospital", "healthcare=hospital", "building=hospital"],
+  "tourism=camp_site": ["tourism=camp_site", "amenity=campground", "leisure=camping"],
+  "amenity=library": ["amenity=library", "building=library", "tourism=attraction"],
+  "historic=monument": ["historic=monument", "tourism=attraction", "memorial=*"],
+  "amenity=theatre": ["amenity=theatre", "building=theatre", "tourism=attraction"],
+  "amenity=cinema": ["amenity=cinema", "building=cinema", "leisure=cinema"],
+  "amenity=bus_station": ["amenity=bus_station", "public_transport=station", "highway=bus_stop"],
+  "railway=station": ["railway=station", "public_transport=station", "amenity=train_station"]
+};
 
   let consulta = `[out:json][timeout:25];(\n`;
 
