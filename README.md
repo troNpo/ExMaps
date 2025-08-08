@@ -52,7 +52,7 @@ Con ayuda de [**Copilot**](https://play.google.com/store/apps/details?id=com.mic
 - Iconos descargados desde [Flaticon](https://www.flaticon.com/), propiedad de Freepik Company S.L.
 - Iconos del Repositorio oficial Mapsforge para los POIs,algunos modificados en forma y color.
   
-- OruxMaps es una aplicación independiente, propiedad de José Vázquez.
+- OruxMaps es una aplicación independiente, propiedad de Jose Vázquez.
 
 
 ---
