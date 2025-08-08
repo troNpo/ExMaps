@@ -50,6 +50,8 @@ Con ayuda de [**Copilot**](https://play.google.com/store/apps/details?id=com.mic
 - Visualización cartográfica mediante [**Leaflet**](https://leafletjs.com/)
 - Imágenes callejeras mediante [**Google Street View**](https://www.google.com/streetview/) y [**Mapillary**](https://www.mapillary.com/)
 - Iconos descargados desde [Flaticon](https://www.flaticon.com/), propiedad de Freepik Company S.L.
+- Iconos del Repositorio oficial Mapsforge para los POIs,algunos modificados en forma y color.
+  
 - OruxMaps es una aplicación independiente, propiedad de José Vázquez.
 
 
