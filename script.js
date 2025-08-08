@@ -753,6 +753,22 @@ function limpiarMapa() {
   cerrarAjustes();
 }
 
+function detectarSubtipo(tags) {
+  const clavesPrioritarias = [
+    "emergency", "amenity", "shop", "tourism",
+    "leisure", "natural", "highway", "historic", "building"
+  ];
+
+  for (const clave of clavesPrioritarias) {
+    const valor = tags[clave];
+    if (valor && valor !== "yes" && valor !== "true") {
+      return valor.replace(/[:\/\\ ]/g, "_"); // Limpia caracteres problemáticos
+    }
+  }
+
+  return "default";
+}
+
 function exportarMapaKML(poisPorCategoria) {
   if (!poisPorCategoria || Object.keys(poisPorCategoria).length === 0) {
     mostrarAvisoToast("⚠️ No hay POIs para exportar");
@@ -761,14 +777,12 @@ function exportarMapaKML(poisPorCategoria) {
 
   mostrarAvisoToast("⏳ Exportando mapa KML…");
 
-  // 📝 Solicita nombre del archivo
   let nombreArchivo = prompt("📁 Nombre del archivo KML:", "ExMaps_Orux.kml");
   if (!nombreArchivo || !nombreArchivo.endsWith(".kml")) {
     nombreArchivo = "ExMaps_Orux.kml";
   }
   const nombreInterno = nombreArchivo.replace(".kml", "");
 
-  // 🧭 Encabezado con nombre personalizado y autoría
   const kmlHeader = `<?xml version="1.0" encoding="UTF-8" ?>
 <kml xmlns="http://www.opengis.net/kml/2.2"
      xmlns:om="http://www.oruxmaps.com/oruxmapsextensions/1/0"
@@ -782,12 +796,14 @@ function exportarMapaKML(poisPorCategoria) {
   let contenidoKML = "";
 
   for (const categoria in poisPorCategoria) {
-    const iconoURL = obtenerIconoCompatibleOrux(categoria);
     contenidoKML += `<Folder>\n<name>${categoria}</name>\n`;
 
     poisPorCategoria[categoria].forEach(poi => {
       const { nombre, lat, lon, tags = {} } = poi;
       if (typeof lat !== "number" || typeof lon !== "number") return;
+
+      const subtipo = detectarSubtipo(tags);
+      const iconoURL = `https://raw.githubusercontent.com/troNpo/ExMaps/main/icons/${subtipo}.svg`;
 
       const descripcion = `<![CDATA[
   <p><b>Nombre:</b> ${tags.name || nombre}</p>
@@ -936,7 +952,8 @@ function exportarPOIIndividual(tagsPOI) {
   const nombreArchivo = `${nombrePOI.replace(/\s+/g, "_")}.kml`;
   const nombreInterno = nombreArchivo.replace(".kml", "");
   const categoria = detectarCategoria(tagsPOI);
-  const iconoURL = obtenerIconoCompatibleOrux(categoria);
+  const subtipo = detectarSubtipo(tagsPOI);
+  const iconoURL = `https://raw.githubusercontent.com/troNpo/ExMaps/main/icons/${subtipo}.svg`;
 
   const descripcion = `<![CDATA[
 <p><b>Nombre:</b> ${nombrePOI}</p>
@@ -1184,6 +1201,23 @@ function abrirMapillaryDesdePOI() {
 
   const mapillaryURL = `https://www.mapillary.com/app/?lat=${lat}&lng=${lon}&z=17&focus=photo`;
   window.open(mapillaryURL, "_blank");
+
+  cerrarMenuVer();
+}
+function abrirPeakFinderDesdePOI() {
+  const tags = window.tagsPOI;
+  if (!tags?.lat || !tags?.lon) {
+    mostrarAvisoToast("⚠️ Coordenadas no disponibles");
+    return;
+  }
+
+  const lat = tags.lat.toFixed(7);
+  const lon = tags.lon.toFixed(7);
+  const ele = tags.ele ? parseFloat(tags.ele).toFixed(1) : 0;
+  const azimuth = 180; // Puedes ajustar esto si tienes orientación
+
+  const peakFinderURL = `https://www.peakfinder.org/es?lat=${lat}&lng=${lon}&ele=${ele}&azi=${azimuth}`;
+  window.open(peakFinderURL, "_blank");
 
   cerrarMenuVer();
 }
