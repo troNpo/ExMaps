@@ -811,7 +811,7 @@ function exportarMapaKML(poisPorCategoria) {
   ${tags.address ? `<p><b>Dirección:</b> ${tags.address}</p>` : ""}
   ${tags.phone ? `<p><b>Teléfono:</b> ${tags.phone}</p>` : ""}
   ${tags.opening_hours ? `<p><b>Horario:</b> ${tags.opening_hours}</p>` : ""}
-  ${tags.website ? `<p><b>Web:</b> ${tags.website}</p>` : ""}
+${tags.website ? `<p><b>Web:</b> <a href="${tags.website}" target="_blank">${tags.website}</a></p>` : ""}
   ${tags.ele ? `<p><b>Altitud:</b> ${tags.ele} m</p>` : ""}
       ]]>`;
 
@@ -961,7 +961,7 @@ function exportarPOIIndividual(tagsPOI) {
 ${tagsPOI.address ? `<p><b>Dirección:</b> ${tagsPOI.address}</p>` : ""}
 ${tagsPOI.phone ? `<p><b>Teléfono:</b> ${tagsPOI.phone}</p>` : ""}
 ${tagsPOI.opening_hours ? `<p><b>Horario:</b> ${tagsPOI.opening_hours}</p>` : ""}
-${tagsPOI.website ? `<p><b>Web:</b> ${tagsPOI.website}</p>` : ""}
+${tagsPOI.website ? `<p><b>Web:</b> <a href="${tagsPOI.website}" target="_blank">${tagsPOI.website}</a></p>` : ""}
 ${tagsPOI.ele ? `<p><b>Altitud:</b> ${tagsPOI.ele} m</p>` : ""}
   ]]>`;
 
