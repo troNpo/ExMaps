@@ -128,9 +128,9 @@
   </button>
 </div>
 
-<!-- Panel búsqueda Nominatim -->
-<div id="panelResultadosNominatim" class="menu-emergente" >
-  
+<!-- 📍 Panel búsqueda Nominatim -->
+<div id="panelResultadosNominatim" class="menu-emergente">
+
   <!-- ❌ Botón cerrar -->
   <button class="btnVolverPanel" onclick="cerrarPanelResultados()">
     <img src="icons/ui/fi-sr-cross-small.svg" alt="Cerrar panel" />
@@ -142,10 +142,20 @@
     Buscar ubicación
   </label>
 
-  <!-- 🔍 Barra de búsqueda -->
+  <!-- 🔍 Barra de búsqueda por dirección -->
   <div class="busqueda-wrap">
     <input type="text" id="inputDireccion" placeholder="📍 Escribe una dirección..." />
     <button id="btnBuscarDireccion">Buscar</button>
+  </div>
+
+  <!-- 🔗 Campo para enlaces geo o Google Maps -->
+  <div class="bloque-enlace">
+    <label for="inputEnlaceGeo">
+      <img src="icons/ui/fi-sr-link.svg" alt="Icono enlace" />
+      Enlace de ubicación
+    </label>
+    <input type="text" id="inputEnlaceGeo" placeholder="Pega un enlace geo: o Google Maps" />
+    <button id="btnProcesarEnlaceGeo">Procesar enlace</button>
   </div>
 
   <!-- 📋 Título de resultados -->
@@ -156,8 +166,8 @@
 
   <!-- 📍 Área de resultados -->
   <div id="resultadosNominatim"></div>
-</div>    
 
+</div>
 <!-- Panel flotante para el perfil de usuario -->
 <div id="menuPerfilUsuario" class="menu-emergente">
  <button class="btnVolverPanel cerrarMenu" onclick="cerrarPerfilUsuario()">
@@ -798,5 +808,6 @@
       .catch(err => console.error('Error al registrar SW', err));
   }
   </script>
+ 
 </body>
 </html>

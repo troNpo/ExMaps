@@ -109,6 +109,42 @@ function cerrarPanelResultados() {
   const panel = document.getElementById("panelResultadosNominatim");
   if (panel) panel.style.display = "none";
 }
+document.getElementById("btnProcesarEnlaceGeo").onclick = () => {
+  const enlace = document.getElementById("inputEnlaceGeo").value.trim();
+  if (!enlace) return;
+
+  let lat = null, lon = null;
+
+  // Detectar geo:lat,lon
+  const geoMatch = enlace.match(/geo:([-.\d]+),([-.\d]+)/);
+  if (geoMatch) {
+    lat = parseFloat(geoMatch[1]);
+    lon = parseFloat(geoMatch[2]);
+  }
+
+  // Detectar @lat,lon en enlaces de Google Maps
+  const mapsMatch = enlace.match(/@([-.\d]+),([-.\d]+)/);
+  if (mapsMatch) {
+    lat = parseFloat(mapsMatch[1]);
+    lon = parseFloat(mapsMatch[2]);
+  }
+
+  if (lat && lon) {
+    const coords = L.latLng(lat, lon);
+    marcadorBusquedaNominatim?.remove();
+
+    marcadorBusquedaNominatim = L.marker(coords)
+      .addTo(map)
+      .bindPopup(`📍 Coordenadas: ${lat}, ${lon}`)
+      .openPopup();
+
+    map.setView(coords, 16);
+    document.getElementById("panelResultadosNominatim").style.display = "none";
+  } else {
+    document.getElementById("resultadosNominatim").innerHTML =
+      "⚠️ No se detectaron coordenadas en el enlace";
+  }
+};
 
 // ➕ Zoom In
 document.getElementById("btnZoomIn").addEventListener("click", () => map.zoomIn());
@@ -1486,3 +1522,47 @@ if ('serviceWorker' in navigator && 'SyncManager' in window) {
     registration.sync.register('sync-new-poi');
   });
 }
+
+document.getElementById("btnProcesarEnlaceGeo").onclick = () => {
+  const enlace = document.getElementById("inputEnlaceGeo").value.trim();
+  if (!enlace) return;
+
+  let lat = null, lon = null;
+
+  // geo:lat,lon
+  const geoMatch = enlace.match(/geo:([-.\d]+),([-.\d]+)/);
+  if (geoMatch) {
+    lat = parseFloat(geoMatch[1]);
+    lon = parseFloat(geoMatch[2]);
+  }
+
+  // @lat,lon (Google Maps estilo)
+  const atMatch = enlace.match(/@([-.\d]+),([-.\d]+)/);
+  if (atMatch) {
+    lat = parseFloat(atMatch[1]);
+    lon = parseFloat(atMatch[2]);
+  }
+
+  // ?q=lat,lon (Google Maps estilo)
+  const qMatch = enlace.match(/[?&]q=([-.\d]+),([-.\d]+)/);
+  if (qMatch) {
+    lat = parseFloat(qMatch[1]);
+    lon = parseFloat(qMatch[2]);
+  }
+
+  if (lat && lon) {
+    const coords = L.latLng(lat, lon);
+    marcadorBusquedaNominatim?.remove();
+
+    marcadorBusquedaNominatim = L.marker(coords)
+      .addTo(map)
+      .bindPopup(`📍 Coordenadas: ${lat}, ${lon}`)
+      .openPopup();
+
+    map.setView(coords, 16);
+    document.getElementById("panelResultadosNominatim").style.display = "none";
+  } else {
+    document.getElementById("resultadosNominatim").innerHTML =
+      "⚠️ No se detectaron coordenadas en el enlace";
+  }
+};

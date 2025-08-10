@@ -1066,6 +1066,61 @@ body {
     height: 18px;
   }
 }
+/* 🔗 Bloque para enlaces geo / Google Maps */
+.menu-emergente .bloque-enlace {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.menu-emergente .bloque-enlace label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #f0f0f0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.menu-emergente .bloque-enlace input {
+  padding: 12px 14px;
+  font-size: 15px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.menu-emergente .bloque-enlace button {
+  padding: 10px 16px;
+  font-size: 15px;
+  background-color: #384051;
+  color: #f0f0f0;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.menu-emergente .bloque-enlace button:hover {
+  background-color: #4a5568;
+}
+.menu-emergente .bloque-enlace label {
+  font-size: 13.5px;
+}
+
+.menu-emergente .bloque-enlace input {
+  font-size: 14px;
+  padding: 10px 12px;
+  border-radius: 10px;
+}
+
+.menu-emergente .bloque-enlace button {
+  font-size: 14px;
+  padding: 10px 14px;
+  border-radius: 10px;
+}
 /* 🔘 Botón flotante pegado visualmente a la barra */
 .toggle-botonera {
   position: fixed;
