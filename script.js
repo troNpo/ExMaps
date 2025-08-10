@@ -1566,16 +1566,39 @@ document.getElementById("btnProcesarEnlaceGeo").onclick = () => {
       "⚠️ No se detectaron coordenadas en el enlace";
   }
 };
+function obtenerCoordenadasDesdeURL() {
+  const search = new URLSearchParams(window.location.search);
+  const lat = parseFloat(search.get("lat"));
+  const lon = parseFloat(search.get("lon"));
+  const zoom = parseInt(search.get("zoom"));
 
-const params = new URLSearchParams(window.location.search);
-const lat = parseFloat(params.get("lat"));
-const lon = parseFloat(params.get("lon"));
+  if (!isNaN(lat) && !isNaN(lon)) {
+    return { lat, lon, zoom: zoom || 15 };
+  }
 
-if (!isNaN(lat) && !isNaN(lon)) {
-  const coords = L.latLng(lat, lon);
-  L.marker(coords)
-    .addTo(map)
-    .bindPopup(`📍 Coordenadas recibidas: ${lat}, ${lon}`)
-    .openPopup();
-  map.setView(coords, 16);
+  const hash = window.location.hash;
+  const match = hash.match(/ll=([-.\d]+),([-.\d]+).*?z=(\d+)/);
+  if (match) {
+    return {
+      lat: parseFloat(match[1]),
+      lon: parseFloat(match[2]),
+      zoom: parseInt(match[3])
+    };
+  }
+
+  return null;
 }
+
+window.addEventListener("load", () => {
+  const coords = obtenerCoordenadasDesdeURL();
+  if (coords) {
+    const { lat, lon, zoom } = coords;
+    const punto = L.latLng(lat, lon);
+    marcadorBusquedaNominatim?.remove();
+    marcadorBusquedaNominatim = L.marker(punto)
+      .addTo(map)
+      .bindPopup(`📍 Coordenadas: ${lat}, ${lon}`)
+      .openPopup();
+    map.setView(punto, zoom);
+  }
+});
