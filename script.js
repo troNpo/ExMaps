@@ -1566,3 +1566,16 @@ document.getElementById("btnProcesarEnlaceGeo").onclick = () => {
       "⚠️ No se detectaron coordenadas en el enlace";
   }
 };
+
+const params = new URLSearchParams(window.location.search);
+const lat = parseFloat(params.get("lat"));
+const lon = parseFloat(params.get("lon"));
+
+if (!isNaN(lat) && !isNaN(lon)) {
+  const coords = L.latLng(lat, lon);
+  L.marker(coords)
+    .addTo(map)
+    .bindPopup(`📍 Coordenadas recibidas: ${lat}, ${lon}`)
+    .openPopup();
+  map.setView(coords, 16);
+}
