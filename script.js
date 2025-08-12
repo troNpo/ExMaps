@@ -1527,31 +1527,44 @@ if ('serviceWorker' in navigator && 'SyncManager' in window) {
   });
 }
 
+// Procesar enlace al hacer clic
 document.getElementById("btnProcesarEnlaceGeo").onclick = () => {
   const enlace = document.getElementById("inputEnlaceGeo").value.trim();
   if (!enlace) return;
 
   let lat = null, lon = null;
 
-  // geo:lat,lon
-  const geoMatch = enlace.match(/geo:([-.\d]+),([-.\d]+)/);
-  if (geoMatch) {
-    lat = parseFloat(geoMatch[1]);
-    lon = parseFloat(geoMatch[2]);
+  // Convertir coordenadas DMS a decimal
+  function convertirDMSaDecimal(grados, minutos, segundos, direccion) {
+    let decimal = parseFloat(grados) + parseFloat(minutos) / 60 + parseFloat(segundos) / 3600;
+    if (direccion === 'S' || direccion === 'W') {
+      decimal *= -1;
+    }
+    return decimal;
   }
 
-  // @lat,lon (Google Maps estilo)
-  const atMatch = enlace.match(/@([-.\d]+),([-.\d]+)/);
-  if (atMatch) {
-    lat = parseFloat(atMatch[1]);
-    lon = parseFloat(atMatch[2]);
-  }
+  // Patrones para detectar coordenadas
+  const patrones = [
+    /geo:([-.\d]+),([-.\d]+)/,                                         // geo:lat,lon
+    /@([-.\d]+),([-.\d]+)/,                                            // @lat,lon
+    /[?&]q=([-.\d]+),([-.\d]+)/,                                       // ?q=lat,lon
+    /([-+]?\d{1,3}\.\d+)[,\s]+([-+]?\d{1,3}\.\d+)/,                    // lat,lon o lat lon
+    /(\d{1,3})°(\d{1,2})'(\d{1,2})["']?([NS])\s+(\d{1,3})°(\d{1,2})'(\d{1,2})["']?([EW])/ // DMS
+  ];
 
-  // ?q=lat,lon (Google Maps estilo)
-  const qMatch = enlace.match(/[?&]q=([-.\d]+),([-.\d]+)/);
-  if (qMatch) {
-    lat = parseFloat(qMatch[1]);
-    lon = parseFloat(qMatch[2]);
+  for (const regex of patrones) {
+    const match = enlace.match(regex);
+    if (match) {
+      if (regex.toString().includes("°")) {
+        // Formato DMS
+        lat = convertirDMSaDecimal(match[1], match[2], match[3], match[4]);
+        lon = convertirDMSaDecimal(match[5], match[6], match[7], match[8]);
+      } else {
+        lat = parseFloat(match[1]);
+        lon = parseFloat(match[2]);
+      }
+      break;
+    }
   }
 
   if (lat && lon) {
@@ -1570,6 +1583,8 @@ document.getElementById("btnProcesarEnlaceGeo").onclick = () => {
       "⚠️ No se detectaron coordenadas en el enlace";
   }
 };
+
+// Detectar coordenadas desde la URL al cargar la página
 function obtenerCoordenadasDesdeURL() {
   const search = new URLSearchParams(window.location.search);
   const lat = parseFloat(search.get("lat"));
@@ -1593,6 +1608,7 @@ function obtenerCoordenadasDesdeURL() {
   return null;
 }
 
+// Aplicar coordenadas desde la URL si existen
 window.addEventListener("load", () => {
   const coords = obtenerCoordenadasDesdeURL();
   if (coords) {
