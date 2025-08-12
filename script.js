@@ -1604,13 +1604,18 @@ window.addEventListener("load", () => {
 });
 function abrirVisorAyuda(url, titulo) {
   const visor = document.getElementById('visorWeb');
-  visor.querySelector('iframe').src = url;
-  visor.querySelector('.titulo').textContent = titulo;
+  const iframe = document.getElementById('iframeWeb');
+  const tituloElemento = document.getElementById('visorTitulo');
+
+  iframe.src = url;
+  tituloElemento.textContent = titulo;
   visor.classList.remove('oculto');
 }
 
 function cerrarVisor() {
   const visor = document.getElementById('visorWeb');
-  visor.querySelector('iframe').src = '';
+  const iframe = document.getElementById('iframeWeb');
+
+  iframe.src = '';
   visor.classList.add('oculto');
 }
