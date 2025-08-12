@@ -360,7 +360,11 @@ function ejecutarBusqueda() {
   "amenity=theatre": ["amenity=theatre", "building=theatre", "tourism=attraction"],
   "amenity=cinema": ["amenity=cinema", "building=cinema", "leisure=cinema"],
   "amenity=bus_station": ["amenity=bus_station", "public_transport=station", "highway=bus_stop"],
-  "railway=station": ["railway=station", "public_transport=station", "amenity=train_station"]
+  "railway=station": ["railway=station", "public_transport=station", "amenity=train_station"],
+  "natural=waterfall": [
+  "natural=waterfall",           
+  "waterway=waterfall"      
+]
 };
 
   let consulta = `[out:json][timeout:25];(\n`;
