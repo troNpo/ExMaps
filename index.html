@@ -92,16 +92,16 @@
 <!-- ❔ Botón de ayuda -->
 <!-- Botón para abrir el visor de ayuda -->
 <button onclick="abrirVisorAyuda('tutorial.html', 'Tutorial de la App')">
-     <img src="icons/ui/fi-sr-question-square.svg" alt="Ayuda sobre la app" />
+  <img src="icons/ui/fi-sr-question-square.svg" alt="Ayuda sobre la app" />
 </button>
-</div>
+
 <!-- Contenedor del visor web -->
 <div id="visorWeb" class="visor oculto">
   <div class="barra-superior">
-    <span class="titulo">Ayuda</span>
+    <span id="visorTitulo">Ayuda</span>
     <button onclick="cerrarVisor()">✖</button>
   </div>
-  <iframe src="" frameborder="0"></iframe>
+  <iframe id="iframeWeb" src="" frameborder="0"></iframe>
 </div>
 
 
