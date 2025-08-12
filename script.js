@@ -1602,20 +1602,3 @@ window.addEventListener("load", () => {
     map.setView(punto, zoom);
   }
 });
-function abrirVisorAyuda(url, titulo) {
-  const visor = document.getElementById('visorWeb');
-  const iframe = document.getElementById('iframeWeb');
-  const tituloElemento = document.getElementById('visorTitulo');
-
-  iframe.src = url;
-  tituloElemento.textContent = titulo;
-  visor.classList.remove('oculto');
-}
-
-function cerrarVisor() {
-  const visor = document.getElementById('visorWeb');
-  const iframe = document.getElementById('iframeWeb');
-
-  iframe.src = '';
-  visor.classList.add('oculto');
-}
