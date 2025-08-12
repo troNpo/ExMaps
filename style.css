@@ -1334,3 +1334,155 @@ body.modo-zurdo .barra-lateral {
   height: 100%;
   border: none;
 }
+
+#buscadorPOI {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 20px;
+  background-color: #1e1e1e;
+  box-sizing: border-box;
+}
+
+/* 🔍 Icono dentro del input */
+.input-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 180px;
+  max-width: 300px;
+}
+
+.input-wrapper .icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+  pointer-events: none;
+  font-size: 16px;
+}
+
+.input-wrapper input {
+  width: 82%;
+  padding: 10px 14px 10px 36px;
+  font-size: 15px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* 🟥 Botón rojo: Buscar seleccionados */
+.btnBuscarPanel {
+  background-color: #bb0e26;
+  color: #ffffff;
+  border: none;
+  padding: 10px 14px;
+  font-size: 15px;
+  border-radius: 16px;
+  cursor: pointer;
+  font-family: 'Segoe UI', sans-serif;
+  transition: background-color 0.2s ease;
+  min-width: 180px;
+  flex-shrink: 0;
+}
+
+.btnBuscarPanel:hover {
+  background-color: #a00c20;
+}
+
+/* 🟫 Botón gris: Limpiar selección */
+.btnSecundario {
+  background-color: #2a2a2a;
+  color: #f0f0f0;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 10px 14px;
+  font-size: 15px;
+  border-radius: 16px;
+  cursor: pointer;
+  font-family: 'Segoe UI', sans-serif;
+  transition: background-color 0.2s ease;
+  min-width: 180px;
+  flex-shrink: 0;
+}
+
+.btnSecundario:hover {
+  background-color: #3a3a3a;
+}
+
+/* 📱 Responsive para móviles */
+@media (max-width: 600px) {
+  #buscadorPOI {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .input-wrapper,
+  .btnBuscarPanel,
+  .btnSecundario {
+    width: 100%;
+  }
+
+  .input-wrapper input {
+    font-size: 14px;
+    padding: 10px 12px 10px 36px;
+  }
+
+  .btnBuscarPanel,
+  .btnSecundario {
+    font-size: 14px;
+    padding: 10px 12px;
+    border-radius: 14px;
+  }
+}
+/* 🔽 Contenedor de sugerencias debajo del input */
+#sugerenciasBusqueda {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #1e1e1e;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+  z-index: 100;
+  max-height: 200px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+/* 📄 Ítems individuales de sugerencia */
+.sugerencia-item {
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #f0f0f0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sugerencia-item:hover {
+  background-color: #2a2a2a;
+}
+
+/* 📂 Botón dentro de sugerencia */
+.sugerencia-item button {
+  background-color: #384051;
+  color: #f0f0f0;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: 'Segoe UI', sans-serif;
+  transition: background-color 0.2s ease;
+}
+
+.sugerencia-item button:hover {
+  background-color: #4a5568;
+}

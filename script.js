@@ -1622,3 +1622,99 @@ window.addEventListener("load", () => {
     map.setView(punto, zoom);
   }
 });
+// 🧠 Normaliza texto para búsqueda (sin acentos, minúsculas)
+function normalizarTexto(texto) {
+  return texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+// 📚 Genera el diccionario de POIs desde los checkboxes
+function generarDiccionarioBusqueda() {
+  const diccionario = [];
+
+  document.querySelectorAll(".poicheck").forEach(check => {
+    const label = check.closest("label")?.textContent.trim();
+    const categoria = check.getAttribute("data-cat");
+    const subtipo = check.getAttribute("data-sub");
+
+    if (!label || !categoria || !subtipo) return;
+
+    const panel = check.closest(".subpanel");
+    const panelId = panel?.id || null;
+
+    diccionario.push({
+      label,
+      tags: [`${categoria}=${subtipo}`],
+      category: categoria,
+      subcategory: subtipo,
+      panelId,
+      aliases: [],
+      normalized: label.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    });
+  });
+
+  return diccionario;
+}
+
+function abrirPanelCategoria(poi) {
+  if (!poi.panelId) return;
+
+  // Ocultar todos los subpaneles
+  document.querySelectorAll(".subpanel").forEach(p => {
+    p.classList.add("hidden");
+    p.classList.remove("visible");
+  });
+
+  // Mostrar el panel correspondiente
+  const panel = document.getElementById(poi.panelId);
+  if (panel) {
+    panel.classList.remove("hidden");
+    panel.classList.add("visible");
+
+    // Activar y enfocar el checkbox
+    const selector = `.poicheck[data-cat="${poi.category}"][data-sub="${poi.subcategory}"]`;
+    const checkbox = panel.querySelector(selector);
+    if (checkbox) {
+      checkbox.checked = true;
+      checkbox.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
+}
+
+function activarBuscadorPOI() {
+  const diccionario = generarDiccionarioBusqueda();
+  const input = document.getElementById("inputBusquedaPOI");
+  const sugerencias = document.getElementById("sugerenciasBusqueda");
+
+  input.addEventListener("input", () => {
+    const texto = input.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    sugerencias.innerHTML = "";
+
+    if (texto.length < 2) return;
+
+    const coincidencias = diccionario.filter(poi =>
+      poi.normalized.includes(texto) ||
+      poi.aliases.some(alias => alias.includes(texto))
+    );
+
+    coincidencias.forEach(poi => {
+      const item = document.createElement("div");
+      item.className = "sugerencia-item";
+      item.innerHTML = `
+        <span>${poi.label}</span>
+        <button data-accion="ver" title="Ir al panel">📂</button>
+      `;
+
+      item.querySelector('[data-accion="ver"]').addEventListener("click", () => {
+        abrirPanelCategoria(poi);
+        input.value = ""; // Limpiar campo
+        input.focus();     // Reenfocar campo
+        sugerencias.innerHTML = ""; // Cerrar sugerencias
+      });
+
+      sugerencias.appendChild(item);
+    });
+  });
+}
+
+// Inicializar buscador al cargar
+activarBuscadorPOI();
