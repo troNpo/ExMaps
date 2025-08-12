@@ -90,13 +90,20 @@
   <span>Opciones</span>
 </div>
 <!-- ❔ Botón de ayuda -->
-<div class="bloque-boton">
-  <button id="btnAyudaMapa" title="Abrir ayuda" class="btnLateral" onclick="abrirAyuda()">
-    <img src="icons/ui/fi-sr-question-square.svg" alt="Ayuda sobre la app" />
-  </button>
-  <span>Ayuda</span>
+<!-- Botón para abrir el visor de ayuda -->
+<button onclick="abrirVisorAyuda('tutorial.html', 'Tutorial de la App')">
+     <img src="icons/ui/fi-sr-question-square.svg" alt="Ayuda sobre la app" />
+</button>
 </div>
+<!-- Contenedor del visor web -->
+<div id="visorWeb" class="visor oculto">
+  <div class="barra-superior">
+    <span class="titulo">Ayuda</span>
+    <button onclick="cerrarVisor()">✖</button>
+  </div>
+  <iframe src="" frameborder="0"></iframe>
 </div>
+
 
 <!-- Menú emergente que se abre al pulsar el botón de ajustes -->
 <div id="menuAjustes" class="menu-emergente">
