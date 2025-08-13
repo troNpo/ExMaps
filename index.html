@@ -224,10 +224,15 @@
     <span class="icon">🔍</span>
     <input type="text" id="inputBusquedaPOI" placeholder="Buscar POI..." />
     <div id="sugerenciasBusqueda"></div>
-  </div>
-  <button class="btnBuscarPanel">Buscar seleccionados</button>
-  <button class="btnSecundario">Limpiar selección</button>
-</div>
+  <button id="btnBuscarSeleccionados" class="btnBuscarPanel">
+  <img src="icons/ui/fi-sr-search.svg" alt="Buscar">
+  <span>Buscar seleccionados</span>
+</button>
+
+<button id="btnLimpiarSeleccion" class="btnSecundario">
+  <img src="icons/ui/fi-sr-eraser.svg" alt="Limpiar">
+  <span>Limpiar selección</span>
+</button>
   <!-- Categorías -->
   <div class="grupo-categorias">
     <button onclick="mostrarCategoria('alojamiento')">
