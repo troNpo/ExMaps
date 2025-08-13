@@ -2,6 +2,11 @@
 const map = L.map('map', {
   zoomControl: false
 }).setView([37.3886, -5.9953], 13);
+map.on("moveend", () => {
+  const center = map.getCenter();
+  const zoom = map.getZoom();
+  localStorage.setItem("ultimaUbicacionMapa", JSON.stringify([center.lat, center.lng, zoom]));
+});
 let marcadorBusquedaNominatim = null;
 
 
@@ -9,8 +14,7 @@ let marcadorBusquedaNominatim = null;
 const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '© OpenStreetMap contributors',
   maxZoom: 19
-}).addTo(map); // Se añade por defecto
-
+});
 // Capa base: OpenTopoMap
 const openTopo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
   attribution: '© OpenTopoMap & contributors',
@@ -22,6 +26,51 @@ const esriSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/service
   attribution: '© Esri & contributors',
   maxZoom: 18
 });
+if (!localStorage.getItem("ultimoMapaUsado")) {
+  localStorage.setItem("ultimoMapaUsado", "OpenStreetMap");
+}
+// 🧠 Aplicar preferencias del usuario
+const prefs = JSON.parse(localStorage.getItem("preferenciasUsuario") || "{}");
+
+// 🌍 Ubicación
+if (prefs.usarUltimaUbicacion) {
+  const ultimaVista = localStorage.getItem("ultimaUbicacionMapa");
+  if (ultimaVista) {
+    const [lat, lon, zoom] = JSON.parse(ultimaVista);
+    map.setView([lat, lon], zoom || 14);
+  }
+} else if (prefs?.ubicacion?.lat && prefs?.ubicacion?.lon) {
+  map.setView([prefs.ubicacion.lat, prefs.ubicacion.lon], 14);
+}
+
+// 🖐️ Modo de uso
+document.body.classList.toggle("modo-zurdo", prefs.modo === "zurdo");
+
+// 🗺️ Mapa por defecto
+if (prefs.mapaDefecto && prefs.mapaDefecto !== "ultimo") {
+  const capa = {
+    "satellite": esriSat,
+    "callejero": osmLayer,
+    "topografico": openTopo
+  }[prefs.mapaDefecto];
+
+  if (capa) {
+    capa.addTo(map);
+  }
+} else {
+  const ultima = localStorage.getItem("ultimoMapaUsado");
+  const capa = {
+    "OpenStreetMap": osmLayer,
+    "OpenTopoMap": openTopo,
+    "Satélite (Esri)": esriSat
+  }[ultima];
+
+  if (capa) {
+    capa.addTo(map);
+  } else {
+    osmLayer.addTo(map); // Fallback si no hay nada guardado
+  }
+}
 
 // Selector de capas base
 const baseMaps = {
@@ -54,6 +103,9 @@ const overlayMaps = {
   "🎿 Esquí": skiingOverlay
 };
 L.control.layers(baseMaps, overlayMaps).addTo(map);
+map.on("baselayerchange", function(e) {
+  localStorage.setItem("ultimoMapaUsado", e.name); // Guarda el nombre de la capa
+});
 // Buscar dirección con Nominatim
 document.getElementById("btnBuscarLugar").addEventListener("click", () => {
   const panel = document.getElementById("panelResultadosNominatim");
@@ -81,7 +133,7 @@ document.getElementById("btnBuscarLugar").addEventListener("click", () => {
         data.forEach(lugar => {
           const boton = document.createElement("button");
           boton.textContent = lugar.display_name;
-          boton.classList.add("botonResultado"); // puedes estilizar con CSS
+          boton.classList.add("botonResultado"); 
 
           boton.onclick = () => {
             const coords = L.latLng(lugar.lat, lugar.lon);
@@ -564,10 +616,6 @@ const emojiTags = {
 "type=relation": "🔗"
    
 };
-
-
-
-
 
 function mostrarDetallesEnPanel(tags) {
   const panel = document.getElementById("panelPoi");
@@ -1353,6 +1401,13 @@ function cerrarMenuAjustes() {
 function abrirPerfilUsuario() {
   document.getElementById("menuAjustes").style.display = "none";
   document.getElementById("menuPerfilUsuario").style.display = "flex";
+
+  const prefs = JSON.parse(localStorage.getItem("preferenciasUsuario") || "{}");
+
+  document.getElementById("modoUso").value = prefs.modo || "diestro";
+  document.getElementById("mapaDefecto").value = prefs.mapaDefecto || "ultimo";
+  document.getElementById("ubicacionDefecto").value = prefs.ubicacion?.nombre || "";
+  document.getElementById("usarUltimaUbicacion").checked = !!prefs.usarUltimaUbicacion;
 }
 
 function cerrarPerfilUsuario() {
@@ -1362,59 +1417,47 @@ function cerrarPerfilUsuario() {
 function guardarPreferenciasUsuario() {
   const ubicacionTexto = document.getElementById("ubicacionDefecto")?.value.trim();
   const modoUso = document.getElementById("modoUso")?.value;
+  const usarUltimaUbicacion = document.getElementById("usarUltimaUbicacion")?.checked;
+  const mapaDefecto = document.getElementById("mapaDefecto")?.value;
 
-  if (!ubicacionTexto) {
-    mostrarAvisoToast("⚠️ Escribe una ubicación válida");
+  if (!ubicacionTexto && !usarUltimaUbicacion) {
+    mostrarAvisoToast("⚠️ Escribe una ubicación válida o activa 'usar última ubicación'");
     return;
   }
 
-  // 🌍 Buscar ubicación vía Nominatim
-  fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(ubicacionTexto)}`)
-    .then(res => res.json())
-    .then(data => {
-      if (!data.length) {
-        mostrarAvisoToast("❌ Ubicación no encontrada");
-        return;
-      }
+  const preferencias = {
+    modo: modoUso,
+    usarUltimaUbicacion,
+    mapaDefecto
+  };
 
-      const lugar = data[0];
-      const preferencias = {
-        ubicacion: {
+  if (!usarUltimaUbicacion && ubicacionTexto) {
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(ubicacionTexto)}`)
+      .then(res => res.json())
+      .then(data => {
+        if (!data.length) {
+          mostrarAvisoToast("❌ Ubicación no encontrada");
+          return;
+        }
+
+        const lugar = data[0];
+        preferencias.ubicacion = {
           nombre: lugar.display_name,
           lat: parseFloat(lugar.lat),
           lon: parseFloat(lugar.lon)
-        },
-        modo: modoUso
-      };
+        };
 
-      localStorage.setItem("preferenciasUsuario", JSON.stringify(preferencias));
-      mostrarAvisoToast("✅ Preferencias guardadas");
-    })
-    .catch(() => {
-      mostrarAvisoToast("❌ Error al buscar ubicación");
-    });
+        localStorage.setItem("preferenciasUsuario", JSON.stringify(preferencias));
+        mostrarAvisoToast("✅ Preferencias guardadas");
+      })
+      .catch(() => {
+        mostrarAvisoToast("❌ Error al buscar ubicación");
+      });
+  } else {
+    localStorage.setItem("preferenciasUsuario", JSON.stringify(preferencias));
+    mostrarAvisoToast("✅ Preferencias guardadas");
+  }
 }
-const prefs = JSON.parse(localStorage.getItem("preferenciasUsuario") || "{}");
-
-if (prefs?.ubicacion?.lat && prefs?.ubicacion?.lon) {
-  map.setView([prefs.ubicacion.lat, prefs.ubicacion.lon], 14);
-}
-
-if (prefs?.modo === "zurdo") {
-  document.body.classList.add("modo-zurdo");
-} else {
-  document.body.classList.remove("modo-zurdo");
-}
-
-document.getElementById("toggleBotonera")?.addEventListener("click", () => {
-  const barra = document.querySelector(".barra-lateral");
-  if (!barra) return;
-
-  const estaActiva = barra.classList.contains("activa");
-
-  barra.classList.toggle("activa", !estaActiva);
-  barra.classList.toggle("oculta", estaActiva);
-});
 
 function abrirAyuda() {
   window.open("https://tronpoonpo.blogspot.com/p/exmapsapp.html", "_blank");
@@ -1701,7 +1744,7 @@ function activarBuscadorPOI() {
       item.className = "sugerencia-item";
       item.innerHTML = `
         <span>${poi.label}</span>
-        <button data-accion="ver" title="Ir al panel">📂</button>
+        <button data-accion="ver" title="Ir al panel">✅</button>
       `;
 
       item.querySelector('[data-accion="ver"]').addEventListener("click", () => {

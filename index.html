@@ -172,22 +172,32 @@
 </div>
 <!-- Panel flotante para el perfil de usuario -->
 <div id="menuPerfilUsuario" class="menu-emergente">
- <button class="btnVolverPanel cerrarMenu" onclick="cerrarPerfilUsuario()">
-  <img src="icons/ui/fi-sr-cross-small.svg" alt="Cerrar panel" />
-</button>
+  <button class="btnVolverPanel cerrarMenu" onclick="cerrarPerfilUsuario()">
+    <img src="icons/ui/fi-sr-cross-small.svg" alt="Cerrar panel" />
+  </button>
 
   <h3>Preferencias</h3>
 
+  <!-- 🌍 Ubicación por defecto -->
   <div class="bloque-config">
     <label for="ubicacionDefecto">
       <img src="icons/ui/fi-sr-home-location-alt.svg" alt="Ubicación" />
       Ubicación por defecto
     </label>
     <input type="text" id="ubicacionDefecto" placeholder="Ej. Sevilla, España" />
-    <button onclick="buscarUbicacion()">Buscar ubicación</button>
     <small id="ubicacionConfirmada"></small>
+
+    <!-- 🧭 Nueva opción: usar última ubicación -->
+   <div class="opcion-switch">
+  <label class="switch-label" for="usarUltimaUbicacion">
+    Usar última ubicación mostrada 
+    <input type="checkbox" id="usarUltimaUbicacion" />
+    <span class="switch-slider"></span>
+  </label>
+</div>
   </div>
 
+  <!-- 🖼️ Modo de uso -->
   <div class="bloque-config">
     <label for="modoUso">
       <img src="icons/ui/fi-sr-mobile-hand.svg" alt="Modo de uso" />
@@ -199,7 +209,24 @@
     </select>
   </div>
 
-  <button onclick="guardarPreferenciasUsuario()">✅ Guardar preferencias</button>
+  <!-- 🗺️ Mapa por defecto -->
+  <div class="bloque-config">
+    <label for="mapaDefecto">
+      <img src="icons/ui/fi-sr-map.svg" alt="Mapa por defecto" />
+      Mapa por defecto
+    </label>
+    <select id="mapaDefecto">
+      <option value="ultimo">Mantener último mapa usado</option>
+      <option value="satellite">Satélite</option>
+      <option value="callejero">Callejero</option>
+      <option value="topografico">Topográfico</option>
+    </select>
+  </div>
+
+  <!-- ✅ Botón guardar -->
+  <button onclick="guardarPreferenciasUsuario()" class="btnGuardarPreferencias">
+    ✅ Guardar preferencias
+  </button>
 </div>
 
 
@@ -211,7 +238,7 @@
     <!-- 🏷️ Título de la app -->
     <div id="nombreApp">Puntos de Interés</div> 
    
-      <!-- 🧭 Panel principal de selección de categorías -->
+        <!-- 🧭 Panel principal de selección de categorías -->
 <div id="panelCategorias" class="subpanel visible">
 
   <!-- Botón volver -->
@@ -236,6 +263,7 @@
     <span>Limpiar selección</span>
   </button>
 </div>
+
   <!-- Categorías -->
   <div class="grupo-categorias">
     <button onclick="mostrarCategoria('alojamiento')">
