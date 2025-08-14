@@ -376,7 +376,12 @@ function crearMarcador(el) {
   return marcador;
 }
 function ejecutarBusqueda() {
-  const seleccionados = obtenerPOIsSeleccionados();
+  const seleccionados = Array.from(document.querySelectorAll('.poicheck:checked'))
+    .map(input => ({
+      categoria: input.dataset.cat,
+      subtipo: input.dataset.sub
+    }));
+
   if (seleccionados.length === 0) {
     alert("Selecciona al menos un tipo de lugar para buscar.");
     return;
@@ -388,45 +393,71 @@ function ejecutarBusqueda() {
 
   const center = map.getCenter();
   const zoom = map.getZoom();
-  const radio = Math.round(100 * Math.pow(2, 19 - zoom)); // Escalado dinámico
+  const radio = Math.round(80 * Math.pow(2, 19 - zoom)); // 🔁 Área ajustada
 
-  // 🧬 Diccionario de equivalencias por categoría + subtipo
- const equivalencias = {
-  "historic=castle": ["historic=castle", "castle=yes", "tourism=attraction"],
-  "tourism=hotel": ["tourism=hotel", "amenity=hotel"],
-  "shop=supermarket": ["shop=supermarket", "amenity=marketplace"],
-  "amenity=pharmacy": ["amenity=pharmacy", "healthcare=pharmacy", "shop=health"],
-  "tourism=museum": ["tourism=museum", "amenity=museum", "historic=building"],
-  "amenity=restaurant": ["amenity=restaurant", "cuisine=*", "tourism=attraction"],
-  "amenity=cafe": ["amenity=cafe", "cuisine=cafe", "shop=coffee"],
-  "amenity=bar": ["amenity=bar", "cuisine=bar", "shop=alcohol"],
-  "amenity=bank": ["amenity=bank", "office=financial", "shop=money"],
-  "amenity=atm": ["amenity=atm", "shop=money", "amenity=bank"],
-  "amenity=parking": ["amenity=parking", "highway=parking", "tourism=caravan_site"],
-  "leisure=park": ["leisure=park", "landuse=recreation_ground", "tourism=attraction"],
-  "amenity=school": ["amenity=school", "education=school", "building=school"],
-  "amenity=hospital": ["amenity=hospital", "healthcare=hospital", "building=hospital"],
-  "tourism=camp_site": ["tourism=camp_site", "amenity=campground", "leisure=camping"],
-  "amenity=library": ["amenity=library", "building=library", "tourism=attraction"],
-  "historic=monument": ["historic=monument", "tourism=attraction", "memorial=*"],
-  "amenity=theatre": ["amenity=theatre", "building=theatre", "tourism=attraction"],
-  "amenity=cinema": ["amenity=cinema", "building=cinema", "leisure=cinema"],
-  "amenity=bus_station": ["amenity=bus_station", "public_transport=station", "highway=bus_stop"],
-  "railway=station": ["railway=station", "public_transport=station", "amenity=train_station"],
-  "natural=waterfall": [
-  "natural=waterfall",           
-  "waterway=waterfall"      
-]
-};
+   const equivalencias = {
+    "historic=castle": ["historic=castle", "castle=yes"],
+    "tourism=hotel": ["tourism=hotel"],
+    "shop=supermarket": ["shop=supermarket", "amenity=marketplace"],
+    "amenity=pharmacy": ["amenity=pharmacy", "healthcare=pharmacy"],
+    "tourism=museum": ["tourism=museum", "historic=building"],
+    "amenity=restaurant": ["amenity=restaurant"],
+    "amenity=cafe": ["amenity=cafe", "shop=coffee"],
+    "amenity=bar": ["amenity=bar", "shop=alcohol"],
+    "amenity=bank": ["amenity=bank", "office=financial"],
+    "amenity=atm": ["amenity=atm"],
+    "amenity=parking": ["amenity=parking", "highway=parking"],
+    "leisure=park": ["leisure=park", "landuse=recreation_ground"],
+    "amenity=school": ["amenity=school", "building=school"],
+    "amenity=hospital": ["amenity=hospital", "healthcare=hospital"],
+    "tourism=camp_site": ["tourism=camp_site", "leisure=camping"],
+    "amenity=library": ["amenity=library", "building=library"],
+    "historic=monument": ["historic=monument"],
+    "amenity=theatre": ["amenity=theatre", "building=theatre"],
+    "amenity=cinema": ["amenity=cinema", "leisure=cinema"],
+    "amenity=bus_station": ["amenity=bus_station", "public_transport=station"],
+    "railway=station": ["railway=station", "public_transport=station"],
+    "natural=waterfall": ["natural=waterfall"],
+    "natural=spring": ["natural=spring"],
+    "aeroway=airport": ["aeroway=airport"],
+    "aeroway=helipad": ["aeroway=helipad"],
+    "amenity=parking_entrance": ["amenity=parking_entrance"],
+    "railway=subway_entrance": ["railway=subway_entrance"],
+    "railway=level_crossing": ["railway=level_crossing"],
+    "railway=crossing": ["railway=crossing"],
+    "highway=bus_stop": ["highway=bus_stop"],
+    "aerialway=station": ["aerialway=station"],
+    "amenity=ferry_terminal": ["amenity=ferry_terminal"],
+    "tourism=artwork": ["tourism=artwork"],
+    "tourism=gallery": ["tourism=gallery"],
+    "tourism=sculpture": ["tourism=sculpture"],
+    "historic=memorial": ["historic=memorial"],
+    "historic=ruins": ["historic=ruins"],
+    "historic=archaeological_site": ["historic=archaeological_site"],
+    "tourism=attraction": ["tourism=attraction"],
+    "tourism=zoo": ["tourism=zoo"],
+    "amenity=fast_food": ["amenity=fast_food"],
+    "amenity=pub": ["amenity=pub"],
+    "amenity=biergarten": ["amenity=biergarten"],
+    "amenity=ice_cream": ["amenity=ice_cream"],
+    "amenity=public_bookcase": ["amenity=public_bookcase"],
+    "amenity=wayside_shrine": ["amenity=wayside_shrine"],
+    "amenity=wayside_cross": ["amenity=wayside_cross"]
+  };
+
 
   let consulta = `[out:json][timeout:25];(\n`;
+  let tagsUtilizados = [];
 
   seleccionados.forEach(({ categoria, subtipo }) => {
     const clave = `${categoria}=${subtipo}`;
-    const opciones = equivalencias[clave] || [clave];
+    const tags = equivalencias[clave] || [clave];
 
-    opciones.forEach(tag => {
+    tags.forEach(tag => {
       const [k, v] = tag.split("=");
+      if (!k || !v || v === "*") return;
+
+      tagsUtilizados.push(`${k}=${v}`);
       consulta += `node["${k}"="${v}"](around:${radio},${center.lat},${center.lng});\n`;
       consulta += `way["${k}"="${v}"](around:${radio},${center.lat},${center.lng});\n`;
       consulta += `relation["${k}"="${v}"](around:${radio},${center.lat},${center.lng});\n`;
@@ -434,6 +465,9 @@ function ejecutarBusqueda() {
   });
 
   consulta += `);out center;`;
+
+  // 🪧 Mostrar los criterios utilizados
+  alert(`🔍 Buscando lugares con los siguientes criterios(versión de prueba ):\n\n${tagsUtilizados.join("\n")}`);
 
   fetch("https://overpass-api.de/api/interpreter", {
     method: "POST",
@@ -443,11 +477,13 @@ function ejecutarBusqueda() {
   .then(data => {
     const grupo = L.layerGroup();
     const elementos = data.elements;
+    const vistos = new Set();
 
     elementos.forEach(el => {
       const punto = el.center || { lat: el.lat, lon: el.lon };
-      if (!punto) return;
+      if (!punto || vistos.has(`${el.type}-${el.id}`)) return;
 
+      vistos.add(`${el.type}-${el.id}`);
       el.lat = punto.lat;
       el.lon = punto.lon;
 
@@ -458,17 +494,20 @@ function ejecutarBusqueda() {
     window.poisLayer = grupo;
     grupo.addTo(map);
 
-    if (elementos.length > 0) {
+    if (grupo.getLayers().length > 0) {
       map.fitBounds(grupo.getBounds(), { padding: [30, 30] });
     } else {
       alert("No se encontraron resultados en esta zona.");
     }
   })
+/*
   .catch(err => {
     console.error("Error en Overpass:", err);
-  //  alert("❌ No se pudo conectar con el servidor. Intenta más tarde.");//
+    alert("❌ No se pudo conectar con el servidor.");
   });
+*/
 }
+  
 const emojiTags = {
   // 🎯 Claves generales
   "tourism": "🧳",
