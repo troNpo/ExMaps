@@ -1544,3 +1544,162 @@ body.modo-zurdo .barra-lateral {
   cursor: pointer;
   width: 100%;
 }
+/* 🔧 Panel de configuración avanzada */
+#panelBusquedaAvanzada {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 400px;
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 12px;
+  padding: 15px 20px;
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 350;
+  box-sizing: border-box;
+}
+
+#panelBusquedaAvanzada.visible {
+  display: flex;
+}
+
+#panelBusquedaAvanzada h3 {
+  font-size: 15px;
+  color: #66ccff;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* 📏 Slider de radio */
+#sliderRadioBusqueda {
+  width: 100%;
+  margin-top: 6px;
+}
+
+#valorRadio {
+  text-align: right;
+  font-weight: bold;
+  margin-top: 4px;
+  font-size: 14px;
+}
+
+/* 🧩 Interruptores visuales */
+.opcion-switch {
+  margin-top: 10px;
+  width: 100%;
+}
+
+.switch-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 15px;
+  color: #f0f0f0;
+  cursor: pointer;
+  gap: 12px;
+}
+
+.switch-label input[type="checkbox"] {
+  display: none;
+}
+
+.switch-slider {
+  position: relative;
+  width: 42px;
+  height: 24px;
+  background-color: #555;
+  border-radius: 12px;
+  transition: background-color 0.3s ease;
+}
+
+.switch-slider::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.switch-label input[type="checkbox"]:checked + .switch-slider {
+  background-color: #bb0e26;
+}
+
+.switch-label input[type="checkbox"]:checked + .switch-slider::before {
+  transform: translateX(18px);
+}
+
+/* 💾 Botón guardar */
+.btnGuardarPreferencias {
+  margin-top: 16px;
+  padding: 10px 14px;
+  background-color: #2a2a2a;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* ❌ Botón cerrar flotante */
+.btnVolverPanel {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  border: none;
+  padding: 8px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+  transition: background-color 0.3s ease;
+}
+
+.btnVolverPanel img {
+  width: 22px;
+  height: 22px;
+  filter: invert(100%);
+}
+
+.btnVolverPanel:hover {
+  background-color: #384051;
+}
+
+.toast {
+  visibility: hidden;
+  min-width: 250px;
+  background-color: #323232;
+  color: #fff;
+  text-align: center;
+  border-radius: 8px;
+  padding: 12px;
+  position: fixed;
+  z-index: 9999;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: visibility 0s, opacity 0.5s ease-in-out;
+  opacity: 0;
+}
+
+.toast.show {
+  visibility: visible;
+  opacity: 1;
+}

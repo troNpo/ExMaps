@@ -123,11 +123,11 @@
     <img src="icons/ui/fi-sr-file-download.svg" alt="Exportar seleccionados KML" />
     Exportar Capa personalizada 
   </button>
-<!-- Sección avanzada -->
- <!-- <button onclick="abrirConfiguracionAvanzada()" class="btn-opcion">
+ <!-- Sección avanzada -->
+  <button onclick="abrirConfiguracionAvanzada()" class="btn-opcion">
     <img src="icons/ui/fi-sr-settings.svg" alt="Configuración avanzada" />
     Con.avanzada
-  </button> -->
+  </button>
 </div>
 
 <!-- 📍 Panel búsqueda Nominatim -->
@@ -228,7 +228,62 @@
     ✅ Guardar preferencias
   </button>
 </div>
+<!-- 🔧 Panel de Configuración Avanzada -->
+<div id="panelBusquedaAvanzada" class="menu-emergente hidden">
+  <!-- Botón cerrar -->
+  <button class="btnVolverPanel cerrarMenu" onclick="cerrarConfiguracionAvanzada()">
+    <img src="icons/ui/fi-sr-cross-small.svg" alt="Cerrar panel" />
+  </button>
 
+  <h3>Configuración de búsqueda</h3>
+
+  <!-- 📏 Radio de búsqueda -->
+  <label for="sliderRadioBusqueda">
+    <img src="icons/ui/fi-sr-radar.svg" alt="Radio" />
+    Radio de búsqueda: <span id="valorRadio">1000</span> metros
+  </label>
+  <input type="range" id="sliderRadioBusqueda" min="100" max="10000" step="100" value="5000" />
+
+  
+  <!-- 📌 Mantener resultados anteriores -->
+  <div class="opcion-switch">
+    <label class="switch-label">
+      Mantener resultados anteriores
+      <input type="checkbox" id="mantenerResultados">
+      <span class="switch-slider"></span>
+    </label>
+  </div>
+
+  <!-- 🔄 Búsqueda dinámica -->
+  <div class="opcion-switch">
+    <label class="switch-label">
+      Búsqueda dinámica al mover el mapa
+      <input type="checkbox" id="busquedaDinamica">
+      <span class="switch-slider"></span>
+    </label>
+  </div>
+  <!-- 🎯 Mostrar icono central del mapa -->
+<div class="opcion-switch">
+  <label class="switch-label">
+    Mostrar icono central
+    <input type="checkbox" id="mostrarIconoCentro">
+    <span class="switch-slider"></span>
+  </label>
+</div>
+<!-- 📐 Tamaño del icono central -->
+<label for="sliderTamanoIconoCentro">
+  <img src="icons/ui/cur_cen.svg" alt="Centro" />
+  Tamaño del icono: <span id="valorTamanoIcono">32</span> px
+</label>
+<input type="range" id="sliderTamanoIconoCentro" min="16" max="64" step="2" value="32" />
+
+  <!-- 💾 Botón guardar -->
+  <button onclick="guardarConfiguracionBusqueda()" class="btnGuardarPreferencias">
+    💾 Guardar configuración
+  </button>
+</div>
+
+<div id="toastConfirmacion" class="toast">✅ Configuración guardada y centro actualizado</div>
 
   <!-- 📂 Panel lateral -->
   <div id="sidebar" class="sidebar hidden">

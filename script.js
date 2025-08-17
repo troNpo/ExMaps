@@ -106,6 +106,68 @@ L.control.layers(baseMaps, overlayMaps).addTo(map);
 map.on("baselayerchange", function(e) {
   localStorage.setItem("ultimoMapaUsado", e.name); // Guarda el nombre de la capa
 });
+let marcadorCentro = null;
+
+// 🔧 Crear o actualizar el icono central
+function actualizarIconoCentro() {
+  const mostrar = document.getElementById("mostrarIconoCentro").checked;
+  const tamano = parseInt(document.getElementById("sliderTamanoIconoCentro").value, 10);
+
+  if (mostrar) {
+    const iconoCentro = L.icon({
+      iconUrl: "icons/ui/cur_cen.svg",
+      iconSize: [tamano, tamano],
+      iconAnchor: [tamano / 2, tamano / 2],
+    });
+
+    if (!marcadorCentro) {
+      marcadorCentro = L.marker(map.getCenter(), {
+        icon: iconoCentro,
+        interactive: false,
+      }).addTo(map);
+    } else {
+      marcadorCentro.setIcon(iconoCentro);
+    }
+  } else {
+    if (marcadorCentro) {
+      map.removeLayer(marcadorCentro);
+      marcadorCentro = null;
+    }
+  }
+}
+
+// 🔁 Mantener el icono centrado al mover el mapa
+map.on("move", () => {
+  if (marcadorCentro) {
+    marcadorCentro.setLatLng(map.getCenter());
+  }
+});
+map.on("moveend", () => {
+  const config = JSON.parse(localStorage.getItem("configBusquedaAvanzada") || "{}");
+  if (!config.busquedaDinamica) return;
+
+  const radio = Math.min(config.radio || 5000, 10000);
+  const centroActual = map.getCenter();
+  const centroAnterior = config.lat && config.lng ? L.latLng(config.lat, config.lng) : null;
+
+  if (!centroAnterior) return;
+
+  const distancia = centroActual.distanceTo(centroAnterior);
+
+  if (distancia > radio) {
+    mostrarAvisoToast("🔄 Búsqueda automática por movimiento");
+    ejecutarBusqueda();
+  }
+});
+
+// 🎚️ Eventos de los controles
+document.getElementById("mostrarIconoCentro").addEventListener("change", actualizarIconoCentro);
+
+document.getElementById("sliderTamanoIconoCentro").addEventListener("input", (e) => {
+  const valor = e.target.value;
+  document.getElementById("valorTamanoIcono").textContent = valor;
+  actualizarIconoCentro();
+});
 // Buscar dirección con Nominatim
 document.getElementById("btnBuscarLugar").addEventListener("click", () => {
   const panel = document.getElementById("panelResultadosNominatim");
@@ -376,138 +438,217 @@ function crearMarcador(el) {
   return marcador;
 }
 function ejecutarBusqueda() {
-  const seleccionados = Array.from(document.querySelectorAll('.poicheck:checked'))
-    .map(input => ({
-      categoria: input.dataset.cat,
-      subtipo: input.dataset.sub
-    }));
+  try {
+    const seleccionados = Array.from(document.querySelectorAll('.poicheck:checked'))
+      .map(input => ({
+        categoria: input.dataset.cat,
+        subtipo: input.dataset.sub
+      }));
 
-  if (seleccionados.length === 0) {
-    alert("Selecciona al menos un tipo de lugar para buscar.");
-    return;
-  }
+    if (seleccionados.length === 0) {
+      alert("Selecciona al menos un tipo de lugar para buscar.");
+      return;
+    }
 
-  if (window.poisLayer) {
-    map.removeLayer(window.poisLayer);
+    const config = JSON.parse(localStorage.getItem("configBusquedaAvanzada") || "{}");
+    const mantener = config.mantenerResultados;
+    const radio = Math.min(config.radio || 5000, 10000);
+
+    if (!mantener && window.poisLayer) {
+      map.removeLayer(window.poisLayer);
+    }
+
+    if (!mantener) {
+      window.poisMostrados = new Set();
+    } else {
+      window.poisMostrados ||= new Set();
+    }
+
+    const center = map.getCenter();
+    const zoom = map.getZoom();
+
+    // 🧭 Guardar centro de búsqueda para comparación futura
+    config.lat = center.lat;
+    config.lng = center.lng;
+    localStorage.setItem("configBusquedaAvanzada", JSON.stringify(config));
+
+    const equivalencias = {
+      "historic=castle": ["historic=castle", "castle=yes"],
+      "tourism=hotel": ["tourism=hotel"],
+      "shop=supermarket": ["shop=supermarket", "amenity=marketplace"],
+      "amenity=pharmacy": ["amenity=pharmacy", "healthcare=pharmacy"],
+      "tourism=museum": ["tourism=museum", "historic=building"],
+      "amenity=restaurant": ["amenity=restaurant"],
+      "amenity=cafe": ["amenity=cafe", "shop=coffee"],
+      "amenity=bar": ["amenity=bar", "shop=alcohol"],
+      "amenity=bank": ["amenity=bank", "office=financial"],
+      "amenity=atm": ["amenity=atm"],
+      "amenity=parking": ["amenity=parking", "highway=parking"],
+      "leisure=park": ["leisure=park", "landuse=recreation_ground"],
+      "amenity=school": ["amenity=school", "building=school"],
+      "amenity=hospital": ["amenity=hospital", "healthcare=hospital"],
+      "tourism=camp_site": ["tourism=camp_site", "leisure=camping"],
+      "amenity=library": ["amenity=library", "building=library"],
+      "historic=monument": ["historic=monument"],
+      "amenity=theatre": ["amenity=theatre", "building=theatre"],
+      "amenity=cinema": ["amenity=cinema", "leisure=cinema"],
+      "amenity=bus_station": ["amenity=bus_station", "public_transport=station"],
+      "railway=station": ["railway=station", "public_transport=station"],
+      "natural=waterfall": ["natural=waterfall"],
+      "natural=spring": ["natural=spring"],
+      "aeroway=airport": ["aeroway=airport"],
+      "aeroway=helipad": ["aeroway=helipad"],
+      "amenity=parking_entrance": ["amenity=parking_entrance"],
+      "railway=subway_entrance": ["railway=subway_entrance"],
+      "railway=level_crossing": ["railway=level_crossing"],
+      "railway=crossing": ["railway=crossing"],
+      "highway=bus_stop": ["highway=bus_stop"],
+      "aerialway=station": ["aerialway=station"],
+      "amenity=ferry_terminal": ["amenity=ferry_terminal"],
+      "tourism=artwork": ["tourism=artwork"],
+      "tourism=gallery": ["tourism=gallery"],
+      "tourism=sculpture": ["tourism=sculpture"],
+      "historic=memorial": ["historic=memorial"],
+      "historic=ruins": ["historic=ruins"],
+      "historic=archaeological_site": ["historic=archaeological_site"],
+      "tourism=attraction": ["tourism=attraction"],
+      "tourism=zoo": ["tourism=zoo"],
+      "amenity=fast_food": ["amenity=fast_food"],
+      "amenity=pub": ["amenity=pub"],
+      "amenity=biergarten": ["amenity=biergarten"],
+      "amenity=ice_cream": ["amenity=ice_cream"],
+      "amenity=public_bookcase": ["amenity=public_bookcase"],
+      "amenity=wayside_shrine": ["amenity=wayside_shrine"],
+      "amenity=wayside_cross": ["amenity=wayside_cross"]
+    };
+
+    let consulta = `[out:json][timeout:25];(\n`;
+    let tagsUtilizados = [];
+
+    seleccionados.forEach(({ categoria, subtipo }) => {
+      const clave = `${categoria}=${subtipo}`;
+      const tags = equivalencias[clave] || [clave];
+
+      tags.forEach(tag => {
+        const [k, v] = tag.split("=");
+        if (!k || !v || v === "*") return;
+
+        tagsUtilizados.push(`${k}=${v}`);
+        consulta += `node["${k}"="${v}"](around:${radio},${center.lat},${center.lng});\n`;
+        consulta += `way["${k}"="${v}"](around:${radio},${center.lat},${center.lng});\n`;
+        consulta += `relation["${k}"="${v}"](around:${radio},${center.lat},${center.lng});\n`;
+      });
+    });
+
+    consulta += `);out center;`;
+
+    // alert(`🔍 Buscando lugares con los siguientes criterios (versión de prueba):\n\n${tagsUtilizados.join("\n")}`);
+
+    fetch("https://overpass-api.de/api/interpreter", {
+      method: "POST",
+      body: consulta
+    })
+    .then(res => res.json())
+    .then(data => {
+      const grupo = L.layerGroup();
+      const elementos = data.elements;
+      const vistos = new Set();
+
+      elementos.forEach(el => {
+        const punto = el.center || { lat: el.lat, lon: el.lon };
+        const idUnico = `${el.type}-${el.id}`;
+
+        if (!punto || vistos.has(idUnico) || window.poisMostrados.has(idUnico)) return;
+
+        vistos.add(idUnico);
+        window.poisMostrados.add(idUnico);
+
+        el.lat = punto.lat;
+        el.lon = punto.lon;
+
+        const marcador = crearMarcador(el);
+        grupo.addLayer(marcador);
+      });
+
+      if (mantener && window.poisLayer) {
+        window.poisLayer.addLayer(grupo);
+      } else {
+        window.poisLayer = grupo;
+        grupo.addTo(map);
+      }
+
+      if (grupo.getLayers().length > 0) {
+        map.fitBounds(grupo.getBounds(), { padding: [30, 30] });
+      } else {
+        alert("No se encontraron resultados en esta zona.");
+      }
+    })
+    /*
+    .catch(err => {
+      console.error("Error en Overpass:", err);
+      alert("❌ No se pudo conectar con el servidor.");
+    });
+    */
+
+  } catch (error) {
+    console.error("Error en ejecutarBusqueda:", error);
+    alert("⚠️ Se produjo un error inesperado al ejecutar la búsqueda.");
   }
+}
+
+document.getElementById("sliderRadioBusqueda").addEventListener("input", e => {
+  document.getElementById("valorRadio").textContent = e.target.value;
+});
+function guardarConfiguracionBusqueda() {
+  const radio = parseInt(document.getElementById("sliderRadioBusqueda").value, 10);
+  const mantener = document.getElementById("mantenerResultados").checked;
+  const dinamica = document.getElementById("busquedaDinamica").checked;
+  const iconoCentralActivo = document.getElementById("mostrarIconoCentro").checked;
+  const tamañoIcono = parseInt(document.getElementById("sliderTamanoIconoCentro").value, 10);
 
   const center = map.getCenter();
-  const zoom = map.getZoom();
-  const radio = Math.round(80 * Math.pow(2, 19 - zoom)); // 🔁 Área ajustada
 
-   const equivalencias = {
-    "historic=castle": ["historic=castle", "castle=yes"],
-    "tourism=hotel": ["tourism=hotel"],
-    "shop=supermarket": ["shop=supermarket", "amenity=marketplace"],
-    "amenity=pharmacy": ["amenity=pharmacy", "healthcare=pharmacy"],
-    "tourism=museum": ["tourism=museum", "historic=building"],
-    "amenity=restaurant": ["amenity=restaurant"],
-    "amenity=cafe": ["amenity=cafe", "shop=coffee"],
-    "amenity=bar": ["amenity=bar", "shop=alcohol"],
-    "amenity=bank": ["amenity=bank", "office=financial"],
-    "amenity=atm": ["amenity=atm"],
-    "amenity=parking": ["amenity=parking", "highway=parking"],
-    "leisure=park": ["leisure=park", "landuse=recreation_ground"],
-    "amenity=school": ["amenity=school", "building=school"],
-    "amenity=hospital": ["amenity=hospital", "healthcare=hospital"],
-    "tourism=camp_site": ["tourism=camp_site", "leisure=camping"],
-    "amenity=library": ["amenity=library", "building=library"],
-    "historic=monument": ["historic=monument"],
-    "amenity=theatre": ["amenity=theatre", "building=theatre"],
-    "amenity=cinema": ["amenity=cinema", "leisure=cinema"],
-    "amenity=bus_station": ["amenity=bus_station", "public_transport=station"],
-    "railway=station": ["railway=station", "public_transport=station"],
-    "natural=waterfall": ["natural=waterfall"],
-    "natural=spring": ["natural=spring"],
-    "aeroway=airport": ["aeroway=airport"],
-    "aeroway=helipad": ["aeroway=helipad"],
-    "amenity=parking_entrance": ["amenity=parking_entrance"],
-    "railway=subway_entrance": ["railway=subway_entrance"],
-    "railway=level_crossing": ["railway=level_crossing"],
-    "railway=crossing": ["railway=crossing"],
-    "highway=bus_stop": ["highway=bus_stop"],
-    "aerialway=station": ["aerialway=station"],
-    "amenity=ferry_terminal": ["amenity=ferry_terminal"],
-    "tourism=artwork": ["tourism=artwork"],
-    "tourism=gallery": ["tourism=gallery"],
-    "tourism=sculpture": ["tourism=sculpture"],
-    "historic=memorial": ["historic=memorial"],
-    "historic=ruins": ["historic=ruins"],
-    "historic=archaeological_site": ["historic=archaeological_site"],
-    "tourism=attraction": ["tourism=attraction"],
-    "tourism=zoo": ["tourism=zoo"],
-    "amenity=fast_food": ["amenity=fast_food"],
-    "amenity=pub": ["amenity=pub"],
-    "amenity=biergarten": ["amenity=biergarten"],
-    "amenity=ice_cream": ["amenity=ice_cream"],
-    "amenity=public_bookcase": ["amenity=public_bookcase"],
-    "amenity=wayside_shrine": ["amenity=wayside_shrine"],
-    "amenity=wayside_cross": ["amenity=wayside_cross"]
+  const config = {
+    radio,
+    mantenerResultados: mantener,
+    busquedaDinamica: dinamica,
+    iconoCentralActivo,
+    tamañoIcono,
+    lat: center.lat,
+    lng: center.lng
   };
 
-
-  let consulta = `[out:json][timeout:25];(\n`;
-  let tagsUtilizados = [];
-
-  seleccionados.forEach(({ categoria, subtipo }) => {
-    const clave = `${categoria}=${subtipo}`;
-    const tags = equivalencias[clave] || [clave];
-
-    tags.forEach(tag => {
-      const [k, v] = tag.split("=");
-      if (!k || !v || v === "*") return;
-
-      tagsUtilizados.push(`${k}=${v}`);
-      consulta += `node["${k}"="${v}"](around:${radio},${center.lat},${center.lng});\n`;
-      consulta += `way["${k}"="${v}"](around:${radio},${center.lat},${center.lng});\n`;
-      consulta += `relation["${k}"="${v}"](around:${radio},${center.lat},${center.lng});\n`;
-    });
-  });
-
-  consulta += `);out center;`;
-
-  // 🪧 Mostrar los criterios utilizados
-  alert(`🔍 Buscando lugares con los siguientes criterios(versión de prueba ):\n\n${tagsUtilizados.join("\n")}`);
-
-  fetch("https://overpass-api.de/api/interpreter", {
-    method: "POST",
-    body: consulta
-  })
-  .then(res => res.json())
-  .then(data => {
-    const grupo = L.layerGroup();
-    const elementos = data.elements;
-    const vistos = new Set();
-
-    elementos.forEach(el => {
-      const punto = el.center || { lat: el.lat, lon: el.lon };
-      if (!punto || vistos.has(`${el.type}-${el.id}`)) return;
-
-      vistos.add(`${el.type}-${el.id}`);
-      el.lat = punto.lat;
-      el.lon = punto.lon;
-
-      const marcador = crearMarcador(el);
-      grupo.addLayer(marcador);
-    });
-
-    window.poisLayer = grupo;
-    grupo.addTo(map);
-
-    if (grupo.getLayers().length > 0) {
-      map.fitBounds(grupo.getBounds(), { padding: [30, 30] });
-    } else {
-      alert("No se encontraron resultados en esta zona.");
-    }
-  })
-/*
-  .catch(err => {
-    console.error("Error en Overpass:", err);
-    alert("❌ No se pudo conectar con el servidor.");
-  });
-*/
+  localStorage.setItem("configBusquedaAvanzada", JSON.stringify(config));
+  cerrarConfiguracionAvanzada();
 }
-  
+function cargarConfiguracionBusqueda() {
+  const config = JSON.parse(localStorage.getItem("configBusquedaAvanzada") || "{}");
+
+  if (config.radio) {
+    document.getElementById("sliderRadioBusqueda").value = config.radio;
+    document.getElementById("valorRadio").textContent = config.radio;
+  }
+
+  if (typeof config.mantenerResultados === "boolean") {
+    document.getElementById("mantenerResultados").checked = config.mantenerResultados;
+  }
+
+  if (typeof config.busquedaDinamica === "boolean") {
+    document.getElementById("busquedaDinamica").checked = config.busquedaDinamica;
+  }
+
+  if (typeof config.iconoCentralActivo === "boolean") {
+    document.getElementById("mostrarIconoCentro").checked = config.iconoCentralActivo;
+    actualizarIconoCentro(); // Aplica el estado del icono
+  }
+
+  if (config.tamañoIcono) {
+    document.getElementById("sliderTamanoIconoCentro").value = config.tamañoIcono;
+    document.getElementById("valorTamanoIcono").textContent = config.tamañoIcono;
+    actualizarIconoCentro(); // Aplica el tamaño
+  }
+}
+
 const emojiTags = {
   // 🎯 Claves generales
   "tourism": "🧳",
@@ -856,6 +997,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+cargarConfiguracionBusqueda();
+cargarSeleccionCheckbox();
 
 document.getElementById("btnAjustesMapa")?.addEventListener("click", () => {
   document.getElementById("menuAjustes").style.display = "block";
@@ -865,7 +1008,6 @@ function cerrarAjustes() {
   document.getElementById("menuAjustes").style.display = "none";
 }
 
-// Ejemplo de funciones (puedes conectar con tus métodos reales)
 function limpiarMapa() {
   if (window.poisLayer) {
     map.removeLayer(window.poisLayer);
@@ -876,6 +1018,8 @@ function limpiarMapa() {
     map.removeLayer(marcadorBusquedaNominatim);
     marcadorBusquedaNominatim = null;
   }
+
+  window.poisMostrados?.clear(); // Limpia el conjunto de POIs mostrados
 
   cerrarAjustes();
 }
@@ -1045,7 +1189,18 @@ function construirPoisPorCategoria() {
 
   if (!window.poisLayer) return agrupados;
 
-  window.poisLayer.eachLayer(marcador => {
+  const todosLosMarcadores = [];
+
+  // Extraer todos los marcadores, incluso si están en subgrupos
+  window.poisLayer.eachLayer(layer => {
+    if (layer instanceof L.LayerGroup) {
+      layer.eachLayer(marcador => todosLosMarcadores.push(marcador));
+    } else {
+      todosLosMarcadores.push(layer);
+    }
+  });
+
+  todosLosMarcadores.forEach(marcador => {
     const tags = marcador._tags;
     if (!tags || typeof tags.lat !== "number" || typeof tags.lon !== "number") return;
 
@@ -1800,3 +1955,17 @@ function activarBuscadorPOI() {
 
 // Inicializar buscador al cargar
 activarBuscadorPOI();
+
+function abrirConfiguracionAvanzada() {
+  const panel = document.getElementById("panelBusquedaAvanzada");
+  if (panel) {
+    panel.classList.add("visible");
+  }
+}
+
+function cerrarConfiguracionAvanzada() {
+  const panel = document.getElementById("panelBusquedaAvanzada");
+  if (panel) {
+    panel.classList.remove("visible");
+  }
+}
