@@ -2008,24 +2008,18 @@ function actualizarListadoFiltros() {
     const item = document.createElement("li");
     item.innerHTML = `
       ${label} <span style="color:gray;">(${tag})</span>
-      <button class="btn-quitar" data-cat="${categoria}" data-sub="${subtipo}">x</button>
+      <button class="btn-quitar">x</button>
     `;
-    lista.appendChild(item);
-  });
 
-  // Botón para desmarcar usando data-cat y data-sub
-  document.querySelectorAll(".btn-quitar").forEach(btn => {
-    btn.addEventListener("click", e => {
-      const cat = e.target.getAttribute("data-cat");
-      const sub = e.target.getAttribute("data-sub");
-      const selector = `.poicheck[data-cat="${cat}"][data-sub="${sub}"]`;
-      const checkbox = document.querySelector(selector);
-      if (checkbox) {
-        checkbox.checked = false;
-        guardarFiltros();
-        actualizarListadoFiltros();
-      }
+    // Guardar referencia directa al checkbox
+    const btn = item.querySelector(".btn-quitar");
+    btn.addEventListener("click", () => {
+      check.checked = false;
+      guardarFiltros();
+      actualizarListadoFiltros();
     });
+
+    lista.appendChild(item);
   });
 }
 function guardarFiltros() {
