@@ -509,7 +509,7 @@ function ejecutarBusqueda(silenciosa = false) {
       "amenity=cinema": ["amenity=cinema", "leisure=cinema"],
       "amenity=bus_station": ["amenity=bus_station", "public_transport=station"],
       "railway=station": ["railway=station", "public_transport=station"],
-      "natural=waterfall": ["natural=waterfall"],
+      "waterway=waterfall": ["waterway=waterfall"],
       "natural=spring": ["natural=spring"],
       "aeroway=airport": ["aeroway=airport"],
       "aeroway=helipad": ["aeroway=helipad"],
