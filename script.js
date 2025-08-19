@@ -3,9 +3,25 @@ const map = L.map('map', {
   zoomControl: false
 }).setView([37.3886, -5.9953], 13);
 map.on("moveend", () => {
-  const center = map.getCenter();
-  const zoom = map.getZoom();
-  localStorage.setItem("ultimaUbicacionMapa", JSON.stringify([center.lat, center.lng, zoom]));
+  const config = JSON.parse(localStorage.getItem("configBusquedaAvanzada") || "{}");
+  if (!config.busquedaDinamica) return;
+
+  // ✅ Verificar si hay algún checkbox activo
+  const hayCheckboxActivo = document.querySelectorAll('.poicheck:checked').length > 0;
+  if (!hayCheckboxActivo) return; // 💤 No hacer nada si no hay filtros activos
+
+  const radio = Math.min(config.radio || 5000, 10000);
+  const centroActual = map.getCenter();
+  const centroAnterior = config.lat && config.lng ? L.latLng(config.lat, config.lng) : null;
+
+  if (!centroAnterior) return;
+
+  const distancia = centroActual.distanceTo(centroAnterior);
+
+  if (distancia > radio) {
+    mostrarAvisoToast("🔄 Búsqueda automática por movimiento");
+    ejecutarBusqueda(true); // 🧘‍♂️ modo silencioso activado
+  }
 });
 let marcadorBusquedaNominatim = null;
 
@@ -437,7 +453,9 @@ function crearMarcador(el) {
 
   return marcador;
 }
-function ejecutarBusqueda() {
+let ultimaBusquedaSinResultados = 0; // 🕒 Marca de tiempo para evitar repeticiones
+
+function ejecutarBusqueda(silenciosa = false) {
   try {
     const seleccionados = Array.from(document.querySelectorAll('.poicheck:checked'))
       .map(input => ({
@@ -446,7 +464,7 @@ function ejecutarBusqueda() {
       }));
 
     if (seleccionados.length === 0) {
-      alert("Selecciona al menos un tipo de lugar para buscar.");
+      mostrarAvisoToast("⚠️ Selecciona al menos un tipo de lugar para buscar.");
       return;
     }
 
@@ -465,9 +483,6 @@ function ejecutarBusqueda() {
     }
 
     const center = map.getCenter();
-    const zoom = map.getZoom();
-
-    // 🧭 Guardar centro de búsqueda para comparación futura
     config.lat = center.lat;
     config.lng = center.lng;
     localStorage.setItem("configBusquedaAvanzada", JSON.stringify(config));
@@ -542,8 +557,6 @@ function ejecutarBusqueda() {
 
     consulta += `);out center;`;
 
-    // alert(`🔍 Buscando lugares con los siguientes criterios (versión de prueba):\n\n${tagsUtilizados.join("\n")}`);
-
     fetch("https://overpass-api.de/api/interpreter", {
       method: "POST",
       body: consulta
@@ -580,19 +593,23 @@ function ejecutarBusqueda() {
       if (grupo.getLayers().length > 0) {
         map.fitBounds(grupo.getBounds(), { padding: [30, 30] });
       } else {
-        alert("No se encontraron resultados en esta zona.");
+        if (!silenciosa) {
+          const ahora = Date.now();
+          if (ahora - ultimaBusquedaSinResultados > 5000) { // ⏱️ 5 segundos de margen
+            mostrarAvisoToast("⚠️ No se encontraron resultados en esta zona.");
+            ultimaBusquedaSinResultados = ahora;
+          }
+        }
       }
     })
-    /*
     .catch(err => {
       console.error("Error en Overpass:", err);
-      alert("❌ No se pudo conectar con el servidor.");
+      mostrarAvisoToast("❌ No se pudo conectar con el servidor.");
     });
-    */
 
   } catch (error) {
     console.error("Error en ejecutarBusqueda:", error);
-    alert("⚠️ Se produjo un error inesperado al ejecutar la búsqueda.");
+    mostrarAvisoToast("⚠️ Se produjo un error inesperado al ejecutar la búsqueda.");
   }
 }
 
