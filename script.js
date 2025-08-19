@@ -2,26 +2,28 @@
 const map = L.map('map', {
   zoomControl: false
 }).setView([37.3886, -5.9953], 13);
+
 map.on("moveend", () => {
-  const config = JSON.parse(localStorage.getItem("configBusquedaAvanzada") || "{}");
-  if (!config.busquedaDinamica) return;
+  requestAnimationFrame(() => {
+    const config = JSON.parse(localStorage.getItem("configBusquedaAvanzada") || "{}");
+    if (!config.busquedaDinamica) return;
 
-  // ✅ Verificar si hay algún checkbox activo
-  const hayCheckboxActivo = document.querySelectorAll('.poicheck:checked').length > 0;
-  if (!hayCheckboxActivo) return; // 💤 No hacer nada si no hay filtros activos
+    const hayCheckboxActivo = document.querySelectorAll('.poicheck:checked').length > 0;
+    if (!hayCheckboxActivo) return;
 
-  const radio = Math.min(config.radio || 5000, 10000);
-  const centroActual = map.getCenter();
-  const centroAnterior = config.lat && config.lng ? L.latLng(config.lat, config.lng) : null;
+    const radio = Math.min(config.radio || 5000, 10000);
+    const centroActual = map.getCenter();
+    const centroAnterior = config.lat && config.lng ? L.latLng(config.lat, config.lng) : null;
 
-  if (!centroAnterior) return;
+    if (!centroAnterior) return;
 
-  const distancia = centroActual.distanceTo(centroAnterior);
+    const distancia = centroActual.distanceTo(centroAnterior);
 
-  if (distancia > radio) {
-    mostrarAvisoToast("🔄 Búsqueda automática por movimiento");
-    ejecutarBusqueda(true); // 🧘‍♂️ modo silencioso activado
-  }
+    if (distancia > radio) {
+      mostrarAvisoToast("🔄 Búsqueda automática por movimiento");
+      ejecutarBusqueda(true);
+    }
+  });
 });
 let marcadorBusquedaNominatim = null;
 
@@ -511,7 +513,7 @@ function ejecutarBusqueda(silenciosa = false) {
       "railway=station": ["railway=station", "public_transport=station"],
       "waterway=waterfall": ["waterway=waterfall"],
       "natural=spring": ["natural=spring"],
-      "aeroway=airport": ["aeroway=airport"],
+      "aeroway=airport": ["aeroway=airport","aeroway=aerodrome"],
       "aeroway=helipad": ["aeroway=helipad"],
       "amenity=parking_entrance": ["amenity=parking_entrance"],
       "railway=subway_entrance": ["railway=subway_entrance"],
@@ -1986,3 +1988,65 @@ function cerrarConfiguracionAvanzada() {
     panel.classList.remove("visible");
   }
 }
+function actualizarListadoFiltros() {
+  const lista = document.getElementById("listaFiltros");
+  lista.innerHTML = "";
+
+  const seleccionados = Array.from(document.querySelectorAll('.poicheck:checked'));
+
+  if (seleccionados.length === 0) {
+    lista.innerHTML = "<li><em>No hay filtros activos</em></li>";
+    return;
+  }
+
+  seleccionados.forEach(check => {
+    const label = check.closest("label")?.textContent.trim() || "POI";
+    const categoria = check.dataset.cat;
+    const subtipo = check.dataset.sub;
+    const tag = `${categoria}=${subtipo}`;
+
+    const item = document.createElement("li");
+    item.innerHTML = `
+      ${label} <span style="color:gray;">(${tag})</span>
+      <button class="btn-quitar" data-cat="${categoria}" data-sub="${subtipo}">x</button>
+    `;
+    lista.appendChild(item);
+  });
+
+  // Botón para desmarcar usando data-cat y data-sub
+  document.querySelectorAll(".btn-quitar").forEach(btn => {
+    btn.addEventListener("click", e => {
+      const cat = e.target.getAttribute("data-cat");
+      const sub = e.target.getAttribute("data-sub");
+      const selector = `.poicheck[data-cat="${cat}"][data-sub="${sub}"]`;
+      const checkbox = document.querySelector(selector);
+      if (checkbox) {
+        checkbox.checked = false;
+        guardarFiltros();
+        actualizarListadoFiltros();
+      }
+    });
+  });
+}
+function guardarFiltros() {
+  const seleccionados = Array.from(document.querySelectorAll('.poicheck:checked'))
+    .map(check => check.id);
+  localStorage.setItem("filtrosActivos", JSON.stringify(seleccionados));
+}
+function restaurarFiltros() {
+  const guardados = JSON.parse(localStorage.getItem("filtrosActivos")) || [];
+  guardados.forEach(id => {
+    const checkbox = document.getElementById(id);
+    if (checkbox) checkbox.checked = true;
+  });
+  actualizarListadoFiltros();
+}
+
+window.addEventListener("DOMContentLoaded", restaurarFiltros);
+
+document.querySelectorAll('.poicheck').forEach(check => {
+  check.addEventListener("change", () => {
+    guardarFiltros();
+    actualizarListadoFiltros();
+  });
+});
