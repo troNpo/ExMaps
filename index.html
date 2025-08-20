@@ -4,8 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ExMaps</title>
-  <!--manifest.json-->
-
+  
   <!-- Estilos -->
   <link rel="stylesheet" href="style.css" />
 
@@ -234,33 +233,9 @@
     <img src="icons/ui/fi-sr-cross-small.svg" alt="Cerrar panel" />
   </button>
 
-  <h3>Configuración de búsqueda</h3>
+  <h3>Elementos visuales</h3>
 
-  <!-- 📏 Radio de búsqueda -->
-  <label for="sliderRadioBusqueda">
-    <img src="icons/ui/fi-sr-radar.svg" alt="Radio" />
-    Radio de búsqueda: <span id="valorRadio">1000</span> metros
-  </label>
-  <input type="range" id="sliderRadioBusqueda" min="100" max="10000" step="100" value="5000" />
-
-  
-  <!-- 📌 Mantener resultados anteriores -->
-  <div class="opcion-switch">
-    <label class="switch-label">
-      Mantener resultados anteriores
-      <input type="checkbox" id="mantenerResultados">
-      <span class="switch-slider"></span>
-    </label>
-  </div>
-
-  <!-- 🔄 Búsqueda dinámica -->
-  <div class="opcion-switch">
-    <label class="switch-label">
-      Búsqueda dinámica al mover el mapa
-      <input type="checkbox" id="busquedaDinamica">
-      <span class="switch-slider"></span>
-    </label>
-  </div>
+ 
   <!-- 🎯 Mostrar icono central del mapa -->
 <div class="opcion-switch">
   <label class="switch-label">
@@ -306,16 +281,56 @@
     <input type="text" id="inputBusquedaPOI" placeholder="Buscar POI..." />
     <div id="sugerenciasBusqueda"></div>
   </div>
-
-  <button id="btnBuscarSeleccionados" class="btnBuscarPanel">
+ <div class="accionesCompactas">
+  <button id="btnBuscarSeleccionados" class="btnIcono btnRojo">
     <img src="icons/ui/fi-sr-search.svg" alt="Buscar">
-    <span>Buscar seleccionados</span>
+    <span>Buscar</span>
   </button>
-
-  <button id="btnLimpiarSeleccion" class="btnSecundario">
+  <button id="btnLimpiarSeleccion" class="btnIcono">
     <img src="icons/ui/fi-sr-eraser.svg" alt="Limpiar">
-    <span>Limpiar selección</span>
+    <span>Limpiar</span>
   </button>
+</div>
+  <button id="btnToggleConfigBusqueda" class="btnSecundario">
+  ⚙️ Configurar de búsqueda
+</button>
+<div id="bloqueConfigBusqueda" class="bloque-config oculto">
+  <label for="sliderRadioBusqueda">
+    Radio de búsqueda: <span id="valorRadio">1000</span> metros
+  </label>
+  <input type="range" id="sliderRadioBusqueda" min="100" max="10000" step="100" value="5000" />
+
+  <div class="opcion-switch">
+    <label class="switch-label">
+      Mantener resultados anteriores
+      <input type="checkbox" id="mantenerResultados">
+      <span class="switch-slider"></span>
+    </label>
+  </div>
+
+  <div class="opcion-switch">
+    <label class="switch-label">
+      Búsqueda dinámica al mover el mapa
+      <input type="checkbox" id="busquedaDinamica">
+      <span class="switch-slider"></span>
+    </label>
+  </div>
+
+  <button onclick="guardarConfiguracionBusqueda()" class="btnGuardarPreferencias">
+    💾 Guardar configuración
+  </button>
+</div>
+<!-- ✅ Botón para mostrar filtros activos -->
+<button id="btnToggleFiltrosActivos" class="btnSecundario oculto">
+  🧭 Mostrar filtros activos
+</button>
+
+<!-- ✅ Bloque de filtros activos -->
+<div id="filtrosActivos" class="bloque-filtros oculto">
+  <h4>🧭 Filtros activos:</h4>
+  <ul id="listaFiltros"></ul>
+</div>
+
 </div>
 
   <!-- Categorías -->
@@ -361,10 +376,7 @@
   </button>
 
   </div>
-  <div id="filtrosActivos" class="bloque-filtros">
-  <h4>🧭 Filtros activos:</h4>
-  <ul id="listaFiltros"></ul>
-</div>
+ 
 </div>
 
 <div id="panelalojamiento" class="subpanel hidden">

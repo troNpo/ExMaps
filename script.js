@@ -359,13 +359,27 @@ function cerrarPanelCategorias() {
 // Abrir menú lateral al pulsar icono
 menuBtn.addEventListener('click', abrirSidebar);
 
-// Botones "Buscar POIs" dentro de cada panel de categoría
-document.querySelectorAll(".btnBuscarPanel").forEach(boton => {
-  boton.addEventListener("click", () => {
-    ejecutarBusqueda(); // 🔍 Llama a Overpass
-    sidebar.classList.add("hidden"); // Oculta panel lateral
-    document.querySelectorAll(".subpanel.visible").forEach(panel => panel.classList.remove("visible")); // Oculta subpanel
-    actualizarBotones(); // Refresca visibilidad de botones
+// Botones "Buscar POIs" dentro de cada panel de categoría y panel 
+window.addEventListener("DOMContentLoaded", () => {
+  const btnBuscarSeleccionados = document.getElementById("btnBuscarSeleccionados");
+  if (btnBuscarSeleccionados) {
+    btnBuscarSeleccionados.addEventListener("click", () => {
+      ejecutarBusqueda(false);
+      sidebar.classList.add("hidden");
+      document.querySelectorAll(".subpanel.visible").forEach(panel => panel.classList.remove("visible"));
+      actualizarBotones();
+    });
+  }
+
+  document.querySelectorAll(".btnBuscarPanel").forEach(boton => {
+    if (boton.id !== "btnBuscarSeleccionados") {
+      boton.addEventListener("click", () => {
+        ejecutarBusqueda();
+        sidebar.classList.add("hidden");
+        document.querySelectorAll(".subpanel.visible").forEach(panel => panel.classList.remove("visible"));
+        actualizarBotones();
+      });
+    }
   });
 });
 
@@ -1600,6 +1614,9 @@ document.getElementById("btnLimpiarSeleccion")?.addEventListener("click", () => 
 
   localStorage.removeItem("checkboxPOI"); // 🔁 Limpia también la selección guardada
 
+  guardarFiltros(); // ✅ Actualiza localStorage con estado vacío
+  actualizarListadoFiltros(); // ✅ Refresca el panel visual
+
   mostrarAvisoToast("🧼 Selección de filtros limpiada");
 });
 
@@ -1990,14 +2007,24 @@ function cerrarConfiguracionAvanzada() {
 }
 function actualizarListadoFiltros() {
   const lista = document.getElementById("listaFiltros");
+  const bloque = document.getElementById("filtrosActivos");
+  const botonToggle = document.getElementById("btnToggleFiltrosActivos");
+
   lista.innerHTML = "";
 
   const seleccionados = Array.from(document.querySelectorAll('.poicheck:checked'));
 
   if (seleccionados.length === 0) {
     lista.innerHTML = "<li><em>No hay filtros activos</em></li>";
+    bloque.classList.add("oculto");
+    botonToggle.classList.add("oculto");
     return;
   }
+
+  // Mostrar botón y bloque si hay filtros
+  botonToggle.classList.remove("oculto");
+  bloque.classList.remove("oculto");
+  botonToggle.textContent = "🧭 Ocultar filtros activos";
 
   seleccionados.forEach(check => {
     const label = check.closest("label")?.textContent.trim() || "POI";
@@ -2011,7 +2038,6 @@ function actualizarListadoFiltros() {
       <button class="btn-quitar">x</button>
     `;
 
-    // Guardar referencia directa al checkbox
     const btn = item.querySelector(".btn-quitar");
     btn.addEventListener("click", () => {
       check.checked = false;
@@ -2022,11 +2048,13 @@ function actualizarListadoFiltros() {
     lista.appendChild(item);
   });
 }
+
 function guardarFiltros() {
   const seleccionados = Array.from(document.querySelectorAll('.poicheck:checked'))
     .map(check => check.id);
   localStorage.setItem("filtrosActivos", JSON.stringify(seleccionados));
 }
+
 function restaurarFiltros() {
   const guardados = JSON.parse(localStorage.getItem("filtrosActivos")) || [];
   guardados.forEach(id => {
@@ -2036,6 +2064,32 @@ function restaurarFiltros() {
   actualizarListadoFiltros();
 }
 
+window.addEventListener("DOMContentLoaded", () => {
+  restaurarFiltros();
+
+  // Evento para el botón toggle
+  const botonToggle = document.getElementById("btnToggleFiltrosActivos");
+  if (botonToggle) {
+    botonToggle.addEventListener("click", () => {
+      const bloque = document.getElementById("filtrosActivos");
+      bloque.classList.toggle("oculto");
+
+      const visible = !bloque.classList.contains("oculto");
+      botonToggle.textContent = visible
+        ? "🧭 Ocultar filtros activos"
+        : "🧭 Mostrar filtros activos";
+    });
+  }
+
+  // Eventos para los checkboxes
+  document.querySelectorAll('.poicheck').forEach(check => {
+    check.addEventListener("change", () => {
+      guardarFiltros();
+      actualizarListadoFiltros();
+    });
+  });
+});
+
 window.addEventListener("DOMContentLoaded", restaurarFiltros);
 
 document.querySelectorAll('.poicheck').forEach(check => {
@@ -2043,4 +2097,13 @@ document.querySelectorAll('.poicheck').forEach(check => {
     guardarFiltros();
     actualizarListadoFiltros();
   });
+});
+document.getElementById("btnToggleConfigBusqueda").addEventListener("click", () => {
+  const bloque = document.getElementById("bloqueConfigBusqueda");
+  bloque.classList.toggle("oculto");
+
+  const visible = !bloque.classList.contains("oculto");
+  document.getElementById("btnToggleConfigBusqueda").textContent = visible
+    ? "🔽 Ocultar Configuración de búsqueda"
+    : "⚙️ Configuración de búsqueda";
 });

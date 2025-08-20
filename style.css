@@ -368,32 +368,29 @@ body {
   filter: brightness(0) invert(1);
 }
 
-/* 🧽 Botón limpieza checkbox */
-.btnSecundario {
-  margin-top: 10px;
-  padding: 10px;
-  width: 100%;
-  font-size: 15px;
-  background-color: #1e1e1e;
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 16px;
-  cursor: pointer;
-  color: #f0f0f0;
-  font-family: 'Segoe UI', sans-serif;
-  transition: background 0.3s ease;
-}
-.btnSecundario:hover {
-  background-color: #2a2a2a;
-}
-.btnBuscarPanel:hover,
-.btnSecundario:hover {
-  background-color: #2a2a2a;
-}
+
 .btnBuscarPanel img,
 .btnSecundario img {
   width: 24px;
   height: 24px;
   filter: invert(100%);
+}
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.button-row .btnBuscarPanel,
+.button-row .btnSecundario {
+  flex: 1;
+  padding: 10px;
+  font-size: 15px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 /* 📱 Responsive: ajustes para pantallas pequeñas */
@@ -1719,4 +1716,101 @@ body.modo-zurdo .barra-lateral {
 
 .btn-quitar:hover {
   background-color: rgba(255, 255, 255, 0.25); /* más visible al pasar */
+}
+.bloque-config {
+  margin-top: 12px;
+  padding: 10px;
+  background-color: #222;
+  border-radius: 8px;
+  color: white;
+}
+
+.bloque-config.oculto {
+  display: none;
+}
+.accionesCompactas {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.btnIcono {
+  flex: 1;
+  background-color: #1e1e1e;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 12px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 36px;
+  color: #ffffff; /* ✅ texto blanco */
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.btnIcono img {
+  width: 20px;
+  height: 20px;
+  filter: invert(100%);
+}
+
+.btnRojo {
+  background-color: #bb0e26;
+  border-color: #bb0e26;
+  color: #ffffff; /* ✅ texto blanco también en el rojo */
+}
+
+.btnRojo:hover {
+  background-color: #a00c20;
+}
+
+/* Oculta elementos dinámicamente */
+.oculto {
+  display: none;
+}
+
+/* Bloque de filtros activos */
+.bloque-filtros {
+  margin-top: 12px;
+  padding: 10px;
+  background-color: #222;
+  border-radius: 8px;
+  color: white;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.bloque-filtros ul {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 8px;
+}
+
+.bloque-filtros li {
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.btn-quitar {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  line-height: 1;
+  transition: background-color 0.2s ease;
+}
+
+.btn-quitar:hover {
+  background-color: rgba(255, 255, 255, 0.25);
 }
