@@ -2107,3 +2107,32 @@ document.getElementById("btnToggleConfigBusqueda").addEventListener("click", () 
     ? "🔽 Ocultar Configuración de búsqueda"
     : "⚙️ Configuración de búsqueda";
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const toggleBtn = document.getElementById("toggleBotonera");
+  const barraControles = document.getElementById("barraControles");
+  const iconoToggle = toggleBtn?.querySelector("img");
+
+  if (!toggleBtn || !barraControles) return;
+
+  // 🔁 Restaurar estado guardado
+  const estadoGuardado = localStorage.getItem("estadoBotonera");
+  if (estadoGuardado === "oculto") {
+    barraControles.classList.add("oculto");
+    if (iconoToggle) iconoToggle.src = "icons/ui/fi-sr-brain.svg";
+  }
+
+  // 🧠 Toggle al hacer clic
+  toggleBtn.addEventListener("click", () => {
+    barraControles.classList.toggle("oculto");
+
+    const estaOculta = barraControles.classList.contains("oculto");
+    localStorage.setItem("estadoBotonera", estaOculta ? "oculto" : "visible");
+
+    if (iconoToggle) {
+      iconoToggle.src = estaOculta
+        ? "icons/ui/fi-sr-brain.svg"
+        : "icons/ui/fi-sr-brain-circuit.svg";
+    }
+  });
+});
