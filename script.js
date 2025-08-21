@@ -549,8 +549,10 @@ function ejecutarBusqueda(silenciosa = false) {
       "amenity=biergarten": ["amenity=biergarten"],
       "amenity=ice_cream": ["amenity=ice_cream"],
       "amenity=public_bookcase": ["amenity=public_bookcase"],
-      "amenity=wayside_shrine": ["amenity=wayside_shrine"],
-      "amenity=wayside_cross": ["amenity=wayside_cross"]
+      "amenity=firepit": ["amenity=bbq"],
+      "historic=wayside_shrine": ["amenity=wayside_shrine"],
+      "historic=wayside_cross": ["amenity=wayside_cross"],
+      "amenityplace_of_worship":["religion=christian"]
     };
 
     let consulta = `[out:json][timeout:25];(\n`;
