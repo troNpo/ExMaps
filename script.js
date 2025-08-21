@@ -550,8 +550,8 @@ function ejecutarBusqueda(silenciosa = false) {
       "amenity=ice_cream": ["amenity=ice_cream"],
       "amenity=public_bookcase": ["amenity=public_bookcase"],
       "amenity=firepit": ["amenity=bbq"],
-      "historic=wayside_shrine": ["amenity=wayside_shrine"],
-      "historic=wayside_cross": ["amenity=wayside_cross"],
+      "historic=wayside_shrine": ["historic=wayside_shrine"],
+      "historic=wayside_cross": ["historic=wayside_cross"],
       "amenityplace_of_worship":["religion=christian"]
     };
 
