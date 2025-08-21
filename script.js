@@ -412,7 +412,41 @@ function obtenerPOIsSeleccionados() {
   return seleccionados;
 }
 
-
+const subtiposPorCategoria = {
+  tourism: [
+    "apartment", "hostel", "camp_site", "caravan_site", "chalet", "guest_house", "hotel", "motel",
+    "wilderness_hut", "alpine_hut", "picnic_site", "viewpoint", "attraction", "artwork", "gallery",
+    "museum", "zoo"
+  ],
+  information: ["guidepost", "board", "terminal"],
+  amenity: [
+    "bicycle_repair_station", "charging_station", "shelter", "firepit", "drinking_water", "hospital",
+    "pharmacy", "doctors", "bar", "biergarten", "library", "cafe", "cinema", "fast_food", "place_of_worship",
+    "pub", "public_bookcase", "restaurant", "theatre", "bank", "post_box", "atm", "fuel", "laundry",
+    "post_office", "parking_entrance", "bus_station", "ferry_terminal", "parking", "toilets", "bench",
+    "public_bath", "fountain", "recycling", "lounger", "police", "fire_station"
+  ],
+  natural: [
+    "tree", "spring", "cave_entrance", "rock", "volcano", "peak", "saddle", "mountain_pass", "beach",
+    "cliff"
+  ],
+  waterway: ["waterfall"],
+  boundary: ["protected_area"],
+  emergency: ["emergency_phone", "defibrillator", "emergency_access_point"],
+  historic: [
+    "castle", "ruins", "wayside_shrine", "wayside_cross", "memorial", "monument", "archaeological_site"
+  ],
+  man_made: ["watermill", "windmill", "survey_point"],
+  leisure: ["botanical_garden", "park"],
+  aeroway: ["aerodrome", "helipad"],
+  railway: ["crossing", "subway_entrance", "station", "level_crossing"],
+  aerialway: ["station"],
+  highway: ["bus_stop"],
+  shop: [
+    "travel_agency", "bicycle", "doityourself", "butcher", "books", "bakery", "chemist", "organic",
+    "convenience", "sports", "supermarket"
+  ]
+};
 
 function crearMarcador(el) {
   const nombre = el.tags.name || "POI";
@@ -420,17 +454,31 @@ function crearMarcador(el) {
   let subtipo = null;
   let key = null;
 
-  for (const k of ["amenity", "shop", "tourism", "leisure", "natural", "emergency", "highway", "historic", "building"]) {
-    if (el.tags[k]) {
-      key = k;
-      subtipo = el.tags[k];
+  // Buscar subtipo válido usando el objeto subtiposPorCategoria
+  for (const [categoria, listaSubtipos] of Object.entries(subtiposPorCategoria)) {
+    const valor = el.tags[categoria];
+    if (valor && listaSubtipos.includes(valor)) {
+      key = categoria;
+      subtipo = valor;
       break;
     }
   }
 
-  // Ruta del icono específico
-  const rutaIcono = subtipo ? `icons/${subtipo}.svg` : null;
+  // Limpiar nombre para ruta de icono
+  const limpiarNombre = s => s.replace(/[:\/\\ ]/g, "_").toLowerCase();
+  const nombreIcono = subtipo ? limpiarNombre(subtipo) : null;
+  const rutaIcono = nombreIcono ? `icons/${nombreIcono}.svg` : null;
 
+  // Mostrar toast informativo
+/*
+  mostrarToast(
+    subtipo
+      ? `✅ Subtipo reconocido: ${subtipo} (${key}) → ${rutaIcono}`
+      : `⚠️ Subtipo no reconocido. Usando icono por defecto.`,
+    subtipo ? "success" : "warning"
+  );
+*/
+  // Crear icono personalizado o usar el por defecto
   const icono = rutaIcono
     ? L.icon({
         iconUrl: rutaIcono,
@@ -438,16 +486,17 @@ function crearMarcador(el) {
         iconAnchor: [15, 30],
         popupAnchor: [0, -25]
       })
-    : null;
+    : L.Icon.Default.prototype;
 
-  const marcador = icono
-    ? L.marker([el.lat, el.lon], { icon: icono }).addTo(map)
-    : L.marker([el.lat, el.lon]).addTo(map); // marcador estándar si no hay icono
+  // Crear marcador
+  const marcador = L.marker([el.lat, el.lon], { icon: icono }).addTo(map);
 
+  // Guardar tags en el marcador
   el.tags.lat = el.lat;
   el.tags.lon = el.lon;
   marcador._tags = el.tags;
 
+  // Contenido del popup
   const contenidoPopup = `
     <div style="cursor:pointer;" onclick='mostrarDetallesDesdePopup(${JSON.stringify(el.tags)})'>
       <b>${nombre}</b>
@@ -455,6 +504,7 @@ function crearMarcador(el) {
   `;
   marcador.bindPopup(contenidoPopup);
 
+  // Evento de clic
   marcador.on("click", () => {
     marcador.openPopup();
     window.tagsPOI = el.tags;
@@ -469,8 +519,36 @@ function crearMarcador(el) {
 
   return marcador;
 }
-let ultimaBusquedaSinResultados = 0; // 🕒 Marca de tiempo para evitar repeticiones
+function mostrarToast(mensaje, tipo = "info") {
+  const colores = {
+    info: "#2196F3",
+    error: "#f44336",
+    success: "#4CAF50",
+    warning: "#FFC107"
+  };
 
+  const toast = document.createElement("div");
+  toast.textContent = mensaje;
+  toast.style.position = "fixed";
+  toast.style.bottom = "20px";
+  toast.style.right = "20px";
+  toast.style.backgroundColor = colores[tipo] || "#333";
+  toast.style.color = "white";
+  toast.style.padding = "10px 20px";
+  toast.style.borderRadius = "5px";
+  toast.style.boxShadow = "0 2px 6px rgba(0,0,0,0.3)";
+  toast.style.zIndex = "9999";
+  toast.style.fontFamily = "sans-serif";
+  toast.style.opacity = "0";
+  toast.style.transition = "opacity 0.5s ease";
+
+  document.body.appendChild(toast);
+  setTimeout(() => (toast.style.opacity = "1"), 100);
+  setTimeout(() => {
+    toast.style.opacity = "0";
+    setTimeout(() => toast.remove(), 500);
+  }, 4000);
+}
 function ejecutarBusqueda(silenciosa = false) {
   try {
     const seleccionados = Array.from(document.querySelectorAll('.poicheck:checked'))
@@ -620,10 +698,12 @@ function ejecutarBusqueda(silenciosa = false) {
         }
       }
     })
+    /*
     .catch(err => {
       console.error("Error en Overpass:", err);
       mostrarAvisoToast("❌ No se pudo conectar con el servidor.");
     });
+    */
 
   } catch (error) {
     console.error("Error en ejecutarBusqueda:", error);
