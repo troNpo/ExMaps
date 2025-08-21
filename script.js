@@ -552,7 +552,7 @@ function ejecutarBusqueda(silenciosa = false) {
       "amenity=firepit": ["amenity=bbq"],
       "historic=wayside_shrine": ["historic=wayside_shrine"],
       "historic=wayside_cross": ["historic=wayside_cross"],
-      "amenityplace_of_worship":["religion=christian"]
+      "amenity=place_of_worship":["religion=christian"]
     };
 
     let consulta = `[out:json][timeout:25];(\n`;
