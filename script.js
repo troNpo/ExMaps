@@ -90,6 +90,10 @@ if (prefs.mapaDefecto && prefs.mapaDefecto !== "ultimo") {
   }
 }
 
+map.whenReady(() => {
+  cargarRutaGPXGuardada();
+});
+
 // Selector de capas base
 const baseMaps = {
   "OpenStreetMap": osmLayer,
@@ -186,6 +190,7 @@ document.getElementById("sliderTamanoIconoCentro").addEventListener("input", (e)
   document.getElementById("valorTamanoIcono").textContent = valor;
   actualizarIconoCentro();
 });
+
 // Buscar dirección con Nominatim
 document.getElementById("btnBuscarLugar").addEventListener("click", () => {
   const panel = document.getElementById("panelResultadosNominatim");
@@ -1977,6 +1982,8 @@ window.addEventListener("load", () => {
     map.setView(punto, zoom);
   }
 });
+
+
 // 🧠 Normaliza texto para búsqueda (sin acentos, minúsculas)
 function normalizarTexto(texto) {
   return texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -2218,3 +2225,111 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+
+document.getElementById("inputGPX").addEventListener("change", e => {
+  const archivo = e.target.files[0];
+  if (!archivo || !archivo.name.endsWith(".gpx")) {
+    mostrarToast("⚠️ Archivo no válido. Usa formato .gpx", "warning");
+    return;
+  }
+
+  const lector = new FileReader();
+  lector.onload = evento => {
+    const contenido = evento.target.result;
+    localStorage.setItem("rutaGPX", contenido);
+
+    const capaGPX = new L.GPX(contenido, {
+      async: true,
+      marker_options: {
+        startIcon: false,
+        endIcon: false,
+        shadowUrl: null
+      }
+    });
+
+    capaGPX.addTo(map);
+
+    capaGPX.on("loaded", () => {
+      map.fitBounds(capaGPX.getBounds());
+      mostrarToast("✅ Ruta GPX cargada y guardada", "success");
+      colocarMarcadoresInicioFin(capaGPX);
+    });
+
+    capaGPX.on("error", () => {
+      mostrarToast("❌ Error al procesar el archivo GPX", "error");
+    });
+  };
+
+  lector.readAsText(archivo);
+});
+
+function cargarRutaGPXGuardada() {
+  const contenido = localStorage.getItem("rutaGPX");
+  if (!contenido) {
+    mostrarToast("ℹ️ No hay ruta GPX guardada en memoria", "info");
+    return;
+  }
+
+  mostrarToast("📦 Cargando ruta GPX desde memoria", "info");
+
+  const capaGPX = new L.GPX(contenido, {
+    async: true,
+    marker_options: {
+      startIcon: false,
+      endIcon: false,
+      shadowUrl: null
+    }
+  });
+
+  capaGPX.addTo(map);
+
+  capaGPX.on("loaded", function (e) {
+    map.fitBounds(e.target.getBounds());
+    mostrarToast("📍 Ruta GPX restaurada y centrada en el mapa", "success");
+    colocarMarcadoresInicioFin(e.target);
+  });
+
+  capaGPX.on("error", function () {
+    mostrarToast("❌ Error al cargar ruta desde memoria", "error");
+  });
+}
+
+function borrarRutaGPX() {
+  localStorage.removeItem("rutaGPX");
+
+  let capasEliminadas = 0;
+  map.eachLayer(layer => {
+    if (layer instanceof L.GPX || layer instanceof L.Marker) {
+      map.removeLayer(layer);
+      capasEliminadas++;
+    }
+  });
+
+  mostrarToast("🗑️ Ruta GPX eliminada. Capas eliminadas: " + capasEliminadas, "info");
+}
+
+function colocarMarcadoresInicioFin(capaGPX) {
+  let puntos = [];
+
+  capaGPX.eachLayer(layer => {
+    if (layer instanceof L.Polyline) {
+      puntos = layer.getLatLngs();
+    }
+  });
+
+  if (puntos.length >= 2) {
+    const inicio = puntos[0];
+    const fin = puntos[puntos.length - 1];
+
+    const iconoPersonalizado = L.icon({
+      iconUrl: 'icons/ui/dot_white.svg',
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      popupAnchor: [0, -12]
+    });
+
+    L.marker(inicio, { icon: iconoPersonalizado }).addTo(map).bindPopup("📍 Inicio").openPopup();
+    L.marker(fin, { icon: iconoPersonalizado }).addTo(map).bindPopup("🏁 Fin");
+  }
+}

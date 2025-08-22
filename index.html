@@ -11,6 +11,7 @@
   <!-- Leaflet para mapas -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.5.1/gpx.min.js"></script>
   <!-- Geocoder plugin para Nominatim -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
@@ -110,8 +111,8 @@
     <img src="icons/ui/fi-sr-user-gear.svg" alt="Perfil de usuario" />
     Perfil de usuario
   </button>
-  
-  <!-- 🧭 Exportación directa KML -->
+
+  <!-- Exportación -->
   <button onclick="exportarMapaKML(construirPoisPorCategoria())" class="btn-opcion">
     <img src="icons/ui/fi-sr-folder-download.svg" alt="Exportar mapa KML" />
     Exportar todos los POIs del mapa
@@ -121,7 +122,23 @@
     <img src="icons/ui/fi-sr-file-download.svg" alt="Exportar seleccionados KML" />
     Exportar Capa personalizada 
   </button>
- <!-- Sección avanzada -->
+
+  <!-- Subir ruta GPX -->
+  <button onclick="document.getElementById('bloqueSubidaGPX').classList.toggle('visible')" class="btn-opcion">
+    <img src="icons/ui/fi-sr-upload.svg" alt="Subir GPX" />
+    Subir ruta GPX
+  </button>
+
+  <div id="bloqueSubidaGPX" class="bloque-config oculto">
+    <label for="inputGPX">Selecciona archivo GPX:</label>
+    <input type="file" id="inputGPX" accept=".gpx" />
+  </div>
+  <button onclick="borrarRutaGPX()" class="btn-opcion">
+  <img src="icons/ui/fi-sr-trash.svg" alt="Borrar GPX" />
+  Borrar ruta GPX
+</button>
+
+  <!-- Configuración avanzada -->
   <button onclick="abrirConfiguracionAvanzada()" class="btn-opcion">
     <img src="icons/ui/fi-sr-settings.svg" alt="Configuración avanzada" />
     Con.avanzada
