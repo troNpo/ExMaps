@@ -44,6 +44,7 @@ const esriSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/service
   attribution: '© Esri & contributors',
   maxZoom: 18
 });
+
 if (!localStorage.getItem("ultimoMapaUsado")) {
   localStorage.setItem("ultimoMapaUsado", "OpenStreetMap");
 }
@@ -2308,28 +2309,133 @@ function borrarRutaGPX() {
 
   mostrarToast("🗑️ Ruta GPX eliminada. Capas eliminadas: " + capasEliminadas, "info");
 }
+function toggleMenuCompartir() {
+  const menu = document.getElementById("menuCompartir");
 
-function colocarMarcadoresInicioFin(capaGPX) {
-  let puntos = [];
+  const estaVisible = menu.classList.contains("visible");
 
-  capaGPX.eachLayer(layer => {
-    if (layer instanceof L.Polyline) {
-      puntos = layer.getLatLngs();
-    }
+  // Ocultar todos los menús emergentes
+  document.querySelectorAll(".menu-emergente").forEach(m => {
+    m.classList.remove("visible");
+    m.classList.add("oculto");
   });
 
-  if (puntos.length >= 2) {
-    const inicio = puntos[0];
-    const fin = puntos[puntos.length - 1];
-
-    const iconoPersonalizado = L.icon({
-      iconUrl: 'icons/ui/dot_white.svg',
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
-      popupAnchor: [0, -12]
-    });
-
-    L.marker(inicio, { icon: iconoPersonalizado }).addTo(map).bindPopup("📍 Inicio").openPopup();
-    L.marker(fin, { icon: iconoPersonalizado }).addTo(map).bindPopup("🏁 Fin");
+  // Si no estaba visible, lo mostramos
+  if (!estaVisible) {
+    menu.classList.remove("oculto");
+    menu.classList.add("visible");
   }
 }
+function compartirTextoCentroMapa() {
+  const centro = map.getCenter();
+  const lat = centro.lat.toFixed(7);
+  const lon = centro.lng.toFixed(7);
+  const fecha = new Date().toISOString().slice(0, 10);
+
+  const texto = `ExMaps posición actual
+
+📍 Centro del mapa:
+- Latitud: ${lat}
+- Longitud: ${lon}
+
+geo:${lat},${lon}
+https://oruxmaps.com/position?q=${lat},${lon}
+
+🗓️ Generado el ${fecha} con ExMaps`;
+
+  if (navigator.share) {
+    navigator.share({ title: "Ubicación actual", text: texto })
+      .then(() => mostrarAvisoToast("✅ Texto compartido"))
+      .catch(() => mostrarAvisoToast("⚠️ No se pudo compartir directamente"));
+  } else {
+    navigator.clipboard.writeText(texto)
+      .then(() => mostrarAvisoToast("📋 Copiado al portapapeles"))
+      .catch(() => mostrarAvisoToast("⚠️ No se pudo copiar"));
+  }
+}
+
+function compartirPosicionCentroMapa() {
+  const centro = map.getCenter();
+  const lat = centro.lat.toFixed(7);
+  const lon = centro.lng.toFixed(7);
+  const geoIntent = `geo:${lat},${lon}?q=${lat},${lon}`;
+  window.location.href = geoIntent;
+}
+
+function abrirEditorOSMDesdeCentro() {
+  const centro = map.getCenter();
+  const lat = centro.lat.toFixed(7);
+  const lon = centro.lng.toFixed(7);
+  const url = `https://www.openstreetmap.org/edit?editor=id#map=18/${lat}/${lon}`;
+  window.open(url, '_blank');
+}
+
+function añadirNotaOSMDesdeCentro() {
+  const centro = map.getCenter();
+  const lat = centro.lat.toFixed(7);
+  const lon = centro.lng.toFixed(7);
+  const textoNota = encodeURIComponent(`Sugerencia para esta ubicación`);
+  const url = `https://www.openstreetmap.org/note/new#map=18/${lat}/${lon}&text=${textoNota}`;
+  window.open(url, '_blank');
+}
+
+function abrirVisorWebDesdeCentro(tipo) {
+  const centro = map.getCenter();
+  const lat = centro.lat.toFixed(7);
+  const lon = centro.lng.toFixed(7);
+  const ele = 0;
+
+  let url = "";
+  let titulo = "";
+
+  switch (tipo) {
+    case "streetview":
+      url = `https://www.google.com/maps?q=&layer=c&cbll=${lat},${lon}`;
+      window.open(url, "_blank");
+      return;
+
+    case "mapillary":
+      url = `https://www.mapillary.com/app/?lat=${lat}&lng=${lon}&z=17&focus=photo`;
+      window.open(url, "_blank");
+      return;
+
+    case "peakfinder":
+      url = `https://www.peakfinder.org/es?lat=${lat}&lng=${lon}&ele=${ele}&azi=180`;
+      titulo = "PeakFinder";
+      break;
+  }
+
+  // 🔒 Cerrar menús desplegables
+  document.querySelectorAll(".bloque-config.visible").forEach(b => b.classList.remove("visible"));
+
+  const menuAjustes = document.getElementById("menuAjustes");
+  if (menuAjustes) menuAjustes.style.display = "none";
+
+  // 📺 Mostrar visor embebido
+  const visor = document.getElementById("visorWeb");
+  const iframe = document.getElementById("iframeWeb");
+  const tituloElemento = document.getElementById("visorTitulo");
+
+  if (visor && iframe && tituloElemento) {
+    iframe.src = url;
+    tituloElemento.textContent = titulo;
+    visor.classList.remove("hidden");
+  }
+}
+
+// botón exportar
+document.addEventListener("DOMContentLoaded", () => {
+  const boton = document.getElementById("btnExportar");
+  const bloque = document.getElementById("bloqueExportar");
+
+  boton.addEventListener("click", (e) => {
+    e.stopPropagation(); // Evita que el clic se propague
+    bloque.classList.toggle("visible");
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!bloque.contains(e.target) && !boton.contains(e.target)) {
+      bloque.classList.remove("visible");
+    }
+  });
+});

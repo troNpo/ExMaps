@@ -112,16 +112,24 @@
     Perfil de usuario
   </button>
 
-  <!-- Exportación -->
-  <button onclick="exportarMapaKML(construirPoisPorCategoria())" class="btn-opcion">
+<!-- Botón Exportar -->
+<button id="btnExportar" class="btn-opcion">
+  <img src="icons/ui/fi-sr-folder-download.svg" alt="Exportar" />
+  Exportar
+</button>
+
+<!-- Bloque desplegable -->
+<div id="bloqueExportar" class="bloque oculto">
+  <button onclick="exportarMapaKML(construirPoisPorCategoria())">
     <img src="icons/ui/fi-sr-folder-download.svg" alt="Exportar mapa KML" />
-    Exportar todos los POIs del mapa
+    <span>Exportar todos los POIs del mapa</span>
   </button>
 
-  <button onclick="exportarPOIsSeleccionados()" class="btn-opcion">
+  <button onclick="exportarPOIsSeleccionados()">
     <img src="icons/ui/fi-sr-file-download.svg" alt="Exportar seleccionados KML" />
-    Exportar Capa personalizada 
+    <span>Exportar capa personalizada</span>
   </button>
+</div>
 
   <!-- Subir ruta GPX -->
   <button onclick="document.getElementById('bloqueSubidaGPX').classList.toggle('visible')" class="btn-opcion">
@@ -138,12 +146,56 @@
   Borrar ruta GPX
 </button>
 
+<!-- 📑 Menú compartir ubicación del centro del mapa -->
+<button onclick="document.getElementById('bloqueCompartir').classList.toggle('visible')" class="btn-opcion">
+  <img src="icons/ui/fi-sr-share.svg" alt="Compartir" />
+  Compartir ubicación centro del mapa
+</button>
+
+<div id="bloqueCompartir" class="bloque-config oculto">
+  <button onclick="compartirTextoCentroMapa()">
+    <img src="icons/ui/fi-sr-blog-text.svg" alt="Texto POI" />
+    <span>Compartir como texto</span>
+  </button>
+
+  <button onclick="compartirPosicionCentroMapa()">
+    <img src="icons/ui/fi-sr-map-marker.svg" alt="Ubicación POI" />
+    <span>Compartir posición en otra app</span>
+  </button>
+
+  <button onclick="abrirEditorOSMDesdeCentro()">
+    <img src="icons/ui/fi-sr-code-editing.svg" alt="Editor OSM" />
+    <span>Editar directamente en OpenStreetMap</span>
+  </button>
+
+  <button onclick="añadirNotaOSMDesdeCentro()">
+    <img src="icons/ui/fi-sr-blog-pencil.svg" alt="Añadir nota OSM" />
+    <span>Añadir sugerencia como nota pública</span>
+  </button>
+
+  <button onclick="abrirVisorWebDesdeCentro('streetview')">
+    <img src="icons/ui/fi-sr-street-view.svg" alt="Street View" />
+    <span>Ver en Street View</span>
+  </button>
+
+  <button onclick="abrirVisorWebDesdeCentro('mapillary')">
+    <img src="icons/ui/fi-sr-camera-viewfinder.svg" alt="Mapillary" />
+    <span>Ver en Mapillary</span>
+  </button>
+
+  <button onclick="abrirVisorWebDesdeCentro('peakfinder')">
+    <img src="icons/ui/fi-sr-mountains.svg" alt="PeakFinder" />
+    <span>Ver en PeakFinder</span>
+  </button>
+</div>
+
   <!-- Configuración avanzada -->
   <button onclick="abrirConfiguracionAvanzada()" class="btn-opcion">
     <img src="icons/ui/fi-sr-settings.svg" alt="Configuración avanzada" />
-    Con.avanzada
+    Elementos visuales 
   </button>
 </div>
+
 
 <!-- 📍 Panel búsqueda Nominatim -->
 <div id="panelResultadosNominatim" class="menu-emergente">

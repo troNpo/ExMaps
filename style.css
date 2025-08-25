@@ -1825,3 +1825,14 @@ body.modo-zurdo .barra-lateral {
   display: block;
   margin-top: 10px;
 }
+.bloque {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+  padding-left: 20px;
+}
+
+.bloque.visible {
+  display: flex;
+}
