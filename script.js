@@ -2468,16 +2468,30 @@ function activarSeguimientoGPS() {
       const punto = L.latLng(lat, lon);
       map.setView(punto, 16);
 
-   if (!marcadorGPS) {
-  marcadorGPS = L.marker(punto)
-    .addTo(map)
-    .bindPopup("📍 Estás aquí");
-} else {
-  marcadorGPS.setLatLng(punto);
-}
+      if (!marcadorGPS) {
+        marcadorGPS = L.marker(punto)
+          .addTo(map)
+          .bindPopup("📍 Estás aquí");
+      } else {
+        marcadorGPS.setLatLng(punto);
+      }
 
-marcadorGPS.openPopup();
-mostrarAvisoToast("📍 Ubicación actualizada");
+      marcadorGPS.openPopup();
+      mostrarAvisoToast("📍 Ubicación actualizada");
+    },
+    (err) => {
+      mostrarAvisoToast("❌ Error al obtener ubicación");
+      console.error(err);
+    },
+    {
+      enableHighAccuracy: true,
+      maximumAge: 0,
+      timeout: 10000
+    }
+  );
+
+  seguimientoActivo = true;
+}
 
 function desactivarSeguimientoGPS() {
   if (watchId) {
