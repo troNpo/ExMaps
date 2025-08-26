@@ -2439,3 +2439,77 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+// ubicación GPS 
+let seguimientoActivo = false;
+let watchId = null;
+let marcadorGPS = null;
+
+function toggleSeguimientoGPSDesdeSwitch(input) {
+  if (input.checked) {
+    activarSeguimientoGPS();
+  } else {
+    desactivarSeguimientoGPS();
+  }
+}
+
+function activarSeguimientoGPS() {
+  if (!navigator.geolocation) {
+    mostrarAvisoToast("⚠️ Geolocalización no disponible");
+    document.getElementById("switchGPS").checked = false;
+    return;
+  }
+
+  mostrarAvisoToast("📡 Activando seguimiento GPS...");
+
+  watchId = navigator.geolocation.watchPosition(
+    (pos) => {
+      const lat = pos.coords.latitude;
+      const lon = pos.coords.longitude;
+      const punto = L.latLng(lat, lon);
+      map.setView(punto, 16);
+
+   if (!marcadorGPS) {
+  marcadorGPS = L.marker(punto)
+    .addTo(map)
+    .bindPopup("📍 Estás aquí");
+} else {
+  marcadorGPS.setLatLng(punto);
+}
+
+marcadorGPS.openPopup();
+mostrarAvisoToast("📍 Ubicación actualizada");
+
+function desactivarSeguimientoGPS() {
+  if (watchId) {
+    navigator.geolocation.clearWatch(watchId);
+    watchId = null;
+  }
+
+  if (marcadorGPS) {
+    map.removeLayer(marcadorGPS);
+    marcadorGPS = null;
+  }
+
+  seguimientoActivo = false;
+  mostrarAvisoToast("🛑 Seguimiento GPS desactivado");
+}
+
+function mostrarAvisoToast(mensaje) {
+  let toast = document.getElementById("toastAviso");
+
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "toastAviso";
+    toast.className = "toast oculto";
+    document.body.appendChild(toast);
+  }
+
+  toast.textContent = mensaje;
+  toast.classList.remove("oculto");
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+    toast.classList.add("oculto");
+  }, 3000);
+}

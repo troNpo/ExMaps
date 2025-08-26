@@ -226,6 +226,19 @@
     <input type="text" id="inputEnlaceGeo" placeholder="Pega un enlace geo: o Google Maps" />
     <button id="btnProcesarEnlaceGeo">Procesar enlace</button>
   </div>
+<!-- 📡 Seguimiento GPS -->
+<div class="bloque-switch">
+  <label for="switchGPS">
+    <img src="icons/ui/fi-sr-location-crosshairs.svg" alt="Icono GPS" />
+    Activar seguimiento GPS
+  <label class="switch">
+  <input type="checkbox" id="switchGPS" onchange="toggleSeguimientoGPSDesdeSwitch(this)">
+  <span class="slider"></span>
+</label>
+</div>
+
+<!-- 🧭 Avisos tipo toast -->
+<div id="toastAviso" class="toast oculto"></div>
 
   <!-- 📋 Título de resultados -->
   <label>

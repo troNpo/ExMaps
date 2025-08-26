@@ -1836,3 +1836,97 @@ body.modo-zurdo .barra-lateral {
 .bloque.visible {
   display: flex;
 }
+
+/* 🔘 Contenedor del interruptor */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 28px;
+}
+
+/* 🚫 Ocultar el checkbox original */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* 🎨 Estilo del slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: background-color 0.4s;
+  border-radius: 34px;
+}
+
+/* ⚪ Círculo deslizante */
+.slider::before {
+  content: "";
+  position: absolute;
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: transform 0.4s;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* 🔴 Estado activado */
+.switch input:checked + .slider {
+  background-color: #e53935; /* Rojo intenso */
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(24px);
+}
+
+/* 🖱️ Efecto hover opcional */
+.slider:hover {
+  background-color: #bdbdbd;
+}
+
+/* 🌙 Modo oscuro opcional */
+@media (prefers-color-scheme: dark) {
+  .slider {
+    background-color: #555;
+  }
+
+  .switch input:checked + .slider {
+    background-color: #ff5252;
+  }
+}
+
+/* 📢 Toast de aviso */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  z-index: 9999;
+}
+
+.toast.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.toast.oculto {
+  opacity: 0;
+}
