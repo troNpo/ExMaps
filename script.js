@@ -2548,11 +2548,11 @@ function obtenerAltitud(lat, lng) {
         document.getElementById("altitudMapa").textContent = `Altitud: --`;
       }
     })
-    .catch(error => {
-      document.getElementById("altitudMapa").textContent = `Altitud: --`;
-      document.getElementById("estadoAltitud").textContent = "❌ Error al consultar la API de altitud";
-      console.error("Error al consultar altitud:", error);
-    });
+   .catch(error => {
+  document.getElementById("altitudMapa").textContent = `Altitud: --`;
+  document.getElementById("estadoAltitud").textContent = `❌ Error al consultar la API: ${error.message}`;
+});
+     
 }
 
 function actualizarCabecera() {
