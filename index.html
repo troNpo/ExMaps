@@ -540,49 +540,45 @@
 
     <!-- 🧭 Señalización -->
     <label><input type="checkbox" class="poicheck" data-cat="information" data-sub="guidepost"> Poste de ruta</label>
-    <label><input type="checkbox" class="poicheck" data-cat="information" data-sub="guidepost"> Señal guía</label>
     <label><input type="checkbox" class="poicheck" data-cat="information" data-sub="board"> Panel informativo</label>
     <label><input type="checkbox" class="poicheck" data-cat="information" data-sub="terminal"> Terminal digital</label>
-
     <!-- 🚲 Servicios para ciclistas -->
+         <label><input type="checkbox" class="poicheck" data-cat="amenity" data-sub="charging_station"> Punto de carga</label>
     <label><input type="checkbox" class="poicheck" data-cat="amenity" data-sub="bicycle_repair_station"> Reparación bici</label>
-    <label><input type="checkbox" class="poicheck" data-cat="amenity" data-sub="charging_station"> Punto de carga</label>
-
+   <div class="separadorBloque"></div>
     <!-- ⛺ Descanso y refugio -->
+        <label><input type="checkbox" class="poicheck" data-cat="amenity" data-sub="drinking_water"> Agua potable</label>
+         <label><input type="checkbox" class="poicheck" data-cat="tourism" data-sub="camp_site"> Camping</label>
+    <label><input type="checkbox" class="poicheck" data-cat="tourism" data-sub="caravan_site"> Caravanas</label>
     <label><input type="checkbox" class="poicheck" data-cat="amenity" data-sub="shelter"> Refugio sencillo</label>
     <label><input type="checkbox" class="poicheck" data-cat="tourism" data-sub="alpine_hut"> Refugio de montaña</label>
     <label><input type="checkbox" class="poicheck" data-cat="tourism" data-sub="wilderness_hut"> Refugio básico</label>
-    <label><input type="checkbox" class="poicheck" data-cat="tourism" data-sub="camp_site"> Camping</label>
-    <label><input type="checkbox" class="poicheck" data-cat="tourism" data-sub="caravan_site"> Caravanas</label>
     <label><input type="checkbox" class="poicheck" data-cat="tourism" data-sub="picnic_site"> Zona picnic</label>
     <label><input type="checkbox" class="poicheck" data-cat="amenity" data-sub="firepit"> Zona fuego(barbacoa)</label>
-    <label><input type="checkbox" class="poicheck" data-cat="amenity" data-sub="drinking_water"> Agua potable</label>
-
+    <div class="separadorBloque"></div>
     <!-- 🏞️ Entorno natural -->
     <label><input type="checkbox" class="poicheck" data-cat="natural" data-sub="tree"> Árbol destacado</label>
-    <label><input type="checkbox" class="poicheck" data-cat="natural" data-sub="spring"> Manantial</label>
-    <label><input type="checkbox" class="poicheck" data-cat="waterway" data-sub="waterfall"> Cascada</label>
+     <label><input type="checkbox" class="poicheck" data-cat="waterway" data-sub="waterfall"> Cascada</label>
+     <label><input type="checkbox" class="poicheck" data-cat="natural" data-sub="saddle"> Collado</label>
     <label><input type="checkbox" class="poicheck" data-cat="natural" data-sub="cave_entrance"> Cueva</label>
     <label><input type="checkbox" class="poicheck" data-cat="natural" data-sub="rock"> Formación rocosa</label>
-    <label><input type="checkbox" class="poicheck" data-cat="natural" data-sub="volcano"> Volcán</label>
+    <label><input type="checkbox" class="poicheck" data-cat="natural" data-sub="spring"> Manantial</label>
+   <label><input type="checkbox" class="poicheck" data-cat="tourism" data-sub="viewpoint"> Mirador</label>
+     <label><input type="checkbox" class="poicheck" data-cat="natural" data-sub="mountain_pass"> Paso montañoso</label>
     <label><input type="checkbox" class="poicheck" data-cat="natural" data-sub="peak"> Pico</label>
-    <label><input type="checkbox" class="poicheck" data-cat="natural" data-sub="saddle"> Collado</label>
-    <label><input type="checkbox" class="poicheck" data-cat="natural" data-sub="mountain_pass"> Paso montañoso</label>
-    <label><input type="checkbox" class="poicheck" data-cat="tourism" data-sub="viewpoint"> Mirador</label>
-    <label><input type="checkbox" class="poicheck" data-cat="boundary" data-sub="protected_area"> Área protegida</label>
-
+    <label><input type="checkbox" class="poicheck" data-cat="natural" data-sub="volcano"> Volcán</label>
+   <div class="separadorBloque"></div> 
     <!-- 🏥 Emergencia y salud -->
+         <label><input type="checkbox" class="poicheck" data-cat="amenity" data-sub="doctors"> Centro médico / doctor</label>
+           <label><input type="checkbox" class="poicheck" data-cat="amenity" data-sub="pharmacy"> Farmacia</label>
     <label><input type="checkbox" class="poicheck" data-cat="amenity" data-sub="hospital"> Hospital</label>
-    <label><input type="checkbox" class="poicheck" data-cat="amenity" data-sub="pharmacy"> Farmacia</label>
-    <label><input type="checkbox" class="poicheck" data-cat="amenity" data-sub="doctors"> Centro médico / doctor</label>
     <label><input type="checkbox" class="poicheck" data-cat="emergency" data-sub="emergency_phone"> Teléfono de emergencia</label>
-
-    <!-- 🏰 Elementos históricos -->
+    <div class="separadorBloque"></div>
+    <!-- 🏰 Elementos históricos , hechos por el hombre -->
     <label><input type="checkbox" class="poicheck" data-cat="historic" data-sub="castle"> Castillo</label>
-    <label><input type="checkbox" class="poicheck" data-cat="historic" data-sub="ruins"> Ruinas</label>
-<!-- hecho por el hombre -->
        <label><input type="checkbox" class="poicheck" data-cat="man_made" data-sub="watermill"> Molino de Agua</label>
       <label><input type="checkbox" class="poicheck" data-cat="man_made" data-sub="windmill"> Molino de Viento</label>
+      <label><input type="checkbox" class="poicheck" data-cat="historic" data-sub="ruins"> Ruinas</label>
     <label><input type="checkbox" class="poicheck" data-cat="man_made" data-sub="survey_point"> Vértice </label>
   </div>
 </div>
@@ -869,6 +865,11 @@
 </div>
 
   </div> <!-- #sidebar -->
+      <div id="infoCabeceraMapa">
+  <span id="nombreMapa">Cargando...</span> |
+  <span id="zoomMapa">--</span> |
+  <span id="coordenadasMapa">--</span>
+</div>
   <!-- 🗺️ Mapa principal -->
   <div id="map"></div>
 

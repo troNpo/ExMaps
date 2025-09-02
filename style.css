@@ -1930,3 +1930,23 @@ body.modo-zurdo .barra-lateral {
 .toast.oculto {
   opacity: 0;
 }
+#infoCabeceraMapa {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #1e1e1e;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 13px;
+  z-index: 300;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  white-space: nowrap;
+}
+.separadorBloque {
+  height: 1px;
+  background: linear-gradient(to right, #333, #666, #333);
+  margin: 16px 0;
+}

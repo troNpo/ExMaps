@@ -3,6 +3,7 @@ const map = L.map('map', {
   zoomControl: false
 }).setView([37.3886, -5.9953], 13);
 
+
 map.on("moveend", () => {
   requestAnimationFrame(() => {
     const config = JSON.parse(localStorage.getItem("configBusquedaAvanzada") || "{}");
@@ -2527,3 +2528,16 @@ function mostrarAvisoToast(mensaje) {
     toast.classList.add("oculto");
   }, 3000);
 }
+function actualizarCabecera() {
+  const centro = map.getCenter();
+  const zoom = map.getZoom();
+  const nombre = localStorage.getItem("ultimoMapaUsado") || "OpenStreetMap";
+
+  document.getElementById("nombreMapa").textContent = nombre;
+  document.getElementById("zoomMapa").textContent = "Zoom " + zoom;
+  document.getElementById("coordenadasMapa").textContent =
+    centro.lat.toFixed(5) + ", " + centro.lng.toFixed(5);
+}
+
+map.whenReady(actualizarCabecera);
+map.on("moveend zoomend baselayerchange", actualizarCabecera);
