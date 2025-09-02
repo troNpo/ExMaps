@@ -2536,7 +2536,23 @@ function mostrarAvisoToast(mensaje) {
 }
 
 function obtenerAltitud(lat, lng) {
-  const url = `https://api.opentopodata.org/v1/srtm90m?locations=${lat},${lng}`;
+  const latRedondeada = lat.toFixed(3);
+  const lngRedondeada = lng.toFixed(3);
+  const claveCache = `altitud_${latRedondeada}_${lngRedondeada}`;
+  const estado = document.getElementById("estadoAltitud");
+
+  // Ocultar el estado por defecto
+  estado.style.display = "none";
+
+  // Verificar si ya está en caché (solo durante la sesión)
+  const altitudGuardada = sessionStorage.getItem(claveCache);
+  if (altitudGuardada !== null) {
+    document.getElementById("altitudMapa").textContent = `Altitud: ${altitudGuardada} m`;
+    return;
+  }
+
+  // Si no está en caché, consultar API
+  const url = `https://api.open-elevation.com/api/v1/lookup?locations=${lat},${lng}`;
 
   fetch(url)
     .then(response => response.json())
@@ -2544,15 +2560,29 @@ function obtenerAltitud(lat, lng) {
       if (data.results && data.results[0] && data.results[0].elevation !== null) {
         const altitud = Math.round(data.results[0].elevation);
         document.getElementById("altitudMapa").textContent = `Altitud: ${altitud} m`;
+
+        // Guardar en caché de sesión
+        sessionStorage.setItem(claveCache, altitud);
       } else {
         document.getElementById("altitudMapa").textContent = `Altitud: --`;
+        mostrarErrorAltitud("⚠️ No se pudo obtener la altitud");
       }
     })
-   .catch(error => {
-  document.getElementById("altitudMapa").textContent = `Altitud: --`;
-  document.getElementById("estadoAltitud").textContent = `❌ Error al consultar la API: ${error.message}`;
-});
-     
+    .catch(error => {
+      document.getElementById("altitudMapa").textContent = `Altitud: --`;
+      mostrarErrorAltitud(`❌ Error al consultar la API: ${error.message}`);
+    });
+}
+
+// Función para mostrar el mensaje de error temporalmente
+function mostrarErrorAltitud(mensaje) {
+  const estado = document.getElementById("estadoAltitud");
+  estado.textContent = mensaje;
+  estado.style.display = "block";
+
+  setTimeout(() => {
+    estado.style.display = "none";
+  }, 4000); // Oculta después de 4 segundos
 }
 
 function actualizarCabecera() {
