@@ -2,7 +2,7 @@
 const map = L.map('map', {
   zoomControl: false
 }).setView([37.3886, -5.9953], 13);
-
+L.control.scale({ imperial: false }).addTo(map);
 
 map.on("moveend", () => {
   requestAnimationFrame(() => {
