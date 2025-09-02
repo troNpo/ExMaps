@@ -1950,3 +1950,17 @@ body.modo-zurdo .barra-lateral {
   background: linear-gradient(to right, #333, #666, #333);
   margin: 16px 0;
 }
+#estadoAltitud {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(30, 30, 30, 0.85);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: 'Segoe UI', sans-serif;
+  z-index: 1400;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
